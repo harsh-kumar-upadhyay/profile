@@ -9,3 +9,15 @@ document.getElementById("education").onclick = function() {
 document.getElementById("experience").onclick = function() {
     location.href = "./experience.html";
 };
+
+var video = document.getElementById("myVideo");
+var btn = document.getElementById("myBtn");
+function myFunction() {
+  if (video.paused) {
+    video.play();
+    btn.innerHTML = "Pause";
+  } else {
+    video.pause();
+    btn.innerHTML = "Play";
+  }
+}
