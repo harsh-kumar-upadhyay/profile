@@ -12,7 +12,7 @@ document.getElementById("experience").onclick = function() {
 
 var video = document.getElementById("myVideo");
 var btn = document.getElementById("myBtn");
-function myFunction() {
+function PFunction() {
   if (video.paused) {
     video.play();
     btn.innerHTML = "Pause";
