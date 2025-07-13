@@ -7,13 +7,16 @@
 </head>
 
 <body>
+
 <video autoplay muted loop id="myVideo" playsinline="true" disablePictureInPicture="true">
   <source src="assets/Video.mp4" type="video/mp4">
   Your browser does not support HTML5 video.
 </video>
 
 <div class="content">
-<button onclick="myFunction()">Toggle dark mode</button>
+
+<div id="bodyElm">
+
 <h2>Harsh Upadhyay</h2> <p>JavaScript can change your IQ as well.</p>
 
 <button onclick="document.getElementById('myImage').src='assets/pic_bulbon.gif'">Turn on the light</button>
@@ -24,9 +27,13 @@
 
 <button type="button" id="education">Education</button>
 <button type="button" id="experience">Experience</button>
+
 <button id="myBtn" onclick="PFunction()">Pause</button>
+<button onclick="myFunction()">Toggle dark mode</button>
+
 <script src="./script.js"></script>
 
+</div>
 </div>
 
 </body>

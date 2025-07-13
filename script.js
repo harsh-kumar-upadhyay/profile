@@ -1,5 +1,5 @@
 function myFunction() {
-   var element = document.body;
+   var element = document.getElementById("bodyElm");
    element.classList.toggle("dark-mode");
 }
 

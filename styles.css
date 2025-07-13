@@ -6,11 +6,6 @@ body {
   font-size: 25px;
 }
 
-.dark-mode {
-  background-color: black;
-  color: white;
-}
-
 #myVideo {
   position: fixed;
   right: 0;
@@ -26,6 +21,13 @@ body {
   width: 100%;
   height: 100%;
   padding: 25px;
+}
+
+.dark-mode {
+  background: rgba(225, 225, 225, 0.5);
+  color: rgb(0, 0, 0);
+  width: 100%;
+  height: 100%;
 }
 
 #myBtn {
