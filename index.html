@@ -20,7 +20,7 @@
 <h2>Harsh<br>Upadhyay</h2>
 <img src="assets/Harsh.png" style="width:175px; height:175px; position:fixed; top: 50px; right: 20px;">
 <div id="draggable">
-<img id="image" src="assets/wire.png" style="width:300px; height:240px; position:absolute; top: 25px; right: -60px;">
+<img id="image" src="assets/wire.png" style="width:300px; height:240px; position:absolute; top: 25px; right: -60px; z-index:-1">
 </div>
 
 <button onclick="document.getElementById('myImage').src='assets/pic_bulbon.gif'" style="position:fixed; top: 575px; right: 25px;">Turn on the light</button>
@@ -31,9 +31,9 @@
 
 <button type="button" id="education">Education</button>
 <button type="button" id="experience">Experience</button>
-
 <button id="myBtn" onclick="PFunction()" style="position:fixed; top: 650px; right: 25px;">Pause</button>
-<button onclick="myFunction()" style="z-index:10">Toggle dark mode</button>
+
+<button onclick="myFunction()" style="position:fixed; z-index:1">Toggle dark mode</button>
 
 <script src="./script.js"></script>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
