@@ -3,9 +3,9 @@ function myFunction() {
    element.classList.toggle("dark-mode");
 }
 
-document.getElementById("option1").onclick = function() {
-    location.href = "./option1.html";
+document.getElementById("education").onclick = function() {
+    location.href = "./education.html";
 };
-document.getElementById("option2").onclick = function() {
-    location.href = "./option2.html";
+document.getElementById("experience").onclick = function() {
+    location.href = "./experience.html";
 };
