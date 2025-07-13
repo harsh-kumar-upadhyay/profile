@@ -19,18 +19,16 @@
 
 <h2>Harsh<br>Upadhyay</h2>
 <img src="assets/Harsh.png" style="width:150px; height:150px; position:fixed; top: 50px; right: 20px;">
-<div id="draggable">
-<img id="image" src="assets/wire.png" style="width:300px; height:240px; position:absolute; top: 5px; right: -60px; z-index:-1">
-</div>
+<button type="button" id="education">Education</button>
+<button type="button" id="experience">Experience</button>
+<button type="submit" onclick="window.open('assets/Resume.pdf')">Resume</button>
+
 
 <button onclick="document.getElementById('myImage').src='assets/pic_bulbon.gif'" style="position:fixed; top: 550px; right: 25px;">Turn on the light</button>
 <img id="myImage" src="assets/pic_bulboff.gif" style="width:75px; position:fixed; top: 400px; right: 30px; transform: rotate(180deg)">
+<div id="draggable"> <img id="image" src="assets/wire.png" style="width:300px; height:240px; position:absolute; top: 5px; right: -60px; z-index:-1"> </div>
 <button onclick="document.getElementById('myImage').src='assets/pic_bulboff.gif'" style="position:fixed; top: 575px; right: 25px;">Turn off the light</button>
 
-<h4>Resume: <a href="assets/Resume.pdf" download> <img src="assets/resume.png" alt="Resume" width="64" height="64"> </a> </h4>
-
-<button type="button" id="education">Education</button>
-<button type="button" id="experience">Experience</button>
 <button id="myBtn" onclick="PFunction()" style="position:fixed; top: 630px; right: 25px;">Pause</button>
 
 <button onclick="myFunction()" style="position:fixed ; top: 600px; right: 25px; z-index:1">Toggle dark mode</button>
