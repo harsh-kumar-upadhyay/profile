@@ -7,10 +7,13 @@ function myFunction() {
 }
 
 document.getElementById("education").onclick = function() {
-    location.href = "./education.html";
+    location.href = "routes/education.html";
 };
 document.getElementById("experience").onclick = function() {
-    location.href = "./experience.html";
+    location.href = "routes/experience.html";
+};
+document.getElementById("people").onclick = function() {
+    location.href = "routes/people.html";
 };
 
 var video = document.getElementById("myVideo");
