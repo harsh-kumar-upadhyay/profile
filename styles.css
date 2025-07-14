@@ -3,13 +3,13 @@ body {
   font-family: Arial;
   background-color: white;
   color: black;
-  font-size: 25px;
+  font-size: 24px;
 }
 
 .container {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .container1 {
@@ -19,7 +19,7 @@ body {
 }
 
 p {
-  font-size: 18px;
+  font-size: 20px;
   margin-top: 10px;
   margin-bottom: 5px;
   margin-right: 0px;
@@ -34,7 +34,7 @@ h2 {
 }
 
 h5 {
-  font-size: 18px;
+  font-size: 24px;
   margin-top: 10px;
   margin-bottom: 5px;
   margin-right: 0px;
@@ -56,11 +56,11 @@ h5 {
   background-color: #00000030;
   border: none;
   color: rgb(0, 0, 0);
-  padding: 4px 6px;
+  padding: 4px 16px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 14px;
+  font-size: 18px;
   margin: none;
   cursor: pointer;
   transition-duration: 0.4s;
@@ -114,10 +114,10 @@ h5 {
 }
 
 table {
+  width: 40%;
   font-family: arial, sans-serif;
-  font-size: 14px;
+  font-size: 18px;
   border-collapse: collapse;
-  width: 100%;
 }
 
 td, th {
