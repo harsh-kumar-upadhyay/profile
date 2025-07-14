@@ -7,15 +7,23 @@ body {
 }
 
 .container {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
+  width: 99%;
+  display: inline-flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.container2 {
+  width: 99%;
+  display: inline-flex;
+  align-items: flex-start;
+  justify-content: flex-end;
 }
 
 .container1 {
   display: inline;
   align-items: normal;
-  justify-content: flex-start;
+  justify-content: space-between;
 }
 
 p {
