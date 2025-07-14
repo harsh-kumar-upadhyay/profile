@@ -56,11 +56,11 @@ h5 {
   background-color: #00000030;
   border: none;
   color: rgb(0, 0, 0);
-  padding: 4px 16px;
+  padding: 3px 4px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 18px;
+  font-size: 14px;
   margin: none;
   cursor: pointer;
   transition-duration: 0.4s;
