@@ -12,8 +12,8 @@ document.getElementById("education").onclick = function() {
 document.getElementById("experience").onclick = function() {
     location.href = "routes/experience.html";
 };
-document.getElementById("people").onclick = function() {
-    location.href = "routes/people.html";
+document.getElementById("about").onclick = function() {
+    location.href = "routes/about.html";
 };
 
 var video = document.getElementById("myVideo");
