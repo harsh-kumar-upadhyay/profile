@@ -6,6 +6,18 @@ body {
   font-size: 25px;
 }
 
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.container1 {
+  display: inline;
+  align-items: normal;
+  justify-content: flex-start;
+}
+
 p {
   font-size: 18px;
   margin-top: 10px;
