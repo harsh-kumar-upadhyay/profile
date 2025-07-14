@@ -1,6 +1,9 @@
 function myFunction() {
    var element = document.getElementById("bodyElm");
    element.classList.toggle("dark-mode");
+   var elem = document.getElementById("mode");
+   if (elem.innerHTML=="Dark Mode") elem.innerHTML = "Light Mode";
+   else elem.innerHTML = "Dark Mode";
 }
 
 document.getElementById("education").onclick = function() {

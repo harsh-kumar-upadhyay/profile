@@ -17,22 +17,24 @@
 <div class="content">
 <div id="bodyElm">
 
-<h2>Harsh Upadhyay</h2>
+<h2 style="position:fixed ; top: 10px; left: 25px;">Harsh Upadhyay</h2>
 <img src="assets/Harsh.png" style="width:150px; height:150px; position:fixed; top: 50px; right: 20px;">
+<div style="position:fixed ; top: 90px; left: 25px;">
 <a href="https://scholar.google.com/citations?user=dItsLCwAAAAJ&hl=en"> <img src="assets/google-scholar.png" alt="Google Scholar" width="33" height="33"></a>
 <a href="https://github.com/harsh-kumar-upadhyay"> <img src="assets/github.png" alt="GitHub" width="32" height="32"></a>
 <a href="https://www.linkedin.com/in/hku/"> <img src="assets/linkedin.png" alt="LinkedIn" width="32" height="32"></a>
 <a href="https://wa.me/919039995292"> <img src="assets/whatsapp.png" alt="WhatsApp" width="33" height="33"></a>
 <br>
-<button type="button" id="education">Education</button>
-<button type="button" id="experience">Experience</button>
+<button class="button" type="button" id="education">Education</button>
+<button class="button" type="button" id="experience">Experience</button>
+</div>
 
 <img id="myImage" src="assets/pic_bulboff.gif" style="width:75px; position:fixed; top: 400px; right: 30px; transform: rotate(180deg)">
-<div id="draggable"> <img id="image" src="assets/wire.png" style="width:300px; height:240px; position:absolute; top: -25px; right: -60px; z-index:-1"> </div>
-<button onclick="document.getElementById('myImage').src='assets/pic_bulbon.gif'" style="position:fixed; top: 550px; right: 25px;">Turn on the light</button>
-<button onclick="document.getElementById('myImage').src='assets/pic_bulboff.gif'" style="position:fixed; top: 575px; right: 25px;">Turn off the light</button>
-<button onclick="myFunction()" style="position:fixed ; top: 600px; right: 25px; z-index:1">Toggle dark mode</button>
-<button id="myBtn" onclick="PFunction()" style="position:fixed; top: 630px; right: 25px;">Pause</button>
+<div id="draggable"> <img id="image" src="assets/wire.png" style="width:300px; height:240px; position:absolute; top: 150px; right: -60px; z-index:-1"> </div>
+<button class="button1" onclick="document.getElementById('myImage').src='assets/pic_bulbon.gif'" style="position:fixed; top: 550px; right: 25px;">Turn on the light</button>
+<button class="button2" onclick="document.getElementById('myImage').src='assets/pic_bulboff.gif'" style="position:fixed; top: 575px; right: 25px;">Turn off the light</button>
+<button id="mode" class="button" onclick="myFunction()" style="position:fixed ; top: 10px; right: 25px; z-index:1">Dark Mode</button>
+<button id="myBtn" class="button" onclick="PFunction()" style="position:fixed; top: 10px; right: 125px;">Pause</button>
 
 <script src="./script.js"></script>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
