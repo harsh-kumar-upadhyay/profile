@@ -93,7 +93,7 @@ h5 {
 
 #myVideo {
   position: fixed;
-  min-width: 98%; 
+  min-width: 99%; 
   min-height: 100%;
 }
 
@@ -101,7 +101,7 @@ h5 {
   position: fixed;
   background: rgba(225, 225, 225, 0.5);
   color: rgb(0, 0, 0);
-  width: 97%;
+  width: 99%;
   height: 100%;
   padding: 25px;
 }
@@ -109,7 +109,7 @@ h5 {
 .dark-mode {
   background: rgba(0, 0, 0, 0.5);
   color: #f1f1f1;
-  width: 97%;
+  width: 99%;
   height: 100%;
   position: fixed;
   top: 0;
@@ -121,7 +121,7 @@ h5 {
 }
 
 table {
-  width: 99%;
+  width: 70%;
   font-family: arial, sans-serif;
   font-size: 18px;
   border-collapse: collapse;
