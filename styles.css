@@ -108,6 +108,9 @@ h5 {
   top: 0;
   left: 0;
   padding: 25px;
+  tr:nth-child(even) {
+  background-color: #2d2d2dad;
+}
 }
 
 table {
