@@ -24,7 +24,3 @@ function PFunction() {
     btn.innerHTML = "Play";
   }
 }
-
-$( function() {
-        $( "#draggable" ).draggable();
-    } );
