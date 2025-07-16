@@ -4,6 +4,7 @@ body {
   background-color: white;
   color: black;
   font-size: 24px;
+  padding: 25px;
 }
 
 .container {
@@ -91,21 +92,6 @@ h5 {
   border: none;
 }
 
-#myVideo {
-  position: fixed;
-  min-width: 97%; 
-  min-height: 100%;
-}
-
-.content {
-  position: fixed;
-  background: rgba(225, 225, 225, 0.5);
-  color: rgb(0, 0, 0);
-  width: 97%;
-  height: 100%;
-  padding: 25px;
-}
-
 .dark-mode {
   background: rgba(0, 0, 0, 0.5);
   color: #f1f1f1;
@@ -121,7 +107,6 @@ h5 {
 }
 
 table {
-  width: 70%;
   font-family: arial, sans-serif;
   font-size: 18px;
   border-collapse: collapse;
