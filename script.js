@@ -1,5 +1,5 @@
 function myFunction() {
-   var element = document.getElementById("bodyElm");
+   var element = document.getElementById("body");
    element.classList.toggle("dark-mode");
    var elem = document.getElementById("mode");
    if (elem.innerHTML=="Dark Mode") elem.innerHTML = "Light Mode";
@@ -12,15 +12,3 @@ document.getElementById("education").onclick = function() {
 document.getElementById("experience").onclick = function() {
     location.href = "routes/experience.html";
 };
-
-var video = document.getElementById("myVideo");
-var btn = document.getElementById("myBtn");
-function PFunction() {
-  if (video.paused) {
-    video.play();
-    btn.innerHTML = "Pause";
-  } else {
-    video.pause();
-    btn.innerHTML = "Play";
-  }
-}
