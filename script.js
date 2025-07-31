@@ -5,10 +5,3 @@ function myFunction() {
    if (elem.innerHTML=="Dark Mode") elem.innerHTML = "Light Mode";
    else elem.innerHTML = "Dark Mode";
 }
-
-document.getElementById("education").onclick = function() {
-    location.href = "routes/education.html";
-};
-document.getElementById("experience").onclick = function() {
-    location.href = "routes/experience.html";
-};
