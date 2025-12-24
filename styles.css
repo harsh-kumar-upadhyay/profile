@@ -37,6 +37,11 @@ a:hover {
     color: var(--accent);
 }
 
+img {
+    max-width: 100%;
+    height: auto;
+}
+
 /* =========================================
    2. UTILITIES & BUTTONS
    ========================================= */
@@ -67,7 +72,7 @@ a:hover {
 
 /* Navigation Container for sub-pages */
 .top-nav {
-    padding: 20px 5%; /* Matches body padding of some pages */
+    padding: 20px 5%;
     display: flex;
     gap: 10px;
     align-items: center;
@@ -110,6 +115,7 @@ body.dark-mode th {
     align-items: center;
     justify-content: space-between;
     margin-bottom: 30px;
+    gap: 30px;
 }
 
 .profile-text h2 {
@@ -179,18 +185,17 @@ body.dark-mode th {
    4. ABOUT PAGE (Timeline) STYLES
    ========================================= */
 .timeline-body {
-    padding: 0; /* Reset padding to handle top-nav better */
+    padding: 0;
     overflow-x: hidden;
 }
 
-/* Specific wrapper for content below nav */
 .timeline-content-wrapper {
     padding: 40px 5%;
 }
 
 .timeline-btn-container {
     position: fixed;
-    top: 110px; /* Moved down slightly to avoid clashing with new nav */
+    top: 110px;
     right: 5%;
     z-index: 1000;
 }
@@ -316,7 +321,6 @@ body.dark-mode th {
     padding-right: 15px;
 }
 
-/* Rank Table in Timeline */
 .rank-container {
     display: flex;
     align-items: flex-start;
@@ -336,16 +340,6 @@ body.dark-mode th {
     text-align: center;
 }
 .rank-table th { background-color: var(--border-color); }
-
-@media screen and (max-width: 900px) {
-    .timeline-wrapper::after { left: 20px; }
-    .timeline-item { flex-direction: column !important; align-items: flex-start; margin-bottom: 50px; }
-    .content-block, .learning-block { width: 100% !important; padding-left: 50px; text-align: left !important; }
-    .learning-content { border-right: none !important; border-left: 3px solid #ff9500 !important; padding-left: 15px; padding-right: 0; }
-    .timeline-dot { left: 20px; }
-    .timeline-item.left .rank-container { justify-content: flex-start; }
-    .timeline-btn-container { top: auto; bottom: 20px; right: 20px; } /* Mobile adjustments */
-}
 
 /* =========================================
    5. BLOGS (Archive) STYLES
@@ -496,7 +490,6 @@ body.dark-mode th {
     height: 12px;
 }
 
-/* Serif Font for Reading Content */
 .article-content p {
     font-family: var(--font-serif);
     font-size: 1.25rem;
@@ -531,4 +524,102 @@ body.dark-mode th {
 .back-btn {
     font-size: 0.9rem;
     font-weight: 600;
+}
+
+/* =========================================
+   7. MEDIA QUERIES (MOBILE)
+   ========================================= */
+@media screen and (max-width: 900px) {
+    /* Global Container Padding */
+    .container-wrapper {
+        padding: 20px;
+    }
+
+    /* --- HOME PAGE --- */
+    .home-header {
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-bottom: 30px;
+    }
+
+    .profile-section {
+        flex-direction: column-reverse; /* Stacks image on top of text */
+        text-align: center;
+        gap: 20px;
+    }
+
+    .profile-section img {
+        width: 140px;
+        height: 140px;
+    }
+
+    .social-icons {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+    }
+    
+    .social-icons a {
+        margin: 0;
+    }
+
+    /* --- TIMELINE (ABOUT) --- */
+    .timeline-wrapper::after { left: 20px; }
+    
+    .timeline-item { 
+        flex-direction: column !important; 
+        align-items: flex-start; 
+        margin-bottom: 50px; 
+    }
+    
+    .content-block, .learning-block { 
+        width: 100% !important; 
+        padding-left: 50px; 
+        text-align: left !important; 
+    }
+    
+    .learning-content { 
+        border-right: none !important; 
+        border-left: 3px solid #ff9500 !important; 
+        padding-left: 15px; 
+        padding-right: 0; 
+    }
+    
+    .timeline-dot { left: 20px; }
+    
+    /* Fix the button being fixed on mobile */
+    .timeline-btn-container { 
+        position: static; 
+        margin: 20px 0; 
+        text-align: center;
+    }
+    
+    .timeline-item.left .rank-container { justify-content: flex-start; }
+    
+    /* Scrollable rank table if it overflows */
+    .rank-container {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .rank-table {
+        width: 100%;
+        display: block;
+        overflow-x: auto;
+    }
+
+    /* --- BLOGS GRID --- */
+    .blog-grid {
+        grid-template-columns: 1fr; /* Single column layout */
+        padding: 0 10px 40px 10px;
+    }
+
+    /* --- ARTICLE --- */
+    .article-header h1 {
+        font-size: 2rem;
+    }
+    
+    .article-content p:first-of-type::first-letter {
+        font-size: 3.5rem;
+    }
 }
