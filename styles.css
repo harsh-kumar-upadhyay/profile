@@ -108,6 +108,7 @@ body.dark-mode th {
     align-items: center;
     gap: 15px;
     margin-bottom: 40px;
+    flex-wrap: wrap; /* Allows wrapping on small screens */
 }
 
 .profile-section {
@@ -130,17 +131,15 @@ body.dark-mode th {
     margin: 0 0 20px 0;
 }
 
-/* Social Icons Styling */
-.social-icons a {
-    margin-right: 10px;
-    display: inline-block;
+.social-icons {
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }
 
-/* Fix for giant icons: Explicitly set size */
-.social-icons img {
-    width: 32px;
-    height: auto;
-    display: block; /* Removes weird line-height spacing */
+.social-icons a {
+    margin: 0;
+    display: flex; /* Ensures the anchor hugs the image */
 }
 
 .blink {
@@ -538,97 +537,87 @@ body.dark-mode th {
    7. MEDIA QUERIES (MOBILE)
    ========================================= */
 @media screen and (max-width: 900px) {
-    /* Global Container Padding */
+    /* Global Text Adjustments */
+    body {
+        font-size: 16px; /* Reduced base font size */
+    }
+
+    h1 { font-size: 2rem; }
+    h2 { font-size: 1.5rem; }
+    h3 { font-size: 1.2rem; }
+
+    /* Container Padding */
     .container-wrapper {
         padding: 20px;
     }
 
-    /* --- HOME PAGE --- */
+    /* --- HOME PAGE HEADER --- */
     .home-header {
         justify-content: center;
-        flex-wrap: wrap;
         margin-bottom: 30px;
+        gap: 8px; /* Tighter gap for buttons */
     }
 
+    /* Make buttons smaller on mobile to fit nicely */
+    .home-header .button {
+        font-size: 0.8rem;
+        padding: 6px 10px;
+        flex-grow: 1; /* Allows buttons to share space evenly */
+        max-width: 100px; /* Prevents them from getting too wide */
+    }
+
+    /* --- HOME PAGE PROFILE --- */
     .profile-section {
-        flex-direction: column-reverse; /* Stacks image on top of text */
+        flex-direction: column-reverse; /* Text below image */
         text-align: center;
         gap: 20px;
     }
 
     .profile-section img {
-        width: 140px;
-        height: 140px;
+        width: 120px;
+        height: 120px;
+    }
+    
+    .profile-text h2 {
+        font-size: 1.8rem; /* Smaller profile Name */
     }
 
+    /* FIX: Force Social Icons to be square and small */
     .social-icons {
         display: flex;
         justify-content: center;
-        align-items: center;
         gap: 15px;
     }
     
-    .social-icons a {
-        margin: 0;
+    .social-icons img {
+        width: 32px !important;
+        height: 32px !important;
+        object-fit: contain; /* Ensures image isn't distorted */
+        max-width: none; /* Overrides global max-width */
     }
 
     /* --- TIMELINE (ABOUT) --- */
     .timeline-wrapper::after { left: 20px; }
-    
-    .timeline-item { 
-        flex-direction: column !important; 
-        align-items: flex-start; 
-        margin-bottom: 50px; 
-    }
-    
-    .content-block, .learning-block { 
-        width: 100% !important; 
-        padding-left: 50px; 
-        text-align: left !important; 
-    }
-    
-    .learning-content { 
-        border-right: none !important; 
-        border-left: 3px solid #ff9500 !important; 
-        padding-left: 15px; 
-        padding-right: 0; 
-    }
-    
+    .timeline-item { flex-direction: column !important; align-items: flex-start; margin-bottom: 40px; }
+    .content-block, .learning-block { width: 100% !important; padding-left: 50px; text-align: left !important; }
+    .learning-content { border-right: none !important; border-left: 3px solid #ff9500 !important; padding-left: 15px; }
     .timeline-dot { left: 20px; }
-    
-    /* Fix the button being fixed on mobile */
-    .timeline-btn-container { 
-        position: static; 
-        margin: 20px 0; 
-        text-align: center;
-    }
-    
-    .timeline-item.left .rank-container { justify-content: flex-start; }
-    
-    /* Scrollable rank table if it overflows */
-    .rank-container {
-        flex-direction: column;
-        width: 100%;
-    }
-    
-    .rank-table {
-        width: 100%;
-        display: block;
-        overflow-x: auto;
-    }
+    .timeline-btn-container { position: static; margin: 20px 0; text-align: center; }
+    .rank-container { flex-direction: column; width: 100%; }
+    .rank-table { width: 100%; display: block; overflow-x: auto; }
 
     /* --- BLOGS GRID --- */
     .blog-grid {
-        grid-template-columns: 1fr; /* Single column layout */
+        grid-template-columns: 1fr;
         padding: 0 10px 40px 10px;
+        gap: 20px;
+    }
+    
+    .blog-card {
+        padding: 25px;
     }
 
     /* --- ARTICLE --- */
-    .article-header h1 {
-        font-size: 2rem;
-    }
-    
-    .article-content p:first-of-type::first-letter {
-        font-size: 3.5rem;
-    }
+    .article-header h1 { font-size: 1.8rem; }
+    .article-content p:first-of-type::first-letter { font-size: 3rem; }
 }
