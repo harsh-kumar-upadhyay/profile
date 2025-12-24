@@ -4,124 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Archive — Stories</title>
-    <style>
-        :root {
-            --bg-color: #ffffff;
-            --text-main: #1a1a1a;
-            --text-muted: #757575;
-            --border-color: #efefef;
-            --accent: #000000;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            margin: 0;
-            padding: 60px 20px;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        .wrapper {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        header {
-            margin-bottom: 80px;
-            text-align: center;
-        }
-
-        h1 {
-            font-weight: 400;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
-            color: var(--text-muted);
-        }
-
-        .blog-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 40px; /* This creates the physical separation you requested */
-        }
-
-        .card {
-            display: flex;
-            flex-direction: column;
-            text-decoration: none;
-            color: inherit;
-            padding: 40px;
-            border: 1px solid var(--border-color);
-            border-radius: 4px; /* Slight roundness for a modern touch */
-            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-            background: #fff;
-        }
-
-        .card:hover {
-            border-color: var(--text-main);
-            transform: translateY(-4px);
-        }
-
-        .card-index {
-            font-size: 0.7rem;
-            font-family: monospace;
-            color: var(--text-muted);
-            margin-bottom: 40px;
-        }
-
-        .card h2 {
-            font-size: 1.4rem;
-            font-weight: 500;
-            margin: 0 0 12px 0;
-            letter-spacing: -0.01em;
-        }
-
-        .card p {
-            font-size: 0.95rem;
-            line-height: 1.6;
-            color: var(--text-muted);
-            margin: 0;
-        }
-
-        .read-link {
-            margin-top: auto;
-            padding-top: 30px;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            font-weight: 600;
-        }
-
-        @media (max-width: 600px) {
-            .blog-grid { gap: 20px; }
-        }
-    </style>
+    <link rel="stylesheet" href="../styles.css">
 </head>
 <body>
 
+    <div class="top-nav">
+        <button class="button" onclick="history.back()">Back</button>
+        <a href="../index.html" class="button">Home</a>
+    </div>
+
     <div class="wrapper">
-        <header>
+        <header class="archive-header">
             <h1>Selected Stories</h1>
         </header>
 
         <main class="blog-grid">
-            <a href="blogs/1.html" class="card">
+            <a href="blogs/1.html" class="blog-card">
                 <span class="card-index">01/</span>
                 <h2>The Neon Horizon</h2>
                 <p>A cinematic perspective on light and isolation within a sprawling digital landscape.</p>
                 <span class="read-link">Read Entry</span>
             </a>
 
-            <a href="#" class="card">
+            <a href="blogs/2.html" class="blog-card">
                 <span class="card-index">02/</span>
                 <h2>Whispers of Oak</h2>
                 <p>Decoding the acoustic secrets hidden within ancient timber and forgotten groves.</p>
                 <span class="read-link">Read Entry</span>
             </a>
 
-            <a href="#" class="card">
+            <a href="blogs/3.html" class="blog-card">
                 <span class="card-index">03/</span>
+                <h2>The Last Echo</h2>
+                <p>A final transcription exploring the transition from sound to absolute silence.</p>
+                <span class="read-link">Read Entry</span>
+            </a>
+            
+             <a href="blogs/4.html" class="blog-card">
+                <span class="card-index">04/</span>
                 <h2>The Last Echo</h2>
                 <p>A final transcription exploring the transition from sound to absolute silence.</p>
                 <span class="read-link">Read Entry</span>

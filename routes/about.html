@@ -4,331 +4,133 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About (Journey)</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-        }
-
-        body {
-            background-color: #ffffff;
-            color: #333;
-            padding: 80px 5%; 
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        /* Reverse Button Styling */
-        .btn-container {
-            position: fixed;
-            top: 25px;
-            right: 5%;
-            z-index: 1000;
-        }
-
-        #reverseBtn {
-            padding: 10px 20px;
-            background: #007aff;
-            color: white;
-            border: none;
-            border-radius: 30px;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0, 122, 255, 0.3);
-            transition: all 0.3s ease;
-        }
-
-        #reverseBtn:hover {
-            background: #0056b3;
-            transform: translateY(-2px);
-        }
-
-        .timeline-wrapper {
-            max-width: 1400px; 
-            margin: 40px auto;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .timeline-wrapper::after {
-            content: '';
-            position: absolute;
-            width: 2px;
-            background-color: #eee;
-            top: 0;
-            bottom: 0;
-            left: 50%;
-            margin-left: -1px;
-            z-index: 0;
-        }
-
-        .item {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start; /* Changed from center to top alignment */
-            width: 100%;
-            margin-bottom: 80px;
-            position: relative;
-            z-index: 1;
-            opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-            will-change: transform, opacity;
-        }
-
-        .item.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .content-block, .learning-block {
-            width: 44%; 
-            padding: 10px 0;
-            min-height: 50px; /* Ensures block visibility */
-        }
-
-        /* Learning side aesthetics */
-        .learning-block h3 {
-            font-size: 0.85rem;
-            color: #ff9500;
-            text-transform: uppercase;
-            margin-bottom: 8px;
-            letter-spacing: 1px;
-        }
-
-        .learning-content {
-            font-style: italic;
-            color: #666;
-            font-size: 1rem;
-            border-left: 3px solid #ff9500;
-            padding-left: 15px;
-        }
-
-        /* Alignment Logic */
-        .item.left { flex-direction: row; }
-        .item.right { flex-direction: row-reverse; }
-
-        .item.left .content-block { text-align: right; }
-        .item.left .learning-block { text-align: left; }
-
-        .item.right .content-block { text-align: left; }
-        .item.right .learning-block { text-align: right; }
-
-        /* Flip border for left items */
-        .item.left .learning-content {
-            border-left: none;
-            border-right: 3px solid #ff9500;
-            padding-left: 0;
-            padding-right: 15px;
-        }
-
-        .dot {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%) scale(0);
-            width: 16px;
-            height: 16px;
-            background: #fff;
-            border: 3px solid #007aff;
-            border-radius: 50%;
-            top: 20px;
-            transition: transform 0.4s ease 0.3s;
-        }
-
-        .item.show .dot {
-            transform: translateX(-50%) scale(1);
-        }
-
-        .date {
-            color: #007aff;
-            font-weight: 700;
-            font-size: 0.95rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        h2 {
-            font-size: clamp(1.25rem, 1vw, 2rem); 
-            margin: 10px 0;
-            color: #111;
-        }
-
-        .school a {
-            font-weight: 600;
-            color: #666;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-
-        .school a:hover { color: #007aff; }
-
-        .description {
-            font-size: 1.1rem;
-            color: #555;
-            max-width: 100%;
-        }
-
-        @media screen and (max-width: 900px) {
-            .timeline-wrapper::after { left: 20px; }
-            .item { flex-direction: column !important; align-items: flex-start; margin-bottom: 50px; }
-            .content-block, .learning-block { width: 100% !important; padding-left: 50px; text-align: left !important; }
-            .learning-content { border-right: none !important; border-left: 3px solid #ff9500 !important; padding-left: 15px; padding-right: 0; }
-            .dot { left: 20px; }
-        }
-
-        .container {
-            display: flex;
-            align-items: flex-start;
-            gap: 20px;
-            font-family: sans-serif;
-        }
-
-        .item.left .container { justify-content: flex-end; }
-
-        table {
-            width: fit-content;
-            border-collapse: collapse;
-            text-align: center;
-        }
-
-        th, td {
-            border: 1px solid black;
-            padding: 1px;
-            padding-left: 10px;
-            padding-right: 10px;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        .description-box {
-            max-width: 300px;
-        }
-    </style>
+    <link rel="stylesheet" href="../styles.css">
 </head>
-<body>
+<body class="timeline-body">
 
-    <div class="btn-container">
+    <div class="top-nav">
+        <button class="button" onclick="history.back()">Back</button>
+        <a href="../index.html" class="button">Home</a>
+    </div>
+
+    <div class="timeline-btn-container">
         <button id="reverseBtn" onclick="reverseTimeline()">⇅ Reverse Order</button>
     </div>
 
-    <div class="timeline-wrapper" id="timeline">
+    <div class="timeline-content-wrapper">
+        <div class="timeline-wrapper" id="timeline">
 
-        <div class="item left">
-            <div class="content-block">
-                <span class="date">2025 — Ongoing</span>
-                <h2>Doctorate in Computer Science Engineering</h2>
-                <span class="school"><a href="https://cse.iith.ac.in" target="_blank" rel="noopener">Indian Institute of Technology, Hyderabad</a></span>
-                <p class="description">Pushing the boundaries of neural architecture search. Researching next-gen AI systems.</p>
-            </div>
-            <div class="dot"></div>
-            <div class="learning-block">
-                <h3>Learnings & Reflections</h3>
-                <p class="learning-content">Deepening my focus on the theoretical frameworks of self-evolving AI. Learning to navigate high-level academic research while keeping practical utility in sight.</p>
-            </div>
-        </div>
-      
-        <div class="item right">
-            <div class="content-block">
-                <span class="date">2022 — 2024 (Full-time Work)</span>
-                <h2>Research Engineer</h2>
-                <span class="school"><a href="https://www.tcs.com/careers/india/research-and-innovation" target="_blank" rel="noopener">TCS Research</a></span>
-                <p class="description">Leveraged end-to-end ML solutions for: <br>
-                    Revenue Prime™ (revenue management for CPG industries) <br>
-                    Optimized promotions cost for improved Promotion RoI by 15%. Price optimization to tackle inflationary pressures. Increase in revenue by 2-5% through insights on key growth levers. <br>
-                    Envirozone™ (sustainability as a service) <br>
-                    Built carbon footprint forcasting models for Scope 1, 2, and 3 emissions across the value chain to meet the greenhouse gas (GHG) emission protocol requirements and Science-based Targets initiative (SBTi) and Carbon Disclosure Project (CDP).
-                    <br><br>
-                    <b>GPT 3.5 came in November 2022, and it changed  course. Over next 1.5 years realisation came that I am just doing the surface work, so I decided to pursue a theoretical career in ML in order to learn the fundamentals of the field.</b>
-                </p>
-            </div>
-            <div class="dot"></div>
-            <div class="learning-block">
-                <h3>Learnings & Reflections</h3>
-                <p class="learning-content">The shift toward Generative AI showed me the importance of understanding the 'black box' of ML. I learned that data-driven sustainability is a critical future frontier.</p>
-            </div>
-        </div>
-
-        <div class="item left">
-            <div class="content-block">
-                <span class="date">2021 — 2025 (Hybrid Mode)</span>
-                <h2>Bachelor of Science in  Programming and Data Science</h2>
-                <span class="school"><a href="https://study.iitm.ac.in/ds/" target="_blank" rel="noopener">Indian Institute of Technology, Madras</a></span>
-                <p class="description">My focus was on mastering Machine Learning.</p>
-            </div>
-            <div class="dot"></div>
-            <div class="learning-block">
-                <h3>Learnings & Reflections</h3>
-                <p class="learning-content">Mastering programming paradigms and statistical models. Realized the power of hybrid education in providing both flexibility and deep technical rigor.</p>
-            </div>
-        </div>
-
-        <div class="item right">
-            <div class="content-block">
-                <span class="date">2018 — 2022 (Graduation)</span>
-                <h2>Bachelor of Engineering in Electrical Engineering</h2>
-                <span class="school"><a href="https://jadavpuruniversity.in" target="_blank" rel="noopener">Jadavpur University, Kolkata</a></span>
-                <div class="container">    
-                    <table>
-                        <thead>
-                            <tr>
-                            <th>Year</th>
-                            <th>Engineering Rank</th>
-                            <th>University Rank</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                            <td>2017</td>
-                            <td>9</td>
-                            <td>5</td>
-                            </tr>
-                            <tr>
-                            <td>2023</td>
-                            <td>10</td>
-                            <td>4</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div class="description-box">
-                        <h2>India Rankings (NIRF)</h2>
-                        <p>Institute ranks under 10 in the country around my graduation.</p>
-                    </div>
+            <div class="timeline-item left">
+                <div class="content-block">
+                    <span class="date-label">2025 — Ongoing</span>
+                    <h2>Doctorate in Computer Science Engineering</h2>
+                    <span class="school"><a href="https://cse.iith.ac.in" target="_blank" rel="noopener">Indian Institute of Technology, Hyderabad</a></span>
+                    <p class="description">Pushing the boundaries of neural architecture search. Researching next-gen AI systems.</p>
                 </div>
-                <p class="description" style="font-weight: bold; margin-top: 10px;"> CGPA: 8.4/10 </p>
-                <p class="description">Acquired quality and holistic education in the field of Electrical Engineering. Electives included Advanced Instrumentation (Measurements), Analysis of Measurement Data, and Artificial Intelligence which developed my keen interest in the field of Machine Learning.</p>
+                <div class="timeline-dot"></div>
+                <div class="learning-block">
+                    <h3>Learnings & Reflections</h3>
+                    <p class="learning-content">Deepening my focus on the theoretical frameworks of self-evolving AI. Learning to navigate high-level academic research while keeping practical utility in sight.</p>
+                </div>
             </div>
-            <div class="dot"></div>
-            <div class="learning-block">
-                <h3>Learnings & Reflections</h3>
-                <p class="learning-content">Developed a systems-thinking approach. The transition from physical electrical circuits to computational neural networks was my most significant takeaway.</p>
+        
+            <div class="timeline-item right">
+                <div class="content-block">
+                    <span class="date-label">2022 — 2024 (Full-time Work)</span>
+                    <h2>Research Engineer</h2>
+                    <span class="school"><a href="https://www.tcs.com/careers/india/research-and-innovation" target="_blank" rel="noopener">TCS Research</a></span>
+                    <p class="description">Leveraged end-to-end ML solutions for: <br>
+                        Revenue Prime™ (revenue management for CPG industries) <br>
+                        Optimized promotions cost for improved Promotion RoI by 15%. Price optimization to tackle inflationary pressures. Increase in revenue by 2-5% through insights on key growth levers. <br>
+                        Envirozone™ (sustainability as a service) <br>
+                        Built carbon footprint forcasting models for Scope 1, 2, and 3 emissions across the value chain to meet the greenhouse gas (GHG) emission protocol requirements and Science-based Targets initiative (SBTi) and Carbon Disclosure Project (CDP).
+                        <br><br>
+                        <b>GPT 3.5 came in November 2022, and it changed course. Over next 1.5 years realisation came that I am just doing the surface work, so I decided to pursue a theoretical career in ML in order to learn the fundamentals of the field.</b>
+                    </p>
+                </div>
+                <div class="timeline-dot"></div>
+                <div class="learning-block">
+                    <h3>Learnings & Reflections</h3>
+                    <p class="learning-content">The shift toward Generative AI showed me the importance of understanding the 'black box' of ML. I learned that data-driven sustainability is a critical future frontier.</p>
+                </div>
             </div>
-        </div>
 
-        <div class="item left">
-            <div class="content-block">
-                <span class="date">Upto 2017 (Schooling)</span>
-                <h2>Senior Education (11th-12th Standard)</h2>
-                <span class="school"> <p class="description" style="font-weight: bold;"> Percentage: 89.3/100.  <a href="https://www.dpsmandlaroad.com" target="_blank" rel="noopener">DPS, Mandla Road</a></span>
-                <p class="description">Science Stream (Mathematics, Physics, Chemistry, Biology).</p>
-                <h2>Secondary Education (Upto 10th Standard)</h2>
-                <span class="school"> <p class="description" style="font-weight: bold;"> CGPA: 9.4/10.  <a href="https://www.ccbsss.org" target="_blank" rel="noopener">CCBSSS, South Civil Line</a></span>
+            <div class="timeline-item left">
+                <div class="content-block">
+                    <span class="date-label">2021 — 2025 (Hybrid Mode)</span>
+                    <h2>Bachelor of Science in Programming and Data Science</h2>
+                    <span class="school"><a href="https://study.iitm.ac.in/ds/" target="_blank" rel="noopener">Indian Institute of Technology, Madras</a></span>
+                    <p class="description">My focus was on mastering Machine Learning.</p>
+                </div>
+                <div class="timeline-dot"></div>
+                <div class="learning-block">
+                    <h3>Learnings & Reflections</h3>
+                    <p class="learning-content">Mastering programming paradigms and statistical models. Realized the power of hybrid education in providing both flexibility and deep technical rigor.</p>
+                </div>
             </div>
-            <div class="dot"></div>
-            <div class="learning-block">
-                <h3>Learnings & Reflections</h3>
-                <p class="learning-content">Foundational years that built my curiosity for how systems work—from biological organisms to mathematical equations.</p>
-            </div>
-        </div>
 
+            <div class="timeline-item right">
+                <div class="content-block">
+                    <span class="date-label">2018 — 2022 (Graduation)</span>
+                    <h2>Bachelor of Engineering in Electrical Engineering</h2>
+                    <span class="school"><a href="https://jadavpuruniversity.in" target="_blank" rel="noopener">Jadavpur University, Kolkata</a></span>
+                    <div class="rank-container">    
+                        <table class="rank-table">
+                            <thead>
+                                <tr>
+                                <th>Year</th>
+                                <th>Engineering Rank</th>
+                                <th>University Rank</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                <td>2017</td>
+                                <td>9</td>
+                                <td>5</td>
+                                </tr>
+                                <tr>
+                                <td>2023</td>
+                                <td>10</td>
+                                <td>4</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="description-box">
+                            <h2 style="font-size: 1rem; margin-top:0;">India Rankings (NIRF)</h2>
+                            <p style="font-size: 0.9rem; margin:0;">Institute ranks under 10 in the country around my graduation.</p>
+                        </div>
+                    </div>
+                    <p class="description" style="font-weight: bold; margin-top: 10px;"> CGPA: 8.4/10 </p>
+                    <p class="description">Acquired quality and holistic education in the field of Electrical Engineering. Electives included Advanced Instrumentation (Measurements), Analysis of Measurement Data, and Artificial Intelligence which developed my keen interest in the field of Machine Learning.</p>
+                </div>
+                <div class="timeline-dot"></div>
+                <div class="learning-block">
+                    <h3>Learnings & Reflections</h3>
+                    <p class="learning-content">Developed a systems-thinking approach. The transition from physical electrical circuits to computational neural networks was my most significant takeaway.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item left">
+                <div class="content-block">
+                    <span class="date-label">Upto 2017 (Schooling)</span>
+                    <h2>Senior Education (11th-12th Standard)</h2>
+                    <span class="school"> <p class="description" style="font-weight: bold;"> Percentage: 89.3/100.  <a href="https://www.dpsmandlaroad.com" target="_blank" rel="noopener">DPS, Mandla Road</a></span>
+                    <p class="description">Science Stream (Mathematics, Physics, Chemistry, Biology).</p>
+                    <h2>Secondary Education (Upto 10th Standard)</h2>
+                    <span class="school"> <p class="description" style="font-weight: bold;"> CGPA: 9.4/10.  <a href="https://www.ccbsss.org" target="_blank" rel="noopener">CCBSSS, South Civil Line</a></span>
+                </div>
+                <div class="timeline-dot"></div>
+                <div class="learning-block">
+                    <h3>Learnings & Reflections</h3>
+                    <p class="learning-content">Foundational years that built my curiosity for how systems work—from biological organisms to mathematical equations.</p>
+                </div>
+            </div>
+
+        </div>
     </div>
 
     <script>
-        // Use threshold 0.1 so it triggers easily even if items are tall
         const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
         
         let observer = new IntersectionObserver((entries) => {
@@ -341,14 +143,14 @@
         }, observerOptions);
 
         function initObserver() {
-            document.querySelectorAll('.item').forEach(item => {
+            document.querySelectorAll('.timeline-item').forEach(item => {
                 observer.observe(item);
             });
         }
 
         function reverseTimeline() {
             const container = document.getElementById('timeline');
-            const items = Array.from(container.getElementsByClassName('item'));
+            const items = Array.from(container.getElementsByClassName('timeline-item'));
             observer.disconnect();
             container.innerHTML = '';
             

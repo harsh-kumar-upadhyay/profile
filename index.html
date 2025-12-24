@@ -5,52 +5,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"> 
     <link rel="stylesheet" href="./styles.css">
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <title>Harsh Upadhyay - Profile</title>
   </head>
   <body id="body">
-        <!-- Head -->
-          <div class="container2">
+    <div class="container-wrapper">
+        <div class="home-header">
+            <a class="button" href="index.html">Home</a>
             <a class="button" href="routes/blogs.html">Blogs</a>
-            <p> </p>
             <a class="button" href="routes/about.html">About</a>
-            <p> </p>
-            <button id="mode" class="button" onclick="myFunction()">Dark Mode</button><br><br>
-          </div>
-          <div class="container">
-            <div class="container1">
-              <h2>Harsh Upadhyay</h2>
-              <p><b>PhD CSE Scholar @ IIT H</b></p>
-              <a href="https://scholar.google.com/citations?user=dItsLCwAAAAJ&hl=en"> <img src="assets/google-scholar.png" alt="Google Scholar" width="33" height="33"></a>
-              <a href="mailto:harsh.handle@gmail.com"> <img src="assets/mail.png" alt="Mail To" width="32" height="28"></a>
-              <a href="https://www.linkedin.com/in/hku/"> <img src="assets/linkedin.png" alt="LinkedIn" width="32" height="32"></a>
-              <a href="https://wa.me/919039995292"> <img src="assets/whatsapp.png" alt="WhatsApp" width="33" height="33"></a>
+            <button id="mode" class="button" onclick="myFunction()">Dark Mode</button>
+        </div>
 
+        <div class="profile-section">
+            <div class="profile-text">
+                <h2>Harsh Upadhyay</h2>
+                <p><b>PhD CSE Scholar @ IIT H</b></p>
+                <div class="social-icons">
+                    <a href="https://scholar.google.com/citations?user=dItsLCwAAAAJ&hl=en"> <img src="assets/google-scholar.png" alt="Google Scholar" width="32" height="32"></a>
+                    <a href="mailto:harsh.handle@gmail.com"> <img src="assets/mail.png" alt="Mail To" width="32" height="28"></a>
+                    <a href="https://www.linkedin.com/in/hku/"> <img src="assets/linkedin.png" alt="LinkedIn" width="32" height="32"></a>
+                    <a href="https://wa.me/919039995292"> <img src="assets/whatsapp.png" alt="WhatsApp" width="32" height="32"></a>
+                </div>
             </div>
-            <img src="assets/Harsh.png" style="width:128px; height:128px;">
-          </div><br>
-          <p><b>People who shaped/inspired me:</b></p>
-          <ul style="font-size: 18px;">
+            <img src="assets/Harsh.png" style="width:128px; height:128px; border-radius: 50%;">
+        </div>
+
+        <br>
+        
+        <p><b>People who shaped/inspired me:</b></p>
+        <ul>
             <li>(Shri.) Sunil and (Smt.) Sudha Upadhyay (My Parents)</li>
             <li><a href="https://people.iith.ac.in/saketha/">(Prof.) Saketha Nath Jagarlapudi (My PhD Guide at IIT H)</a></li>
             <li><a href="https://www.youtube.com/@JEEAdvancedPhysics/playlists ">(Sir) Shashi Bhushan Tiwari (My Physics Teacher in Momentum)</a></li>
-          </ul>
-          <h5 class="blink">News</h5>
-          <ul style="font-size: 18px;">
+        </ul>
+        
+        <h5 class="blink">News</h5>
+        <ul>
             <li>Beginning with second semester at IIT H.</li>
             <li>Experienced IIT B PhD Interview for CSE and CMInDS.</li>
             <li>Coming up...</li>
-          </ul>
-          <div class="dropdown">
+        </ul>
+
+        <div class="dropdown">
             <button onclick="myFunctiondrop()" class="dropbtn">Books I Love...</button>
             <div id="myDropdown" class="dropdown-content">
-              <a href="https://github.com/probml/pml2-book/releases/latest/download/book2.pdf">Probabilistic Machine Learning: Advanced Topics</a>
-              <a href="https://github.com/probml/pml-book/releases/latest/download/book1.pdf">Probabilistic Machine Learning: An Introduction</a>
+                <a href="https://github.com/probml/pml2-book/releases/latest/download/book2.pdf">Probabilistic Machine Learning: Advanced Topics</a>
+                <a href="https://github.com/probml/pml-book/releases/latest/download/book1.pdf">Probabilistic Machine Learning: An Introduction</a>
             </div>
-          </div>
-          <p> </p>
-        <!-- Scripts -->
-        <script src="./script.js"></script>
-        <div style="width: 175px; height: 175px;">
-          <script type="text/javascript" id="mmvst_globe" src="//mapmyvisitors.com/globe.js?d=-yXcoAW-icRoVQy_qvHP5H97QaiBJkCaj-qoL5OKlYo"></script>
         </div>
+
+        <div style="margin-top: 50px; width: 175px; height: 175px;">
+            <script type="text/javascript" id="mmvst_globe" src="//mapmyvisitors.com/globe.js?d=-yXcoAW-icRoVQy_qvHP5H97QaiBJkCaj-qoL5OKlYo"></script>
+        </div>
+    </div>
+    
+    <script src="./script.js"></script>
   </body>
 </html>

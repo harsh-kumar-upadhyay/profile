@@ -4,141 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Neon Horizon — Entry 01</title>
-    <style>
-        :root {
-            --text-main: #1a1a1a;
-            --text-muted: #757575;
-            --accent: #000000;
-            --line: #efefef;
-        }
-
-        body {
-            font-family: "Charter", "Georgia", serif;
-            color: var(--text-main);
-            background: #ffffff;
-            line-height: 1.8;
-            margin: 0;
-            padding: 0;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        nav {
-            padding: 40px;
-            display: flex;
-            justify-content: space-between;
-            max-width: 1000px;
-            margin: 0 auto;
-            font-family: -apple-system, sans-serif;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-        }
-
-        nav a {
-            text-decoration: none;
-            color: var(--text-muted);
-            transition: color 0.2s;
-        }
-
-        nav a:hover { color: var(--accent); }
-
-        article {
-            max-width: 680px;
-            margin: 60px auto 150px auto;
-            padding: 0 25px;
-        }
-
-        header {
-            margin-bottom: 60px;
-            border-bottom: 1px solid var(--line);
-            padding-bottom: 40px;
-        }
-
-        h1 {
-            font-family: -apple-system, sans-serif;
-            font-size: 2.8rem;
-            font-weight: 600;
-            line-height: 1.1;
-            margin-bottom: 20px;
-            letter-spacing: -0.04em;
-        }
-
-        .meta-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-family: -apple-system, sans-serif;
-        }
-
-        .meta {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            display: flex;
-            gap: 15px;
-        }
-
-        /* Minimalist Audio Button */
-        .audio-controls {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            padding: 8px 16px;
-            border: 1px solid var(--line);
-            border-radius: 20px;
-            transition: all 0.2s;
-            background: transparent;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            font-weight: 600;
-        }
-
-        .audio-controls:hover {
-            border-color: var(--accent);
-            background-color: #fafafa;
-        }
-
-        .audio-controls svg {
-            width: 12px;
-            height: 12px;
-        }
-
-        /* Story Content */
-        p { font-size: 1.25rem; margin-bottom: 2rem; color: #2a2a2a; }
-
-        p:first-of-type::first-letter {
-            float: left;
-            font-size: 4.5rem;
-            line-height: 1;
-            padding-right: 12px;
-            font-weight: 600;
-            font-family: -apple-system, sans-serif;
-        }
-
-        footer {
-            margin-top: 100px;
-            padding-top: 40px;
-            border-top: 1px solid var(--line);
-            text-align: center;
-            font-family: -apple-system, sans-serif;
-        }
-
-        .back-btn { text-decoration: none; color: var(--text-main); font-weight: 600; }
-    </style>
+    <link rel="stylesheet" href="../../styles.css">
 </head>
 <body>
 
-    <nav>
-        <a href="blogs.html">← Archive</a>
+    <nav class="article-nav">
+        <div style="display: flex; gap: 10px; align-items: center;">
+             <button class="button" onclick="history.back()">Back</button>
+             <a href="../../index.html" class="button">Home</a>
+        </div>
         <span>Story 01</span>
     </nav>
 
-    <article>
-        <header>
+    <article class="article-container">
+        <header class="article-header">
             <h1>The Neon Horizon</h1>
-            <div class="meta-container">
-                <div class="meta">
+            <div class="article-meta-container">
+                <div class="article-meta">
                     <span>Dec 24, 2025</span>
                     <span>•</span>
                     <span>4 min read</span>
@@ -151,7 +33,7 @@
             </div>
         </header>
 
-        <section class="content" id="storyContent">
+        <section class="article-content" id="storyContent">
             <p>The rain in Sector 7 didn't fall; it drifted. It was a fine mist that caught the glare of the holographic billboards, turning the air into a shimmering kaleidoscope of pink and electric blue.</p>
 
             <p>Elias adjusted his collar. The dampness was beginning to seep through his synthetic leather jacket. He wasn’t supposed to be this far below the cloud line, but the tip he’d received was too good to ignore.</p>
@@ -159,8 +41,8 @@
             <p>The city groaned above him, a heavy percussion of mag-lev trains and distant industrial sirens. Here, in the gutters of the skyline, time felt different—slower, heavier, and far more dangerous.</p>
         </section>
 
-        <footer>
-            <a href="blogs.html" class="back-btn">Return to Archive</a>
+        <footer class="article-footer">
+            <a href="../blogs.html" class="back-btn">Return to Archive</a>
         </footer>
     </article>
 
@@ -172,7 +54,7 @@
         let isPlaying = false;
 
         speech.text = content;
-        speech.rate = 0.9; // Slightly slower for a more dramatic feel
+        speech.rate = 0.9;
         speech.pitch = 1;
 
         btn.addEventListener('click', () => {
@@ -187,7 +69,6 @@
             }
         });
 
-        // Reset button when story ends
         speech.onend = () => {
             btnText.innerText = "Listen";
             isPlaying = false;
