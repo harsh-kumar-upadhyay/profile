@@ -130,9 +130,17 @@ body.dark-mode th {
     margin: 0 0 20px 0;
 }
 
+/* Social Icons Styling */
 .social-icons a {
     margin-right: 10px;
     display: inline-block;
+}
+
+/* Fix for giant icons: Explicitly set size */
+.social-icons img {
+    width: 32px;
+    height: auto;
+    display: block; /* Removes weird line-height spacing */
 }
 
 .blink {
@@ -556,6 +564,7 @@ body.dark-mode th {
     .social-icons {
         display: flex;
         justify-content: center;
+        align-items: center;
         gap: 15px;
     }
     
