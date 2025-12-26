@@ -25,6 +25,12 @@ body {
     line-height: 1.6;
     font-size: 18px;
     -webkit-font-smoothing: antialiased;
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 a {
@@ -51,6 +57,7 @@ img {
     padding: 20px;
 }
 
+/* Standard Text Button (used for Blogs/About links on Index) */
 .button {
     background-color: #6f6f6f;
     border: none;
@@ -70,9 +77,38 @@ img {
     background-color: #333;
 }
 
+/* Unified Icon Button Style (Back, Home, Dark Mode) */
+.icon-btn {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+    text-decoration: none; /* For <a> tags using this class */
+}
+
+.icon-btn:hover {
+    background-color: var(--border-color);
+    transform: translateY(-2px);
+    color: var(--text-main); /* Prevents accent color override on hover */
+}
+
 /* Navigation Container for sub-pages */
 .top-nav {
     padding: 20px 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-buttons {
     display: flex;
     gap: 10px;
     align-items: center;
@@ -99,6 +135,15 @@ body.dark-mode th {
     border-color: #333;
 }
 
+/* Icon Buttons in Dark Mode */
+body.dark-mode .icon-btn {
+    border-color: #333;
+    color: #e0e0e0;
+}
+body.dark-mode .icon-btn:hover {
+    background-color: #333;
+}
+
 /* =========================================
    3. HOME PAGE (Index) STYLES
    ========================================= */
@@ -108,7 +153,7 @@ body.dark-mode th {
     align-items: center;
     gap: 15px;
     margin-bottom: 40px;
-    flex-wrap: wrap; /* Allows wrapping on small screens */
+    flex-wrap: wrap; 
 }
 
 .profile-section {
@@ -139,7 +184,20 @@ body.dark-mode th {
 
 .social-icons a {
     margin: 0;
-    display: flex; /* Ensures the anchor hugs the image */
+    display: flex;
+}
+
+/* Monochrome Icons */
+.social-icons img {
+    filter: grayscale(100%);
+    opacity: 0.7;
+    transition: all 0.3s ease;
+}
+
+.social-icons img:hover {
+    filter: grayscale(0%);
+    opacity: 1;
+    transform: translateY(-2px);
 }
 
 .blink {
@@ -537,38 +595,33 @@ body.dark-mode th {
    7. MEDIA QUERIES (MOBILE)
    ========================================= */
 @media screen and (max-width: 900px) {
-    /* Global Text Adjustments */
     body {
-        font-size: 16px; /* Reduced base font size */
+        font-size: 16px;
     }
 
     h1 { font-size: 2rem; }
     h2 { font-size: 1.5rem; }
     h3 { font-size: 1.2rem; }
 
-    /* Container Padding */
     .container-wrapper {
         padding: 20px;
     }
 
-    /* --- HOME PAGE HEADER --- */
     .home-header {
         justify-content: center;
         margin-bottom: 30px;
-        gap: 8px; /* Tighter gap for buttons */
+        gap: 8px;
     }
 
-    /* Make buttons smaller on mobile to fit nicely */
     .home-header .button {
         font-size: 0.8rem;
         padding: 6px 10px;
-        flex-grow: 1; /* Allows buttons to share space evenly */
-        max-width: 100px; /* Prevents them from getting too wide */
+        flex-grow: 1;
+        max-width: 100px;
     }
 
-    /* --- HOME PAGE PROFILE --- */
     .profile-section {
-        flex-direction: column-reverse; /* Text below image */
+        flex-direction: column-reverse;
         text-align: center;
         gap: 20px;
     }
@@ -579,10 +632,9 @@ body.dark-mode th {
     }
     
     .profile-text h2 {
-        font-size: 1.8rem; /* Smaller profile Name */
+        font-size: 1.8rem;
     }
 
-    /* FIX: Force Social Icons to be square and small */
     .social-icons {
         display: flex;
         justify-content: center;
@@ -592,11 +644,10 @@ body.dark-mode th {
     .social-icons img {
         width: 32px !important;
         height: 32px !important;
-        object-fit: contain; /* Ensures image isn't distorted */
-        max-width: none; /* Overrides global max-width */
+        object-fit: contain;
+        max-width: none;
     }
 
-    /* --- TIMELINE (ABOUT) --- */
     .timeline-wrapper::after { left: 20px; }
     .timeline-item { flex-direction: column !important; align-items: flex-start; margin-bottom: 40px; }
     .content-block, .learning-block { width: 100% !important; padding-left: 50px; text-align: left !important; }
@@ -606,7 +657,6 @@ body.dark-mode th {
     .rank-container { flex-direction: column; width: 100%; }
     .rank-table { width: 100%; display: block; overflow-x: auto; }
 
-    /* --- BLOGS GRID --- */
     .blog-grid {
         grid-template-columns: 1fr;
         padding: 0 10px 40px 10px;
@@ -617,7 +667,6 @@ body.dark-mode th {
         padding: 25px;
     }
 
-    /* --- ARTICLE --- */
     .article-header h1 { font-size: 1.8rem; }
     .article-content p:first-of-type::first-letter { font-size: 3rem; }
 }

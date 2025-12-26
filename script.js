@@ -1,9 +1,21 @@
 function myFunction() {
    var element = document.getElementById("body");
    element.classList.toggle("dark-mode");
-   var elem = document.getElementById("mode");
-   if (elem.innerHTML=="Dark Mode") elem.innerHTML = "Light Mode";
-   else elem.innerHTML = "Dark Mode";
+   
+   // Toggle Icons
+   var moon = document.querySelector('.moon-icon');
+   var sun = document.querySelector('.sun-icon');
+   
+   // Check if elements exist to prevent errors on pages without the button
+   if (moon && sun) {
+       if (element.classList.contains("dark-mode")) {
+           moon.style.display = "none";
+           sun.style.display = "block";
+       } else {
+           moon.style.display = "block";
+           sun.style.display = "none";
+       }
+   }
 }
 
 /* When the user clicks on the button,
