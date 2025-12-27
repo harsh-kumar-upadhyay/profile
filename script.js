@@ -1,22 +1,41 @@
-// 1. On Page Load: Check local storage and apply theme
-document.addEventListener('DOMContentLoaded', () => {
+/* =========================================
+   DARK MODE LOGIC WITH BACK/FORWARD FIX
+   ========================================= */
+
+// 1. Define the logic to apply the theme in one reusable function
+function applySavedTheme() {
     const savedTheme = localStorage.getItem('theme');
     const element = document.getElementById("body");
+    
+    // Safety check: ensure the body element exists
+    if (!element) return;
 
     if (savedTheme === 'dark') {
         element.classList.add("dark-mode");
-        updateIcons(true); // Helper function to set correct icon
+        updateIcons(true);
     } else {
+        // Important: Remove the class if the setting is 'light', 
+        // in case the cached page was previously dark.
+        element.classList.remove("dark-mode");
         updateIcons(false);
     }
+}
+
+// 2. Run on initial page load
+document.addEventListener('DOMContentLoaded', applySavedTheme);
+
+// 3. THE FIX: Run whenever the page is shown (including Back/Forward navigation)
+window.addEventListener('pageshow', (event) => {
+    // This event fires even if the page is loaded from the bfcache
+    applySavedTheme();
 });
 
-// 2. Helper function to manage Icon visibility (prevents code duplication)
+// 4. Helper function to toggle icons (Moon/Sun)
 function updateIcons(isDarkMode) {
     var moon = document.querySelector('.moon-icon');
     var sun = document.querySelector('.sun-icon');
-
-    // Check if elements exist (to prevent errors on pages without the button)
+    
+    // Only run if icons exist on the current page
     if (moon && sun) {
         if (isDarkMode) {
             moon.style.display = "none";
@@ -28,15 +47,15 @@ function updateIcons(isDarkMode) {
     }
 }
 
-// 3. Main Toggle Function (connected to your button)
+// 5. Main Toggle Function (connected to your HTML button)
 function myFunction() {
    var element = document.getElementById("body");
    element.classList.toggle("dark-mode");
    
-   // Determine if dark mode is now active
+   // Check if dark mode is currently active
    const isDarkMode = element.classList.contains("dark-mode");
-
-   // Save the preference to the browser
+   
+   // Save the preference to browser storage
    localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
    
    // Update the icons
@@ -44,8 +63,9 @@ function myFunction() {
 }
 
 /* =========================================
-   DROPDOWN LOGIC (Kept exactly as before)
+   DROPDOWN LOGIC
    ========================================= */
+
 function myFunctiondrop() {
   document.getElementById("myDropdown").classList.toggle("show");
 }
