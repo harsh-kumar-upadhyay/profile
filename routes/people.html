@@ -10,47 +10,58 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* FIX: Changed from Grid to Flexbox for automatic centering */
+        /* Container: Flexbox with centering */
         .people-grid {
             display: flex;
             flex-wrap: wrap;
-            justify-content: center; /* Centers items horizontally */
-            gap: 30px;
-            padding: 20px 0 60px 0;
-            max-width: 1200px; /* Keeps content contained on very large screens */
+            justify-content: center; /* Centers items in the row */
+            gap: 20px; /* Space between cards */
+            padding: 20px 20px 60px 20px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
-        /* Updated to target <a> tag properly */
+        /* Card: Automatic Sizing */
         .people-card {
             position: relative;
             background: transparent;
             border: none;
             border-radius: 8px;
             overflow: hidden; 
-            display: flex;
-            height: 100px;
-            align-items: center;
-            transition: transform 0.2s ease;
             
-            /* Flex sizing */
-            flex: 0 1 380px; 
-            min-width: 300px;
-
-            /* Link Styling Reset */
+            /* Layout */
+            display: flex;
+            align-items: center;
+            
+            /* AUTOMATIC SIZING LOGIC: */
+            /* Grow to fill space (1), Shrink if needed (1), Start at 300px basis */
+            flex: 1 1 300px; 
+            
+            /* Optional: Stop them from becoming awkwardly wide on huge screens */
+            max-width: 500px; 
+            
+            /* Automatic Height based on content + padding */
+            height: auto; 
+            min-height: 100px; /* Minimum touch target size */
+            
+            transition: transform 0.2s ease;
             text-decoration: none;
             color: inherit;
             cursor: pointer;
+            
+            /* Add some padding so content doesn't touch edges if card shrinks */
+            padding: 10px; 
         }
 
         .people-card:hover {
             transform: translateY(-3px);
         }
 
+        /* Image Wrapper: Fixed size for consistency, but card around it is auto */
         .people-image-wrapper {
             width: 100px;
             height: 100px;
-            flex-shrink: 0;
+            flex-shrink: 0; /* Prevent image from squishing */
             display: flex; 
             align-items: center;
             justify-content: center;
@@ -72,7 +83,7 @@
 
         .people-info {
             flex-grow: 1;
-            padding: 0 20px;
+            padding: 0 15px; /* Spacing between image and text */
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -110,13 +121,10 @@
             text-align: center;
             opacity: 0;
             transition: opacity 0.2s ease-in-out;
-            
-            /* High Z-Index + Transform hack to force above zoomed image */
             z-index: 10;
             transform: translateZ(0); 
-            
             border-radius: 8px;
-            pointer-events: none; /* Allows click to pass through to the link */
+            pointer-events: none; 
         }
 
         .people-description-text {
@@ -128,7 +136,7 @@
 
         .people-card:hover .people-description-overlay {
             opacity: 1;
-            pointer-events: auto; /* Re-enable pointer events if text selection is needed, clicking still works */
+            pointer-events: auto; 
         }
 
         /* Explicit Dark Mode Overrides */
@@ -142,17 +150,6 @@
 
         body.dark-mode .people-description-text {
             color: #e0e0e0;
-        }
-        
-        @media screen and (max-width: 600px) {
-            .people-grid {
-                flex-direction: column; /* Stack vertically on mobile */
-                align-items: center;
-            }
-            .people-card {
-                width: 100%;
-                max-width: 400px;
-            }
         }
     </style>
 </head>
@@ -197,13 +194,28 @@
                 </div>
             </a>
 
-            <a href="#" class="people-card">
+            <a href="" class="people-card">
                 <div class="people-image-wrapper">
                     <img src="../assets/parents.png" alt="Sunil and Sudha Upadhyay">
                 </div>
                 <div class="people-info">
                     <h3 class="people-name">(Shri.) Sunil and (Smt.) Sudha Upadhyay</h3>
                     <p class="people-position">Parents</p>
+                </div>
+                <div class="people-description-overlay">
+                    <p class="people-description-text">
+                        The pillars of support and inspiration throughout the journey.
+                    </p>
+                </div>
+            </a>
+
+            <a href="https://momentumacademy.net/faculties/#9c7e380" class="people-card">
+                <div class="people-image-wrapper">
+                    <img src="https://momentumacademy.net/wp-content/uploads/elementor/thumbs/21-1-1-r13lvk3ofmdrgun50x2scad50cax62nxksmi4l5q4o.png" alt="Shashi Bhusan Tiwari">
+                </div>
+                <div class="people-info">
+                    <h3 class="people-name">(Sir) Shashi Bhusan Tiwari</h3>
+                    <p class="people-position">Physics Teacher</p>
                 </div>
                 <div class="people-description-overlay">
                     <p class="people-description-text">
