@@ -21,6 +21,7 @@
             margin: 0 auto;
         }
 
+        /* Updated to target <a> tag properly */
         .people-card {
             position: relative;
             background: transparent;
@@ -32,9 +33,14 @@
             align-items: center;
             transition: transform 0.2s ease;
             
-            /* FIX: Flex sizing */
-            flex: 0 1 380px; /* Prefers 380px width, can shrink, won't grow infinitely */
-            min-width: 300px; /* Ensures it doesn't get too squished on mobile */
+            /* Flex sizing */
+            flex: 0 1 380px; 
+            min-width: 300px;
+
+            /* Link Styling Reset */
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
         }
 
         .people-card:hover {
@@ -110,7 +116,7 @@
             transform: translateZ(0); 
             
             border-radius: 8px;
-            pointer-events: none;
+            pointer-events: none; /* Allows click to pass through to the link */
         }
 
         .people-description-text {
@@ -122,7 +128,7 @@
 
         .people-card:hover .people-description-overlay {
             opacity: 1;
-            pointer-events: auto;
+            pointer-events: auto; /* Re-enable pointer events if text selection is needed, clicking still works */
         }
 
         /* Explicit Dark Mode Overrides */
@@ -176,7 +182,7 @@
 
         <main class="people-grid">
             
-            <div class="people-card">
+            <a href="https://people.iith.ac.in/saketha/" target="_blank" class="people-card">
                 <div class="people-image-wrapper">
                     <img src="https://people.iith.ac.in/saketha/index_files/saketh2015.jpg" alt="Saketha Nath Jagarlapuddi">
                 </div>
@@ -189,9 +195,9 @@
                         Guiding research in theoretical Machine Learning frameworks and optimization.
                     </p>
                 </div>
-            </div>
+            </a>
 
-            <div class="people-card">
+            <a href="#" class="people-card">
                 <div class="people-image-wrapper">
                     <img src="../assets/parents.png" alt="Sunil and Sudha Upadhyay">
                 </div>
@@ -204,7 +210,7 @@
                         The pillars of support and inspiration throughout the journey.
                     </p>
                 </div>
-            </div>
+            </a>
 
         </main>
     </div>
