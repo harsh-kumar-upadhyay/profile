@@ -10,7 +10,8 @@ function applySavedTheme() {
     // Safety check: ensure the body element exists
     if (!element) return;
 
-    if (savedTheme === 'dark') {
+    // CHANGED: Check for 'dark' OR null (which means no preference is saved yet)
+    if (savedTheme === 'dark' || savedTheme === null) {
         element.classList.add("dark-mode");
         updateIcons(true);
     } else {
