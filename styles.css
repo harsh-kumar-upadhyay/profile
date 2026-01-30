@@ -670,3 +670,72 @@ body.dark-mode .icon-btn:hover {
     .article-header h1 { font-size: 1.8rem; }
     .article-content p:first-of-type::first-letter { font-size: 3rem; }
 }
+
+/* =========================================
+   8. GALLERY STYLES (Card Layout)
+   ========================================= */
+
+.gallery-grid {
+    display: grid;
+    /* Responsive columns: at least 280px wide */
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px; /* Space between cards */
+    padding-bottom: 60px;
+    align-items: start; /* Prevents shorter cards from stretching to match taller ones */
+}
+
+/* The Card Container */
+.gallery-card {
+    background-color: var(--card-bg); /* Adapts to Dark Mode automatically */
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden; /* Rounds the corners of the image */
+    display: flex;
+    flex-direction: column; /* Stacks Image on top of Text */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.gallery-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--text-muted);
+}
+
+/* The Image Area */
+.gallery-image {
+    width: 100%;
+    height: 250px; /* Fixed height ensures all rows line up perfectly */
+    object-fit: cover; /* Crops image to fill the 250px height without distorting */
+    display: block;
+    border-bottom: 1px solid var(--border-color); /* Separator line between img and text */
+}
+
+/* The Description Area */
+.gallery-caption {
+    padding: 20px;
+    flex-grow: 1; /* Allows text area to fill space if needed */
+}
+
+.gallery-caption p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--text-main); /* Adapts to Dark Mode */
+    line-height: 1.5;
+}
+
+/* Dark Mode Tweaks (Optional explicit overrides if needed) */
+body.dark-mode .gallery-card {
+    background-color: #1e1e1e; /* Slightly lighter than black background */
+}
+
+/* Mobile Adjustments */
+@media screen and (max-width: 600px) {
+    .gallery-grid {
+        grid-template-columns: 1fr; /* Single column on mobile */
+        gap: 20px;
+    }
+    
+    .gallery-image {
+        height: auto; /* Let image be natural height on mobile */
+        max-height: 400px;
+    }
+}
