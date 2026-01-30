@@ -44,11 +44,11 @@
         // ============================================
         const galleryItems = [
             { 
-                id: "1W-y9uqaWDZdkDEdd5mP_KpahifTxsyPW", // Replace with actual Drive File ID
-                description: "Community gathering at the main hall.Community gathering at the main hall.Community gathering at the main hall." 
+                id: "1W-y9uqaWDZdkDEdd5mP_KpahifTxsyPW", // Replace with actual ID
+                description: "Community gathering at the main hall." 
             },
             { 
-                id: "1y9Kp...", // Replace with actual Drive File ID
+                id: "1y9Kp...", // Replace with actual ID
                 description: "A memorable moment from the summer trip." 
             },
             // Add more items here...
@@ -57,34 +57,37 @@
         const container = document.getElementById('galleryContainer');
 
         galleryItems.forEach(item => {
-            // 1. Define the Image URL (Ensure the $ is present!)
-            // using https://lh3.googleusercontent.com/d/ is the most reliable format
             const imageUrl = `https://lh3.googleusercontent.com/d/${item.id}`;
             
-            // 2. Create the Card (Wrapper)
+            // Create the Card
             const card = document.createElement('div');
             card.className = 'gallery-card';
             
-            // 3. Create the Image
+            // Create the Image
             const img = document.createElement('img');
             img.src = imageUrl;
+            img.className = 'gallery-image';
             img.loading = "lazy";
             img.alt = item.description;
-            img.className = 'gallery-image';
             
-            // Optional: Prevent right-click
+            // --- THE FIX: Force styles directly in JS ---
+            // This prevents "giant image" glitches if CSS fails to load
+            img.style.width = '100%';
+            img.style.height = '250px';
+            img.style.objectFit = 'cover'; 
+            img.style.display = 'block';
+            
             img.oncontextmenu = (e) => { e.preventDefault(); return false; };
 
-            // 4. Create the Description Block
+            // Create the Description
             const caption = document.createElement('div');
             caption.className = 'gallery-caption';
             
-            // Create a paragraph for text to handle spacing nicely
             const text = document.createElement('p');
             text.innerText = item.description;
             caption.appendChild(text);
 
-            // 5. Assemble: Image first, then Caption
+            // Assemble
             card.appendChild(img);
             card.appendChild(caption);
             container.appendChild(card);
