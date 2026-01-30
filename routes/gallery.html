@@ -36,62 +36,126 @@
         <main class="gallery-grid" id="galleryContainer">
             </main>
     </div>
-    
+    <div id="imageModal" class="image-modal" onclick="closeModal()">
+        <img id="modalImg" src="" alt="Full Size">
+    </div>
+
     <script src="../script.js"></script>
+   
     <script>
         // ============================================
         // CONFIGURATION: Add IDs and Descriptions here
         // ============================================
         const galleryItems = [
             { 
-                id: "1W-y9uqaWDZdkDEdd5mP_KpahifTxsyPW", // Replace with actual ID
+                id: "1W-y9uqaWDZdkDEdd5mP_KpahifTxsyPW", // Replace with your actual Drive File ID
                 description: "Community gathering at the main hall." 
             },
             { 
-                id: "1y9Kp...", // Replace with actual ID
+                id: "1sIPdUTSHWiZ_Uj3iy55kexjOZCkD9v3q", // Replace with your actual Drive File ID
                 description: "A memorable moment from the summer trip." 
             },
             // Add more items here...
         ];
 
         const container = document.getElementById('galleryContainer');
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImg');
+
+        // Check if device uses a mouse (Desktop)
+        const isDesktop = window.matchMedia('(hover: hover)').matches;
+        let closeTimer; // Variable to track the "closing" delay
 
         galleryItems.forEach(item => {
+            // FIXED URL: Uses the reliable 'lh3' domain for Drive images
             const imageUrl = `https://lh3.googleusercontent.com/d/${item.id}`;
             
-            // Create the Card
+            // Create Card
             const card = document.createElement('div');
             card.className = 'gallery-card';
             
-            // Create the Image
+            // Create Image
             const img = document.createElement('img');
             img.src = imageUrl;
             img.className = 'gallery-image';
             img.loading = "lazy";
             img.alt = item.description;
             
-            // --- THE FIX: Force styles directly in JS ---
-            // This prevents "giant image" glitches if CSS fails to load
+            // Force styles
             img.style.width = '100%';
             img.style.height = '250px';
             img.style.objectFit = 'cover'; 
             img.style.display = 'block';
             
+            // --- DESKTOP LOGIC (Hover) ---
+            if (isDesktop) {
+                img.addEventListener('mouseenter', () => {
+                    clearTimeout(closeTimer); // Cancel any pending close action
+                    openModal(imageUrl);
+                });
+                
+                img.addEventListener('mouseleave', () => {
+                    // Start a short timer to close. 
+                    // This gives the user time to move their mouse from the thumbnail 
+                    // to the popped-up image without it disappearing instantly.
+                    closeTimer = setTimeout(closeModal, 150); 
+                });
+            } 
+            // --- MOBILE LOGIC (Tap) ---
+            else {
+                img.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    openModal(imageUrl);
+                });
+            }
+
             img.oncontextmenu = (e) => { e.preventDefault(); return false; };
 
-            // Create the Description
+            // Description
             const caption = document.createElement('div');
             caption.className = 'gallery-caption';
-            
             const text = document.createElement('p');
             text.innerText = item.description;
             caption.appendChild(text);
 
-            // Assemble
             card.appendChild(img);
             card.appendChild(caption);
             container.appendChild(card);
         });
+
+        // --- MODAL FUNCTIONS ---
+
+        function openModal(src) {
+            modalImg.src = src;
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+            setTimeout(() => { modalImg.src = ''; }, 200);
+        }
+
+        // --- GLOBAL DESKTOP INTERACTION ---
+        if (isDesktop) {
+            // 1. Make the black background "invisible" to the mouse
+            // This allows the mouse to "pass through" to the page below, 
+            // so we can detect when you leave the image area.
+            modal.style.pointerEvents = 'none';
+            
+            // 2. Make sure the IMAGE itself can still catch the mouse
+            modalImg.style.pointerEvents = 'auto';
+
+            // 3. Keep open if mouse enters the big image
+            modalImg.addEventListener('mouseenter', () => {
+                clearTimeout(closeTimer);
+            });
+
+            // 4. Close immediately if mouse leaves the big image
+            modalImg.addEventListener('mouseleave', () => {
+                closeModal();
+            });
+        }
     </script>
+
 </body>
 </html>
