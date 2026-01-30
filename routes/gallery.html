@@ -42,7 +42,7 @@
 
     <script src="../script.js"></script>
    
-    <script>
+   <script>
         // ============================================
         // CONFIGURATION: Add IDs and Descriptions here
         // ============================================
@@ -64,55 +64,39 @@
 
         const isDesktop = window.matchMedia('(hover: hover)').matches;
         
-        // TIMERS for managing delays
         let openTimer;  
         let closeTimer;
 
         galleryItems.forEach(item => {
-            // Reliable Drive URL format
             const imageUrl = `https://lh3.googleusercontent.com/d/${item.id}`;
             
-            // Create Card
             const card = document.createElement('div');
             card.className = 'gallery-card';
             
-            // Create Image
             const img = document.createElement('img');
             img.src = imageUrl;
             img.className = 'gallery-image';
             img.loading = "lazy";
             img.alt = item.description;
             
-            // Force styles
             img.style.width = '100%';
             img.style.height = '250px';
             img.style.objectFit = 'cover'; 
             img.style.display = 'block';
             
-            // --- DESKTOP LOGIC (Hover with Delay) ---
+            // --- DESKTOP LOGIC ---
             if (isDesktop) {
                 img.addEventListener('mouseenter', () => {
-                    // 1. Cancel any pending "Close" action
                     clearTimeout(closeTimer);
-
-                    // 2. Start a delay to OPEN. 
-                    // If you move your mouse away before 400ms, this never happens.
-                    openTimer = setTimeout(() => {
-                        openModal(imageUrl);
-                    }, 400); 
+                    openTimer = setTimeout(() => { openModal(imageUrl); }, 400); 
                 });
                 
                 img.addEventListener('mouseleave', () => {
-                    // 1. Cancel the pending "Open" action immediately.
-                    // This is the key fix: If you were just passing by, the openTimer 
-                    // gets killed here before it can fire.
                     clearTimeout(openTimer);
-
-                    // 2. If it WAS open, start the close timer
                     closeTimer = setTimeout(closeModal, 150); 
                 });
             } 
-            // --- MOBILE LOGIC (Tap) ---
+            // --- MOBILE LOGIC ---
             else {
                 img.addEventListener('click', (e) => {
                     e.stopPropagation();
@@ -122,7 +106,6 @@
 
             img.oncontextmenu = (e) => { e.preventDefault(); return false; };
 
-            // Description
             const caption = document.createElement('div');
             caption.className = 'gallery-caption';
             const text = document.createElement('p');
@@ -134,32 +117,41 @@
             container.appendChild(card);
         });
 
-        // --- MODAL FUNCTIONS ---
+        // ==================================================
+        // NEW ANIMATION LOGIC (THE FIX)
+        // ==================================================
 
         function openModal(src) {
             modalImg.src = src;
+            
+            // 1. Make it visible to the browser (but still invisible/small)
+            modal.style.display = 'flex';
+            
+            // 2. Force the browser to "read" the state (Reflow)
+            // This forces the browser to realize: "Oh, I am currently small!"
+            void modal.offsetWidth; 
+            
+            // 3. NOW start the animation to "Big"
             modal.classList.add('active');
         }
 
         function closeModal() {
+            // 1. Start the animation back to "Small"
             modal.classList.remove('active');
-            setTimeout(() => { modalImg.src = ''; }, 200);
+            
+            // 2. Wait for the CSS transition (0.6s) to finish, THEN hide it
+            setTimeout(() => {
+                modal.style.display = 'none';
+                modalImg.src = '';
+            }, 600); // 600ms matches the CSS transition time
         }
 
-        // --- DESKTOP INTERACTION ---
         if (isDesktop) {
-            modal.style.pointerEvents = 'none'; // Background ignores mouse
-            modalImg.style.pointerEvents = 'auto'; // Image catches mouse
+            modal.style.pointerEvents = 'none';
+            modalImg.style.pointerEvents = 'auto';
 
-            // Keep open if mouse stays on the big image
-            modalImg.addEventListener('mouseenter', () => {
-                clearTimeout(closeTimer);
-            });
-
-            // Close if mouse leaves the big image
-            modalImg.addEventListener('mouseleave', () => {
-                closeModal();
-            });
+            modalImg.addEventListener('mouseenter', () => clearTimeout(closeTimer));
+            modalImg.addEventListener('mouseleave', () => closeModal());
         }
     </script>
 

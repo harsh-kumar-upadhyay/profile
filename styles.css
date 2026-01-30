@@ -16,6 +16,7 @@
     box-sizing: border-box;
 }
 
+/* Find this block: */
 body {
     margin: 0;
     padding: 0;
@@ -25,6 +26,16 @@ body {
     line-height: 1.6;
     font-size: 18px;
     -webkit-font-smoothing: antialiased;
+    /* DELETE THE ANIMATION LINE FROM HERE */
+    /* animation: fadeIn 0.8s ease-in-out;  <-- REMOVE THIS */
+}
+
+/* Add the animation here instead: */
+.container-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    /* ADD IT HERE: */
     animation: fadeIn 0.8s ease-in-out;
 }
 
@@ -741,40 +752,49 @@ body.dark-mode .gallery-card {
 }
 
 /* =========================================
-   9. IMAGE MODAL (Lightbox)
+   9. IMAGE MODAL (Lightbox) - Corrected
    ========================================= */
 
 .image-modal {
-    display: none; /* Hidden by default */
-    position: fixed;
+    display: none; 
+    /* Force fixed position relative to the screen */
+    position: fixed !important; 
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.9); /* Dark backdrop */
-    z-index: 10000; /* On top of everything */
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    
+    background-color: rgba(0, 0, 0, 0.95); /* Darker background */
+    z-index: 99999; /* Ensure it's on top of everything */
     align-items: center;
     justify-content: center;
-    cursor: pointer; /* Suggests "click to close" */
+    cursor: pointer;
+    
+    /* Animation Start State */
     opacity: 0;
-    transition: opacity 0.2s ease;
-}
-
-.image-modal.active {
-    display: flex; /* Activate Flexbox centering */
-    opacity: 1;
+    transition: opacity 0.5s ease;
+    backdrop-filter: blur(5px); /* Optional: Adds a nice blur to background */
 }
 
 .image-modal img {
-    max-width: 90%;
-    max-height: 90%;
-    object-fit: contain; /* Ensures full image is visible */
+    max-width: 90vw; /* Use Viewport Width units */
+    max-height: 90vh; /* Use Viewport Height units */
+    object-fit: contain;
     border-radius: 4px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
-    transform: scale(0.95);
-    transition: transform 0.2s ease;
+    box-shadow: 0 0 30px rgba(0,0,0,0.8);
+    
+    /* Animation Start State */
+    transform: scale(0.8);
+    transition: transform 0.5s cubic-bezier(0.2, 1, 0.3, 1);
+}
+
+/* Active States */
+.image-modal.active {
+    opacity: 1;
 }
 
 .image-modal.active img {
-    transform: scale(1); /* Subtle zoom-in animation */
+    transform: scale(1);
 }
