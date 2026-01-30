@@ -48,11 +48,11 @@
         // ============================================
         const galleryItems = [
             { 
-                id: "1W-y9uqaWDZdkDEdd5mP_KpahifTxsyPW", // Replace with your actual Drive File ID
+                id: "1sIPdUTSHWiZ_Uj3iy55kexjOZCkD9v3q", // Replace with actual Drive File ID
                 description: "Community gathering at the main hall." 
             },
             { 
-                id: "1sIPdUTSHWiZ_Uj3iy55kexjOZCkD9v3q", // Replace with your actual Drive File ID
+                id: "1W-y9uqaWDZdkDEdd5mP_KpahifTxsyPW", // Replace with actual Drive File ID
                 description: "A memorable moment from the summer trip." 
             },
             // Add more items here...
@@ -62,12 +62,14 @@
         const modal = document.getElementById('imageModal');
         const modalImg = document.getElementById('modalImg');
 
-        // Check if device uses a mouse (Desktop)
         const isDesktop = window.matchMedia('(hover: hover)').matches;
-        let closeTimer; // Variable to track the "closing" delay
+        
+        // TIMERS for managing delays
+        let openTimer;  
+        let closeTimer;
 
         galleryItems.forEach(item => {
-            // FIXED URL: Uses the reliable 'lh3' domain for Drive images
+            // Reliable Drive URL format
             const imageUrl = `https://lh3.googleusercontent.com/d/${item.id}`;
             
             // Create Card
@@ -87,17 +89,26 @@
             img.style.objectFit = 'cover'; 
             img.style.display = 'block';
             
-            // --- DESKTOP LOGIC (Hover) ---
+            // --- DESKTOP LOGIC (Hover with Delay) ---
             if (isDesktop) {
                 img.addEventListener('mouseenter', () => {
-                    clearTimeout(closeTimer); // Cancel any pending close action
-                    openModal(imageUrl);
+                    // 1. Cancel any pending "Close" action
+                    clearTimeout(closeTimer);
+
+                    // 2. Start a delay to OPEN. 
+                    // If you move your mouse away before 400ms, this never happens.
+                    openTimer = setTimeout(() => {
+                        openModal(imageUrl);
+                    }, 400); 
                 });
                 
                 img.addEventListener('mouseleave', () => {
-                    // Start a short timer to close. 
-                    // This gives the user time to move their mouse from the thumbnail 
-                    // to the popped-up image without it disappearing instantly.
+                    // 1. Cancel the pending "Open" action immediately.
+                    // This is the key fix: If you were just passing by, the openTimer 
+                    // gets killed here before it can fire.
+                    clearTimeout(openTimer);
+
+                    // 2. If it WAS open, start the close timer
                     closeTimer = setTimeout(closeModal, 150); 
                 });
             } 
@@ -135,22 +146,17 @@
             setTimeout(() => { modalImg.src = ''; }, 200);
         }
 
-        // --- GLOBAL DESKTOP INTERACTION ---
+        // --- DESKTOP INTERACTION ---
         if (isDesktop) {
-            // 1. Make the black background "invisible" to the mouse
-            // This allows the mouse to "pass through" to the page below, 
-            // so we can detect when you leave the image area.
-            modal.style.pointerEvents = 'none';
-            
-            // 2. Make sure the IMAGE itself can still catch the mouse
-            modalImg.style.pointerEvents = 'auto';
+            modal.style.pointerEvents = 'none'; // Background ignores mouse
+            modalImg.style.pointerEvents = 'auto'; // Image catches mouse
 
-            // 3. Keep open if mouse enters the big image
+            // Keep open if mouse stays on the big image
             modalImg.addEventListener('mouseenter', () => {
                 clearTimeout(closeTimer);
             });
 
-            // 4. Close immediately if mouse leaves the big image
+            // Close if mouse leaves the big image
             modalImg.addEventListener('mouseleave', () => {
                 closeModal();
             });
