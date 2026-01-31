@@ -36,124 +36,173 @@
         <main class="gallery-grid" id="galleryContainer">
             </main>
     </div>
-    <div id="imageModal" class="image-modal" onclick="closeModal()">
-        <img id="modalImg" src="" alt="Full Size">
+
+    <div id="imageModal" class="image-modal" onclick="closeModal(event)">
+        <div class="modal-wrapper">
+            <button id="prevBtn" class="modal-nav-btn" onclick="changeSlide(-1, event)">❮</button>
+            <img id="modalImg" src="" alt="Full Size">
+            <button id="nextBtn" class="modal-nav-btn" onclick="changeSlide(1, event)">❯</button>
+        </div>
     </div>
 
     <script src="../script.js"></script>
-   
-   <script>
-        // ============================================
-        // CONFIGURATION: Add IDs and Descriptions here
-        // ============================================
+
+    <script src="../script.js"></script>
+    <script>
+        // ... (Keep your galleryItems config the same) ...
         const galleryItems = [
             { 
-                id: "1sIPdUTSHWiZ_Uj3iy55kexjOZCkD9v3q", // Replace with actual Drive File ID
-                description: "Community gathering at the main hall." 
+                // A single gallery item now has MULTIPLE images
+                ids: [
+                    "1katdTOV9PBGFSeT_6hR6O0ShJDMMyDmJ", // Image 1 of this event
+                    "1bifTFPUC8uzzwJcAfco-jAcC1k9PIU2Q", // Image 2 of this event
+                    "1a4t3ZfvHfM5k5-0xZElkZFP4tu_CBYLu"  // Image 3 of this event
+                ], 
+                description: "PRAYAS; Dinner with Director." 
             },
             { 
-                id: "1W-y9uqaWDZdkDEdd5mP_KpahifTxsyPW", // Replace with actual Drive File ID
-                description: "A memorable moment from the summer trip." 
+                ids: [
+                    "1a2Bc...", // Image 1 of second event
+                    "1b3Cd..."  // Image 2 of second event
+                ], 
+                description: "Summer Trip Highlights." 
             },
-            // Add more items here...
         ];
 
         const container = document.getElementById('galleryContainer');
         const modal = document.getElementById('imageModal');
         const modalImg = document.getElementById('modalImg');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        // Portal Fix
+        document.body.appendChild(modal);
 
         const isDesktop = window.matchMedia('(hover: hover)').matches;
-        
         let openTimer;  
         let closeTimer;
+        let currentModalImages = []; 
+        let currentModalIndex = 0;   
 
+        // BUILD GALLERY
         galleryItems.forEach(item => {
-            const imageUrl = `https://lh3.googleusercontent.com/d/${item.id}`;
-            
             const card = document.createElement('div');
             card.className = 'gallery-card';
+            const imageStack = document.createElement('div');
+            imageStack.className = 'image-stack';
             
-            const img = document.createElement('img');
-            img.src = imageUrl;
-            img.className = 'gallery-image';
-            img.loading = "lazy";
-            img.alt = item.description;
-            
-            img.style.width = '100%';
-            img.style.height = '250px';
-            img.style.objectFit = 'cover'; 
-            img.style.display = 'block';
-            
-            // --- DESKTOP LOGIC ---
+            item.ids.forEach((id, index) => {
+                const img = document.createElement('img');
+                img.src = `https://lh3.googleusercontent.com/d/${id}`; 
+                img.className = `gallery-image ${index === 0 ? 'visible' : ''}`;
+                img.loading = "lazy";
+                imageStack.appendChild(img);
+            });
+
+            if (item.ids.length > 1) startCardSlideshow(imageStack, item.ids.length);
+
+            // INTERACTION
             if (isDesktop) {
-                img.addEventListener('mouseenter', () => {
+                imageStack.addEventListener('mouseenter', () => {
                     clearTimeout(closeTimer);
-                    openTimer = setTimeout(() => { openModal(imageUrl); }, 400); 
+                    openTimer = setTimeout(() => { openModal(item.ids); }, 400); 
                 });
-                
-                img.addEventListener('mouseleave', () => {
+                imageStack.addEventListener('mouseleave', () => {
                     clearTimeout(openTimer);
                     closeTimer = setTimeout(closeModal, 150); 
                 });
-            } 
-            // --- MOBILE LOGIC ---
-            else {
-                img.addEventListener('click', (e) => {
+            } else {
+                imageStack.addEventListener('click', (e) => {
                     e.stopPropagation();
-                    openModal(imageUrl);
+                    openModal(item.ids);
                 });
             }
 
-            img.oncontextmenu = (e) => { e.preventDefault(); return false; };
-
             const caption = document.createElement('div');
             caption.className = 'gallery-caption';
-            const text = document.createElement('p');
-            text.innerText = item.description;
-            caption.appendChild(text);
-
-            card.appendChild(img);
+            caption.innerHTML = `<p>${item.description}</p>`;
+            card.appendChild(imageStack);
             card.appendChild(caption);
             container.appendChild(card);
         });
 
-        // ==================================================
-        // NEW ANIMATION LOGIC (THE FIX)
-        // ==================================================
+        function startCardSlideshow(stackElement, count) {
+            let currentIndex = 0;
+            const images = stackElement.querySelectorAll('img');
+            setInterval(() => {
+                images[currentIndex].classList.remove('visible');
+                currentIndex = (currentIndex + 1) % count;
+                images[currentIndex].classList.add('visible');
+            }, 3000); 
+        }
 
-        function openModal(src) {
-            modalImg.src = src;
+        // MODAL LOGIC
+        function openModal(imageIds) {
+            currentModalImages = imageIds;
+            currentModalIndex = 0; 
+            updateModalImage();
             
-            // 1. Make it visible to the browser (but still invisible/small)
+            if (imageIds.length > 1) {
+                prevBtn.style.display = 'flex';
+                nextBtn.style.display = 'flex';
+            } else {
+                prevBtn.style.display = 'none';
+                nextBtn.style.display = 'none';
+            }
+
             modal.style.display = 'flex';
-            
-            // 2. Force the browser to "read" the state (Reflow)
-            // This forces the browser to realize: "Oh, I am currently small!"
-            void modal.offsetWidth; 
-            
-            // 3. NOW start the animation to "Big"
+            void modal.offsetWidth; // Force reflow
             modal.classList.add('active');
         }
 
-        function closeModal() {
-            // 1. Start the animation back to "Small"
+        function updateModalImage() {
+            modalImg.src = `https://lh3.googleusercontent.com/d/${currentModalImages[currentModalIndex]}`;
+        }
+
+        function changeSlide(direction, event) {
+            if(event) event.stopPropagation();
+            currentModalIndex += direction;
+            if (currentModalIndex >= currentModalImages.length) currentModalIndex = 0;
+            else if (currentModalIndex < 0) currentModalIndex = currentModalImages.length - 1;
+            updateModalImage();
+        }
+
+        function closeModal(event) {
+            if (event && event.target !== modal) return;
             modal.classList.remove('active');
-            
-            // 2. Wait for the CSS transition (0.6s) to finish, THEN hide it
             setTimeout(() => {
                 modal.style.display = 'none';
                 modalImg.src = '';
-            }, 600); // 600ms matches the CSS transition time
+                currentModalImages = [];
+            }, 500); // Matches CSS transition
         }
 
+        // --- SAFE ZONE LOGIC ---
         if (isDesktop) {
-            modal.style.pointerEvents = 'none';
-            modalImg.style.pointerEvents = 'auto';
+            modal.style.pointerEvents = 'none'; // Pass through background
 
-            modalImg.addEventListener('mouseenter', () => clearTimeout(closeTimer));
-            modalImg.addEventListener('mouseleave', () => closeModal());
+            // Treat the Image AND Buttons as a single "Safe Zone"
+            const safeElements = [modalImg, prevBtn, nextBtn];
+            
+            safeElements.forEach(el => {
+                el.style.pointerEvents = 'auto'; // Capture mouse
+                
+                el.addEventListener('mouseenter', () => {
+                    clearTimeout(closeTimer);
+                });
+                
+                el.addEventListener('mouseleave', () => {
+                    // Increased timer to 300ms to allow smooth bridging between button and image
+                    closeTimer = setTimeout(closeModal, 300);
+                });
+            });
+        } else {
+            modal.style.pointerEvents = 'auto';
         }
     </script>
+
+
+
 
 </body>
 </html>

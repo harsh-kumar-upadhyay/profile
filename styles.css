@@ -683,27 +683,28 @@ body.dark-mode .icon-btn:hover {
 }
 
 /* =========================================
-   8. GALLERY STYLES (Card Layout)
+   8. GALLERY STYLES - Slideshow Support
    ========================================= */
 
 .gallery-grid {
     display: grid;
-    /* Responsive columns: at least 280px wide */
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 30px; /* Space between cards */
+    gap: 30px;
     padding-bottom: 60px;
-    align-items: start; /* Prevents shorter cards from stretching to match taller ones */
+    align-items: start;
 }
 
-/* The Card Container */
 .gallery-card {
-    background-color: var(--card-bg); /* Adapts to Dark Mode automatically */
+    background-color: var(--card-bg);
     border: 1px solid var(--border-color);
     border-radius: 8px;
-    overflow: hidden; /* Rounds the corners of the image */
+    overflow: hidden;
     display: flex;
-    flex-direction: column; /* Stacks Image on top of Text */
+    flex-direction: column;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    
+    /* Ensure positioned context for stacked images */
+    position: relative; 
 }
 
 .gallery-card:hover {
@@ -711,90 +712,131 @@ body.dark-mode .icon-btn:hover {
     border-color: var(--text-muted);
 }
 
-/* The Image Area */
-.gallery-image {
+/* Image Container - needed for stacking */
+.image-stack {
+    position: relative;
     width: 100%;
-    height: 250px; /* Fixed height ensures all rows line up perfectly */
-    object-fit: cover; /* Crops image to fill the 250px height without distorting */
-    display: block;
-    border-bottom: 1px solid var(--border-color); /* Separator line between img and text */
+    height: 250px;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border-color);
 }
 
-/* The Description Area */
+.gallery-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    
+    /* Stacking Logic */
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0; /* Hidden by default */
+    transition: opacity 1s ease-in-out; /* Smooth fade */
+}
+
+/* The active image in the slideshow is visible */
+.gallery-image.visible {
+    opacity: 1;
+    z-index: 1;
+}
+
 .gallery-caption {
     padding: 20px;
-    flex-grow: 1; /* Allows text area to fill space if needed */
+    flex-grow: 1;
+    z-index: 2; /* Ensure text sits above images if overlap occurs */
+    background: var(--card-bg);
 }
 
 .gallery-caption p {
     margin: 0;
     font-size: 0.95rem;
-    color: var(--text-main); /* Adapts to Dark Mode */
+    color: var(--text-main);
     line-height: 1.5;
 }
 
-/* Dark Mode Tweaks (Optional explicit overrides if needed) */
-body.dark-mode .gallery-card {
-    background-color: #1e1e1e; /* Slightly lighter than black background */
-}
-
-/* Mobile Adjustments */
-@media screen and (max-width: 600px) {
-    .gallery-grid {
-        grid-template-columns: 1fr; /* Single column on mobile */
-        gap: 20px;
-    }
-    
-    .gallery-image {
-        height: auto; /* Let image be natural height on mobile */
-        max-height: 400px;
-    }
-}
-
 /* =========================================
-   9. IMAGE MODAL (Lightbox) - Corrected
+   9. IMAGE MODAL (Lightbox) - Buttons on Image
    ========================================= */
 
 .image-modal {
-    display: none; 
-    /* Force fixed position relative to the screen */
-    position: fixed !important; 
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100vw;
-    height: 100vh;
-    
-    background-color: rgba(0, 0, 0, 0.95); /* Darker background */
-    z-index: 99999; /* Ensure it's on top of everything */
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background-color: rgba(0, 0, 0, 0.95);
+    z-index: 99999;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
-    
-    /* Animation Start State */
     opacity: 0;
-    transition: opacity 0.5s ease;
-    backdrop-filter: blur(5px); /* Optional: Adds a nice blur to background */
+    transition: opacity 0.4s ease;
 }
 
-.image-modal img {
-    max-width: 90vw; /* Use Viewport Width units */
-    max-height: 90vh; /* Use Viewport Height units */
-    object-fit: contain;
-    border-radius: 4px;
-    box-shadow: 0 0 30px rgba(0,0,0,0.8);
-    
-    /* Animation Start State */
-    transform: scale(0.8);
-    transition: transform 0.5s cubic-bezier(0.2, 1, 0.3, 1);
-}
-
-/* Active States */
 .image-modal.active {
     opacity: 1;
 }
 
-.image-modal.active img {
-    transform: scale(1);
+/* NEW: A wrapper that hugs the image size exactly */
+.modal-wrapper {
+    position: relative;
+    display: inline-flex; /* Shrinks to fit the image content */
+    align-items: center;
+    justify-content: center;
+    max-width: 85vw;
+    max-height: 85vh;
+    
+    /* Animation affects the whole wrapper now */
+    transform: scale(0.9);
+    opacity: 0;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
 }
+
+/* When active, the wrapper grows */
+.image-modal.active .modal-wrapper {
+    transform: scale(1);
+    opacity: 1;
+}
+
+.image-modal img {
+    display: block;
+    max-width: 100%;
+    max-height: 85vh; /* Ensure it fits vertically */
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 4px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    pointer-events: auto; /* Ensure mouse works on image */
+}
+
+/* Navigation Buttons - Now sticking to the image */
+.modal-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.3); /* Subtle dark background */
+    color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    z-index: 10;
+    pointer-events: auto; /* Ensure clickable */
+    backdrop-filter: blur(2px);
+}
+
+.modal-nav-btn:hover {
+    background: rgba(255, 255, 255, 0.9);
+    color: #000;
+    transform: translateY(-50%) scale(1.1);
+}
+
+/* Position them INSIDE the wrapper (on the image) */
+#prevBtn { left: 15px; }
+#nextBtn { right: 15px; }
