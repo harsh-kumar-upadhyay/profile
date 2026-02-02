@@ -48,10 +48,13 @@
     <script src="../script.js"></script>
 
     <script src="../script.js"></script>
+        
     <script>
-        // ... (Keep your galleryItems config the same) ...
-        const galleryItems = [
-            { 
+    // ============================================
+    // CONFIGURATION: Group your images here
+    // ============================================
+    const galleryItems = [
+        { 
                 // A single gallery item now has MULTIPLE images
                 ids: [
                     "1katdTOV9PBGFSeT_6hR6O0ShJDMMyDmJ", // Image 1 of this event
@@ -83,139 +86,150 @@
                 ], 
                 description: "IIT Madras Provisional Certificate Distribution." 
             },
-        ];
+    ];
 
-        const container = document.getElementById('galleryContainer');
-        const modal = document.getElementById('imageModal');
-        const modalImg = document.getElementById('modalImg');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
+    const container = document.getElementById('galleryContainer');
+    const modal = document.getElementById('imageModal');
+    const modalImg = document.getElementById('modalImg');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
 
-        // Portal Fix
-        document.body.appendChild(modal);
+    // Portal Fix
+    document.body.appendChild(modal);
 
-        const isDesktop = window.matchMedia('(hover: hover)').matches;
-        let openTimer;  
-        let closeTimer;
-        let currentModalImages = []; 
-        let currentModalIndex = 0;   
+    // --- DISABLE RIGHT CLICK ON ENLARGED IMAGE ---
+    modalImg.addEventListener('contextmenu', (e) => {
+        e.preventDefault(); 
+        return false;
+    });
 
-        // BUILD GALLERY
-        galleryItems.forEach(item => {
-            const card = document.createElement('div');
-            card.className = 'gallery-card';
-            const imageStack = document.createElement('div');
-            imageStack.className = 'image-stack';
+    const isDesktop = window.matchMedia('(hover: hover)').matches;
+    let openTimer;  
+    let closeTimer;
+    let currentModalImages = []; 
+    let currentModalIndex = 0;   
+
+    // BUILD GALLERY
+    galleryItems.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'gallery-card';
+        const imageStack = document.createElement('div');
+        imageStack.className = 'image-stack';
+        
+        item.ids.forEach((id, index) => {
+            const img = document.createElement('img');
+            img.src = `https://lh3.googleusercontent.com/d/${id}`; 
+            img.className = `gallery-image ${index === 0 ? 'visible' : ''}`;
+            img.loading = "lazy";
             
-            item.ids.forEach((id, index) => {
-                const img = document.createElement('img');
-                img.src = `https://lh3.googleusercontent.com/d/${id}`; 
-                img.className = `gallery-image ${index === 0 ? 'visible' : ''}`;
-                img.loading = "lazy";
-                imageStack.appendChild(img);
+            // --- DISABLE RIGHT CLICK ON THUMBNAILS ---
+            img.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                return false;
             });
 
-            if (item.ids.length > 1) startCardSlideshow(imageStack, item.ids.length);
-
-            // INTERACTION
-            if (isDesktop) {
-                imageStack.addEventListener('mouseenter', () => {
-                    clearTimeout(closeTimer);
-                    openTimer = setTimeout(() => { openModal(item.ids); }, 400); 
-                });
-                imageStack.addEventListener('mouseleave', () => {
-                    clearTimeout(openTimer);
-                    closeTimer = setTimeout(closeModal, 150); 
-                });
-            } else {
-                imageStack.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    openModal(item.ids);
-                });
-            }
-
-            const caption = document.createElement('div');
-            caption.className = 'gallery-caption';
-            caption.innerHTML = `<p>${item.description}</p>`;
-            card.appendChild(imageStack);
-            card.appendChild(caption);
-            container.appendChild(card);
+            imageStack.appendChild(img);
         });
 
-        function startCardSlideshow(stackElement, count) {
-            let currentIndex = 0;
-            const images = stackElement.querySelectorAll('img');
-            setInterval(() => {
-                images[currentIndex].classList.remove('visible');
-                currentIndex = (currentIndex + 1) % count;
-                images[currentIndex].classList.add('visible');
-            }, 3000); 
-        }
+        if (item.ids.length > 1) startCardSlideshow(imageStack, item.ids.length);
 
-        // MODAL LOGIC
-        function openModal(imageIds) {
-            currentModalImages = imageIds;
-            currentModalIndex = 0; 
-            updateModalImage();
-            
-            if (imageIds.length > 1) {
-                prevBtn.style.display = 'flex';
-                nextBtn.style.display = 'flex';
-            } else {
-                prevBtn.style.display = 'none';
-                nextBtn.style.display = 'none';
-            }
-
-            modal.style.display = 'flex';
-            void modal.offsetWidth; // Force reflow
-            modal.classList.add('active');
-        }
-
-        function updateModalImage() {
-            modalImg.src = `https://lh3.googleusercontent.com/d/${currentModalImages[currentModalIndex]}`;
-        }
-
-        function changeSlide(direction, event) {
-            if(event) event.stopPropagation();
-            currentModalIndex += direction;
-            if (currentModalIndex >= currentModalImages.length) currentModalIndex = 0;
-            else if (currentModalIndex < 0) currentModalIndex = currentModalImages.length - 1;
-            updateModalImage();
-        }
-
-        function closeModal(event) {
-            if (event && event.target !== modal) return;
-            modal.classList.remove('active');
-            setTimeout(() => {
-                modal.style.display = 'none';
-                modalImg.src = '';
-                currentModalImages = [];
-            }, 500); // Matches CSS transition
-        }
-
-        // --- SAFE ZONE LOGIC ---
+        // INTERACTION
         if (isDesktop) {
-            modal.style.pointerEvents = 'none'; // Pass through background
-
-            // Treat the Image AND Buttons as a single "Safe Zone"
-            const safeElements = [modalImg, prevBtn, nextBtn];
-            
-            safeElements.forEach(el => {
-                el.style.pointerEvents = 'auto'; // Capture mouse
-                
-                el.addEventListener('mouseenter', () => {
-                    clearTimeout(closeTimer);
-                });
-                
-                el.addEventListener('mouseleave', () => {
-                    // Increased timer to 300ms to allow smooth bridging between button and image
-                    closeTimer = setTimeout(closeModal, 300);
-                });
+            imageStack.addEventListener('mouseenter', () => {
+                clearTimeout(closeTimer);
+                openTimer = setTimeout(() => { openModal(item.ids); }, 400); 
+            });
+            imageStack.addEventListener('mouseleave', () => {
+                clearTimeout(openTimer);
+                closeTimer = setTimeout(closeModal, 150); 
             });
         } else {
-            modal.style.pointerEvents = 'auto';
+            imageStack.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openModal(item.ids);
+            });
         }
-    </script>
 
+        const caption = document.createElement('div');
+        caption.className = 'gallery-caption';
+        caption.innerHTML = `<p>${item.description}</p>`;
+        card.appendChild(imageStack);
+        card.appendChild(caption);
+        container.appendChild(card);
+    });
+
+    function startCardSlideshow(stackElement, count) {
+        let currentIndex = 0;
+        const images = stackElement.querySelectorAll('img');
+        setInterval(() => {
+            images[currentIndex].classList.remove('visible');
+            currentIndex = (currentIndex + 1) % count;
+            images[currentIndex].classList.add('visible');
+        }, 3000); 
+    }
+
+    // MODAL LOGIC
+    function openModal(imageIds) {
+        currentModalImages = imageIds;
+        currentModalIndex = 0; 
+        updateModalImage();
+        
+        if (imageIds.length > 1) {
+            prevBtn.style.display = 'flex';
+            nextBtn.style.display = 'flex';
+        } else {
+            prevBtn.style.display = 'none';
+            nextBtn.style.display = 'none';
+        }
+
+        modal.style.display = 'flex';
+        void modal.offsetWidth; // Force reflow
+        modal.classList.add('active');
+    }
+
+    function updateModalImage() {
+        modalImg.src = `https://lh3.googleusercontent.com/d/${currentModalImages[currentModalIndex]}`;
+    }
+
+    function changeSlide(direction, event) {
+        if(event) event.stopPropagation();
+        currentModalIndex += direction;
+        if (currentModalIndex >= currentModalImages.length) currentModalIndex = 0;
+        else if (currentModalIndex < 0) currentModalIndex = currentModalImages.length - 1;
+        updateModalImage();
+    }
+
+    function closeModal(event) {
+        if (event && event.target !== modal) return;
+        modal.classList.remove('active');
+        setTimeout(() => {
+            modal.style.display = 'none';
+            modalImg.src = '';
+            currentModalImages = [];
+        }, 500); 
+    }
+
+    // --- SAFE ZONE LOGIC ---
+    if (isDesktop) {
+        modal.style.pointerEvents = 'none'; 
+
+        // Treat the Image AND Buttons as a single "Safe Zone"
+        const safeElements = [modalImg, prevBtn, nextBtn];
+        
+        safeElements.forEach(el => {
+            el.style.pointerEvents = 'auto'; 
+            
+            el.addEventListener('mouseenter', () => {
+                clearTimeout(closeTimer);
+            });
+            
+            el.addEventListener('mouseleave', () => {
+                closeTimer = setTimeout(closeModal, 300);
+            });
+        });
+    } else {
+        modal.style.pointerEvents = 'auto';
+    }
+</script>
 </body>
 </html>
