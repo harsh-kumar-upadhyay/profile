@@ -1,23 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1"> 
     <link rel="stylesheet" href="./styles.css">
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <title>Harsh</title>
   </head>
   <body id="body">
     <div class="container-wrapper">
         <div class="home-header">
-            <!-- <a class="button" href="routes/.html"></a> -->
             <a class="button" href="routes/gallery.html">Gallery</a>
             <a class="button" href="routes/journey.html">Journey</a>
+            <a class="button" href="routes/blogs.html">Blogs</a>
             <a class="button" href="routes/people.html">People</a>
-             <button id="mode" class="icon-btn" onclick="myFunction()" aria-label="Toggle Dark Mode">
+            <button id="mode" class="icon-btn" onclick="toggleTheme()" aria-label="Toggle Dark Mode">
                 <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
                 <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
             </button>
@@ -29,16 +27,15 @@
                 <p><b>PhD CSE Scholar @ IIT H</b></p>
                 <div class="social-icons">
                     <a href="https://scholar.google.com/citations?user=dItsLCwAAAAJ&hl=en"> <img src="assets/google-scholar.png" alt="Google Scholar" width="32" height="32"></a>
-                    <a href="mailto:harsh.handle@gmail.com"> <img src="assets/mail.png" alt="Mail To" width="32" height="28"></a>
+                    <a href="mailto:harsh.handle@gmail.com"> <img src="assets/mail.png" alt="Mail" width="32" height="28"></a>
                     <a href="https://www.linkedin.com/in/hku/"> <img src="assets/linkedin.png" alt="LinkedIn" width="32" height="32"></a>
                     <a href="https://wa.me/919039995292"> <img src="assets/whatsapp.png" alt="WhatsApp" width="32" height="32"></a>
                 </div>
             </div>
             <img src="assets/Harsh.png" style="width:128px; height:128px; border-radius: 50%;">
         </div>
-
-        <br>
         
+        <br>
         <h5 class="blink">News</h5>
         <ul>
             <li>[Jan-May 2026] I am TA for Artificial Intelligence (ID1050).</li>
@@ -54,8 +51,10 @@
                 <a href="https://github.com/probml/pml-book/releases/latest/download/book1.pdf">Probabilistic Machine Learning: An Introduction</a>
             </div>
         </div>
+        
+        <br><br>
+
     </div>
-    
     <script src="./script.js"></script>
   </body>
 </html>

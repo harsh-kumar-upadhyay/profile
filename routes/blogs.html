@@ -5,66 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blogs</title>
     <link rel="stylesheet" href="../styles.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body id="body">
-
-    <div class="top-nav">
-        <div class="nav-buttons">
-            <button class="icon-btn" onclick="history.back()" aria-label="Go Back">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-            </button>
-            
-            <a href="../index.html" class="icon-btn" aria-label="Home">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-            </a>
-        </div>
-        
-        <button id="mode" class="icon-btn" onclick="myFunction()" aria-label="Toggle Dark Mode">
-            <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-            <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-        </button>
-    </div>
+    <div id="dynamic-nav" class="top-nav"></div>
 
     <div class="container-wrapper">
         <header class="archive-header">
             <h1>Selected Stories</h1>
         </header>
-
-        <main class="blog-grid">
-            <a href="blogs/1.html" class="blog-card">
-                <span class="card-index">01/</span>
-                <h2>The Neon Horizon</h2>
-                <p>A cinematic perspective on light and isolation within a sprawling digital landscape.</p>
-                <span class="read-link">Read Entry</span>
-            </a>
-
-            <a href="blogs/2.html" class="blog-card">
-                <span class="card-index">02/</span>
-                <h2>Whispers of Oak</h2>
-                <p>Decoding the acoustic secrets hidden within ancient timber and forgotten groves.</p>
-                <span class="read-link">Read Entry</span>
-            </a>
-
-            <a href="blogs/3.html" class="blog-card">
-                <span class="card-index">03/</span>
-                <h2>The Last Echo</h2>
-                <p>A final transcription exploring the transition from sound to absolute silence.</p>
-                <span class="read-link">Read Entry</span>
-            </a>
-            
-             <a href="blogs/4.html" class="blog-card">
-                <span class="card-index">04/</span>
-                <h2>The Last Echo</h2>
-                <p>A final transcription exploring the transition from sound to absolute silence.</p>
-                <span class="read-link">Read Entry</span>
-            </a>
-        </main>
+        <main class="blog-grid" id="blog-grid"></main>
     </div>
-    
     <script src="../script.js"></script>
-
 </body>
 </html>

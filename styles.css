@@ -16,7 +16,6 @@
     box-sizing: border-box;
 }
 
-/* Find this block: */
 body {
     margin: 0;
     padding: 0;
@@ -26,17 +25,13 @@ body {
     line-height: 1.6;
     font-size: 18px;
     -webkit-font-smoothing: antialiased;
-    /* DELETE THE ANIMATION LINE FROM HERE */
-    /* animation: fadeIn 0.8s ease-in-out;  <-- REMOVE THIS */
 }
 
-/* Add the animation here instead: */
 .container-wrapper {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
-    /* ADD IT HERE: */
-    animation: fadeIn 0.8s ease-in-out;
+    animation: fadeIn 0.8s ease-in-out; /* RESTORED ANIMATION */
 }
 
 @keyframes fadeIn {
@@ -62,13 +57,6 @@ img {
 /* =========================================
    2. UTILITIES & BUTTONS
    ========================================= */
-.container-wrapper {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-/* Standard Text Button (used for Blogs/About links on Index) */
 .button {
     background-color: #6f6f6f;
     border: none;
@@ -88,7 +76,6 @@ img {
     background-color: #333;
 }
 
-/* Unified Icon Button Style (Back, Home, Dark Mode) */
 .icon-btn {
     background: transparent;
     border: 1px solid var(--border-color);
@@ -102,16 +89,15 @@ img {
     cursor: pointer;
     transition: all 0.3s ease;
     padding: 0;
-    text-decoration: none; /* For <a> tags using this class */
+    text-decoration: none;
 }
 
 .icon-btn:hover {
     background-color: var(--border-color);
     transform: translateY(-2px);
-    color: var(--text-main); /* Prevents accent color override on hover */
+    color: var(--text-main);
 }
 
-/* Navigation Container for sub-pages */
 .top-nav {
     padding: 20px 5%;
     display: flex;
@@ -146,7 +132,6 @@ body.dark-mode th {
     border-color: #333;
 }
 
-/* Icon Buttons in Dark Mode */
 body.dark-mode .icon-btn {
     border-color: #333;
     color: #e0e0e0;
@@ -156,7 +141,7 @@ body.dark-mode .icon-btn:hover {
 }
 
 /* =========================================
-   3. HOME PAGE (Index) STYLES
+   3. HOME PAGE
    ========================================= */
 .home-header {
     display: flex;
@@ -193,12 +178,6 @@ body.dark-mode .icon-btn:hover {
     gap: 15px;
 }
 
-.social-icons a {
-    margin: 0;
-    display: flex;
-}
-
-/* Monochrome Icons */
 .social-icons img {
     filter: grayscale(100%);
     opacity: 0.7;
@@ -221,7 +200,6 @@ body.dark-mode .icon-btn:hover {
     50% { opacity: 0; }
 }
 
-/* Dropdown */
 .dropdown {
     position: relative;
     display: inline-block;
@@ -258,7 +236,7 @@ body.dark-mode .icon-btn:hover {
 .show { display: block; }
 
 /* =========================================
-   4. ABOUT PAGE (Timeline) STYLES
+   4. ABOUT PAGE (Timeline)
    ========================================= */
 .timeline-body {
     padding: 0;
@@ -418,7 +396,7 @@ body.dark-mode .icon-btn:hover {
 .rank-table th { background-color: var(--border-color); }
 
 /* =========================================
-   5. BLOGS (Archive) STYLES
+   5. BLOGS & PEOPLE GRID
    ========================================= */
 .archive-header {
     text-align: center;
@@ -426,7 +404,7 @@ body.dark-mode .icon-btn:hover {
     padding-top: 20px;
 }
 
-.archive-header h1 {
+.archive-header h1, .archive-header span {
     font-weight: 400;
     font-size: 0.85rem;
     text-transform: uppercase;
@@ -490,8 +468,114 @@ body.dark-mode .icon-btn:hover {
     font-weight: 600;
 }
 
+/* --- PEOPLE CARD STYLES (Moved from people.html) --- */
+.people-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px 20px 60px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.people-card {
+    position: relative;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    flex: 1 1 300px;
+    max-width: 500px;
+    height: auto;
+    min-height: 100px;
+    transition: transform 0.2s ease;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    padding: 10px;
+}
+
+.people-card:hover {
+    transform: translateY(-3px);
+}
+
+.people-image-wrapper {
+    width: 100px;
+    height: 100px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+}
+
+.people-image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    transition: transform 0.5s ease;
+    border-radius: 4px;
+}
+
+.people-card:hover .people-image-wrapper img {
+    transform: scale(1.05);
+}
+
+.people-info {
+    flex-grow: 1;
+    padding: 0 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+    z-index: 1;
+}
+
+.people-name {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.people-position {
+    margin: 4px 0 0 0;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.people-description-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--card-bg); /* Use var for Dark Mode support */
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+    z-index: 10;
+    pointer-events: none;
+    border-radius: 8px;
+}
+
+.people-card:hover .people-description-overlay {
+    opacity: 1;
+    pointer-events: auto;
+}
+
 /* =========================================
-   6. ARTICLE (Story) STYLES
+   6. ARTICLE (Story)
    ========================================= */
 .article-nav {
     padding: 40px 20px;
@@ -499,9 +583,6 @@ body.dark-mode .icon-btn:hover {
     justify-content: space-between;
     max-width: 1000px;
     margin: 0 auto;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
     align-items: center;
 }
 
@@ -582,14 +663,6 @@ body.dark-mode .icon-btn:hover {
     font-family: var(--font-ui);
 }
 
-.divider {
-    text-align: center;
-    margin: 60px 0;
-    color: var(--text-muted);
-    letter-spacing: 1em;
-    font-family: var(--font-serif);
-}
-
 .article-footer {
     margin-top: 100px;
     padding-top: 40px;
@@ -603,87 +676,7 @@ body.dark-mode .icon-btn:hover {
 }
 
 /* =========================================
-   7. MEDIA QUERIES (MOBILE)
-   ========================================= */
-@media screen and (max-width: 900px) {
-    body {
-        font-size: 16px;
-    }
-
-    h1 { font-size: 2rem; }
-    h2 { font-size: 1.5rem; }
-    h3 { font-size: 1.2rem; }
-
-    .container-wrapper {
-        padding: 20px;
-    }
-
-    .home-header {
-        justify-content: center;
-        margin-bottom: 30px;
-        gap: 8px;
-    }
-
-    .home-header .button {
-        font-size: 0.8rem;
-        padding: 6px 10px;
-        flex-grow: 1;
-        max-width: 100px;
-    }
-
-    .profile-section {
-        flex-direction: column-reverse;
-        text-align: center;
-        gap: 20px;
-    }
-
-    .profile-section img {
-        width: 120px;
-        height: 120px;
-    }
-    
-    .profile-text h2 {
-        font-size: 1.8rem;
-    }
-
-    .social-icons {
-        display: flex;
-        justify-content: center;
-        gap: 15px;
-    }
-    
-    .social-icons img {
-        width: 32px !important;
-        height: 32px !important;
-        object-fit: contain;
-        max-width: none;
-    }
-
-    .timeline-wrapper::after { left: 20px; }
-    .timeline-item { flex-direction: column !important; align-items: flex-start; margin-bottom: 40px; }
-    .content-block, .learning-block { width: 100% !important; padding-left: 50px; text-align: left !important; }
-    .learning-content { border-right: none !important; border-left: 3px solid #ff9500 !important; padding-left: 15px; }
-    .timeline-dot { left: 20px; }
-    .timeline-btn-container { position: static; margin: 20px 0; text-align: center; }
-    .rank-container { flex-direction: column; width: 100%; }
-    .rank-table { width: 100%; display: block; overflow-x: auto; }
-
-    .blog-grid {
-        grid-template-columns: 1fr;
-        padding: 0 10px 40px 10px;
-        gap: 20px;
-    }
-    
-    .blog-card {
-        padding: 25px;
-    }
-
-    .article-header h1 { font-size: 1.8rem; }
-    .article-content p:first-of-type::first-letter { font-size: 3rem; }
-}
-
-/* =========================================
-   8. GALLERY STYLES - Slideshow Support
+   7. GALLERY STYLES
    ========================================= */
 
 .gallery-grid {
@@ -702,8 +695,6 @@ body.dark-mode .icon-btn:hover {
     display: flex;
     flex-direction: column;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    
-    /* Ensure positioned context for stacked images */
     position: relative; 
 }
 
@@ -712,7 +703,6 @@ body.dark-mode .icon-btn:hover {
     border-color: var(--text-muted);
 }
 
-/* Image Container - needed for stacking */
 .image-stack {
     position: relative;
     width: 100%;
@@ -726,16 +716,13 @@ body.dark-mode .icon-btn:hover {
     height: 100%;
     object-fit: cover;
     display: block;
-    
-    /* Stacking Logic */
     position: absolute;
     top: 0;
     left: 0;
-    opacity: 0; /* Hidden by default */
-    transition: opacity 1s ease-in-out; /* Smooth fade */
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
 }
 
-/* The active image in the slideshow is visible */
 .gallery-image.visible {
     opacity: 1;
     z-index: 1;
@@ -744,7 +731,7 @@ body.dark-mode .icon-btn:hover {
 .gallery-caption {
     padding: 20px;
     flex-grow: 1;
-    z-index: 2; /* Ensure text sits above images if overlap occurs */
+    z-index: 2;
     background: var(--card-bg);
 }
 
@@ -756,7 +743,7 @@ body.dark-mode .icon-btn:hover {
 }
 
 /* =========================================
-   9. IMAGE MODAL (Lightbox) - Buttons on Image
+   8. IMAGE MODAL
    ========================================= */
 
 .image-modal {
@@ -776,22 +763,18 @@ body.dark-mode .icon-btn:hover {
     opacity: 1;
 }
 
-/* NEW: A wrapper that hugs the image size exactly */
 .modal-wrapper {
     position: relative;
-    display: inline-flex; /* Shrinks to fit the image content */
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     max-width: 85vw;
     max-height: 85vh;
-    
-    /* Animation affects the whole wrapper now */
     transform: scale(0.9);
     opacity: 0;
     transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
 }
 
-/* When active, the wrapper grows */
 .image-modal.active .modal-wrapper {
     transform: scale(1);
     opacity: 1;
@@ -800,21 +783,20 @@ body.dark-mode .icon-btn:hover {
 .image-modal img {
     display: block;
     max-width: 100%;
-    max-height: 85vh; /* Ensure it fits vertically */
+    max-height: 85vh;
     width: auto;
     height: auto;
     object-fit: contain;
     border-radius: 4px;
     box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-    pointer-events: auto; /* Ensure mouse works on image */
+    pointer-events: auto;
 }
 
-/* Navigation Buttons - Now sticking to the image */
 .modal-nav-btn {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(0, 0, 0, 0.3); /* Subtle dark background */
+    background: rgba(0, 0, 0, 0.3);
     color: rgba(255, 255, 255, 0.8);
     border: 1px solid rgba(255, 255, 255, 0.2);
     width: 44px;
@@ -827,7 +809,7 @@ body.dark-mode .icon-btn:hover {
     justify-content: center;
     transition: all 0.2s;
     z-index: 10;
-    pointer-events: auto; /* Ensure clickable */
+    pointer-events: auto;
     backdrop-filter: blur(2px);
 }
 
@@ -837,6 +819,23 @@ body.dark-mode .icon-btn:hover {
     transform: translateY(-50%) scale(1.1);
 }
 
-/* Position them INSIDE the wrapper (on the image) */
 #prevBtn { left: 15px; }
 #nextBtn { right: 15px; }
+
+/* MEDIA QUERIES */
+@media screen and (max-width: 900px) {
+    body { font-size: 16px; }
+    h1 { font-size: 2rem; }
+    h2 { font-size: 1.5rem; }
+    
+    .home-header { justify-content: center; }
+    .profile-section { flex-direction: column-reverse; text-align: center; }
+    .timeline-item { flex-direction: column !important; }
+    .content-block, .learning-block { width: 100% !important; padding-left: 50px; text-align: left !important; }
+    .learning-content { border-left: 3px solid #ff9500 !important; border-right: none !important; }
+    .timeline-wrapper::after { left: 20px; }
+    .timeline-dot { left: 20px; }
+    
+    .blog-grid { grid-template-columns: 1fr; }
+    .article-header h1 { font-size: 1.8rem; }
+}
