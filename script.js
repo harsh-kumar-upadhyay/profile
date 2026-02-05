@@ -59,7 +59,6 @@ const GALLERY_DATA = [
             "1W17eEk0uZA36RgJ6Gc-AAddNgmn6uGAS",
             "1wq0JSOlEma6cVCFHSXXHJv1ESPjsoFyM",
             "1oUYJeVoYhtMn_M69fuK11pTIKRwTMOey",
-            "1Zesnj7QoyB62kKmk3Z2PoWmeUDPknCDM"
         ], 
         description: "CTO with TRDDC (TCS Research) team."
     },
