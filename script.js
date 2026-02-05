@@ -43,9 +43,13 @@ const GALLERY_DATA = [
     { 
         // A single gallery item now has MULTIPLE images
         ids: [
-            "1katdTOV9PBGFSeT_6hR6O0ShJDMMyDmJ", // Image 1 of this event
-            "1bifTFPUC8uzzwJcAfco-jAcC1k9PIU2Q", // Image 2 of this event
-            "1a4t3ZfvHfM5k5-0xZElkZFP4tu_CBYLu"  // Image 3 of this event
+            "1TaoXVddE91IcHJsmM95BBvr7TNOaNA9z", // Image 1 of this event
+            "1LrnvcnFidVcBoPIwYMqGBPSZ5_voE3TO",
+            "1i0L27j1qYUUSS9buxgpMp8SvByg-M5Si",
+            "1-AFUdiLNzhJWcIESAYaq9gATCEcQ-2s1",
+            "1Fi6Wqt3daQ-qeGTVpkTAzZoQskdH55Wh",
+            "14wJEqcoBTXh_T83NCe6v-YTLg6P39m3j",
+            "14wJEqcoBTXh_T83NCe6v-YTLg6P39m3j"
         ], 
         description: "PRAYAS; Dinner with Director."
     },
