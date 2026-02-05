@@ -72,10 +72,12 @@ const GALLERY_DATA = [
     },
     { 
         ids: [
-            "16M5ZwvDdnCy79lGvxsLH5JmST9q_zlFR", // Image 1 of second event
-            "1W-y9uqaWDZdkDEdd5mP_KpahifTxsyPW"  // Image 2 of second event
+            "1W-y9uqaWDZdkDEdd5mP_KpahifTxsyPW",
+            "1c57Qg4gKyLEu6F42Nnd1gmq3kCQUfPZw",
+            "16M5ZwvDdnCy79lGvxsLH5JmST9q_zlFR",
+            "1Ut7Gz1zJwa-_mPCaoQ890NweruG78_aU"
         ], 
-        description: "IIT Madras Provisional Certificate Distribution." 
+        description: "Awards and Degrees at IIT M." 
     },
 ];
 
