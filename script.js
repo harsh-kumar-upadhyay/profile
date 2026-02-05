@@ -73,8 +73,8 @@ const GALLERY_DATA = [
     { 
         ids: [
             "1W-y9uqaWDZdkDEdd5mP_KpahifTxsyPW",
-            "1c57Qg4gKyLEu6F42Nnd1gmq3kCQUfPZw",
             "16M5ZwvDdnCy79lGvxsLH5JmST9q_zlFR",
+            "1c57Qg4gKyLEu6F42Nnd1gmq3kCQUfPZw",
             "1Ut7Gz1zJwa-_mPCaoQ890NweruG78_aU"
         ], 
         description: "Awards and Degrees at IIT M." 
