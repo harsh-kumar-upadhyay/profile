@@ -56,14 +56,16 @@ const GALLERY_DATA = [
     },
     { 
         ids: [
-            "1W17eEk0uZA36RgJ6Gc-AAddNgmn6uGAS", // Image 1 of second event
-            "1wq0JSOlEma6cVCFHSXXHJv1ESPjsoFyM"  // Image 2 of second event
+            "1W17eEk0uZA36RgJ6Gc-AAddNgmn6uGAS",
+            "1wq0JSOlEma6cVCFHSXXHJv1ESPjsoFyM",
+            "1oUYJeVoYhtMn_M69fuK11pTIKRwTMOey",
+            "1Zesnj7QoyB62kKmk3Z2PoWmeUDPknCDM"
         ], 
         description: "CTO with TRDDC (TCS Research) team."
     },
     { 
         ids: [
-            "1_VoevVg_Go4VyV_xGxQA0muZ3CSUoDFm", // Image 1 of second event
+            "1_VoevVg_Go4VyV_xGxQA0muZ3CSUoDFm",
             "1wfs5Y9l5RVVw2W4QMnz7WXFBpAeqCdzE",
             "1rUZlvC4WA6wPdQNyGOzNq1EAcfATdPbq",
             "1793G3ZqXiguboLlqNA4YxSnooLEUFO2t"
