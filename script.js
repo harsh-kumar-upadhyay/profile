@@ -49,9 +49,10 @@ const GALLERY_DATA = [
             "1-AFUdiLNzhJWcIESAYaq9gATCEcQ-2s1",
             "1Fi6Wqt3daQ-qeGTVpkTAzZoQskdH55Wh",
             "14wJEqcoBTXh_T83NCe6v-YTLg6P39m3j",
-            "14wJEqcoBTXh_T83NCe6v-YTLg6P39m3j"
+            "14wJEqcoBTXh_T83NCe6v-YTLg6P39m3j",
+            "1katdTOV9PBGFSeT_6hR6O0ShJDMMyDmJ"
         ], 
-        description: "PRAYAS; Dinner with Director."
+        description: "A day with IITH Director."
     },
     { 
         ids: [
