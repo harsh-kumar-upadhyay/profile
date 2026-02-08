@@ -838,4 +838,8 @@ body.dark-mode .icon-btn:hover {
     
     .blog-grid { grid-template-columns: 1fr; }
     .article-header h1 { font-size: 1.8rem; }
+
+    .social-icons {
+        justify-content: center;
+    }
 }
