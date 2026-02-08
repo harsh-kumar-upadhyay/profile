@@ -843,3 +843,10 @@ body.dark-mode .icon-btn:hover {
         justify-content: center;
     }
 }
+
+.people-description-text {
+    font-size: 0.95rem;   /* Makes it smaller, matching other cards */
+    line-height: 1.5;     /* Improves readability */
+    color: var(--text-main);
+    margin: 0;
+}
