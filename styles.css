@@ -1115,32 +1115,48 @@ body.dark-mode .icon-btn:hover {
 }
 .close-modal-btn:hover { color: var(--text-main); }
 
-/* --- FIXED CALENDAR MODAL STYLES --- */
+/* --- RESPONSIVE & SCROLLABLE CALENDAR MODAL --- */
 
-/* 1. Modal Container - FORCE Block Display (Fixes side-by-side issue) */
+/* 1. Modal Container */
 #dayModal .modal-wrapper {
-    display: block !important; /* Overrides the Gallery's inline-flex */
+    display: flex !important;       /* Use Flexbox to manage vertical stacking */
+    flex-direction: column;         /* Stack Header and Content vertically */
     background: var(--card-bg);
     padding: 0;
     border-radius: 16px;
-    max-width: 500px;
+    
+    /* WIDTH FIX: Wider on laptops, but safe on mobile */
+    max-width: 800px;               
     width: 90%;
+    
+    /* HEIGHT FIX: Never taller than 85% of screen */
+    max-height: 85vh;               
+    
     text-align: left;
     position: relative;
     border: 1px solid var(--border-color);
     box-shadow: 0 25px 80px rgba(0,0,0,0.5);
-    overflow: hidden;
+    overflow: hidden;               /* Container clips the corners */
 }
 
-/* 2. Date Header - Transparent to match Dark Mode */
+/* 2. Date Header (Stays Fixed at Top) */
 #modalDate {
-    background: var(--card-bg); /* Matches the modal background */
-    padding: 35px 40px 25px 40px; /* Top, Right, Bottom, Left */
+    background: var(--card-bg);
+    padding: 30px 40px 20px 40px;   /* Top, Right, Bottom, Left */
     border-bottom: 1px solid var(--border-color);
     margin: 0;
+    flex-shrink: 0;                 /* Prevents header from shrinking */
+    z-index: 2;
 }
 
-/* 3. The Date Hierarchy (Vertical Stack) */
+/* 3. The Content Area (Scrolls Independently) */
+#modalContent {
+    padding: 30px 40px 40px 40px;
+    overflow-y: auto;               /* ENABLES VERTICAL SCROLLING */
+    overscroll-behavior: contain;   /* Prevents scroll chaining to body */
+}
+
+/* 4. Date Hierarchy */
 .modal-date-group {
     display: flex;
     flex-direction: column;
@@ -1177,19 +1193,14 @@ body.dark-mode .icon-btn:hover {
     margin-left: 10px;
 }
 
-/* 4. Content Area */
-#modalContent {
-    padding: 35px 40px 40px 40px; /* Big spacing around content */
-}
-
+/* 5. Key Insight Box */
 .modal-main-text {
     font-size: 1.15rem;
     line-height: 1.6;
     color: var(--text-main);
-    margin-bottom: 30px; /* Gap before the Key Insight box */
+    margin-bottom: 30px;
 }
 
-/* 5. Key Insight Box */
 .modal-learning-box {
     border-left-width: 4px;
     border-left-style: solid;
@@ -1198,12 +1209,12 @@ body.dark-mode .icon-btn:hover {
     margin-bottom: 20px;
 }
 
-/* Close Button (Updated position) */
+/* 6. Close Button */
 .close-modal-btn {
     position: absolute;
     top: 15px;
     right: 15px;
-    background: rgba(128,128,128,0.1); /* Subtle circle background */
+    background: rgba(128,128,128,0.1);
     width: 32px;
     height: 32px;
     border-radius: 50%;
@@ -1217,6 +1228,7 @@ body.dark-mode .icon-btn:hover {
     transition: all 0.2s;
     padding: 0;
     line-height: 1;
+    z-index: 10;
 }
 .close-modal-btn:hover { 
     background: var(--text-main); 
