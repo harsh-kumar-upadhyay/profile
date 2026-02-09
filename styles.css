@@ -1115,108 +1115,101 @@ body.dark-mode .icon-btn:hover {
 }
 .close-modal-btn:hover { color: var(--text-main); }
 
-/* --- RESPONSIVE & SCROLLABLE CALENDAR MODAL --- */
+/* --- WIDESCREEN CALENDAR MODAL --- */
 
-/* 1. Modal Container */
+/* 1. Modal Container (Wider & Sharper) */
 #dayModal .modal-wrapper {
-    display: flex !important;       /* Use Flexbox to manage vertical stacking */
-    flex-direction: column;         /* Stack Header and Content vertically */
+    display: flex !important;
+    flex-direction: column;
     background: var(--card-bg);
     padding: 0;
-    border-radius: 16px;
+    border-radius: 12px;        /* Slightly tighter corners */
     
-    /* WIDTH FIX: Wider on laptops, but safe on mobile */
-    max-width: 800px;               
-    width: 90%;
+    /* WIDTH UPGRADE: Much wider for laptops */
+    max-width: 900px;           
+    width: 92%;                 /* Fills mobile screens nicely too */
     
-    /* HEIGHT FIX: Never taller than 85% of screen */
-    max-height: 85vh;               
-    
+    max-height: 85vh;
     text-align: left;
     position: relative;
     border: 1px solid var(--border-color);
-    box-shadow: 0 25px 80px rgba(0,0,0,0.5);
-    overflow: hidden;               /* Container clips the corners */
+    box-shadow: 0 40px 100px rgba(0,0,0,0.6); /* Deeper shadow */
+    overflow: hidden;
 }
 
-/* 2. Date Header (Stays Fixed at Top) */
+/* 2. Compact Header (Horizontal Layout) */
 #modalDate {
     background: var(--card-bg);
-    padding: 30px 40px 20px 40px;   /* Top, Right, Bottom, Left */
+    padding: 25px 40px;         /* Reduced vertical padding */
     border-bottom: 1px solid var(--border-color);
     margin: 0;
-    flex-shrink: 0;                 /* Prevents header from shrinking */
+    flex-shrink: 0;
     z-index: 2;
 }
 
-/* 3. The Content Area (Scrolls Independently) */
-#modalContent {
-    padding: 30px 40px 40px 40px;
-    overflow-y: auto;               /* ENABLES VERTICAL SCROLLING */
-    overscroll-behavior: contain;   /* Prevents scroll chaining to body */
-}
-
-/* 4. Date Hierarchy */
+/* 3. Date Text Styling (One Line) */
 .modal-date-group {
     display: flex;
-    flex-direction: column;
-    gap: 4px;
+    align-items: baseline;      /* Aligns text by the font baseline */
+    gap: 15px;                  /* Space between elements */
+    flex-wrap: wrap;            /* Wraps gracefully on tiny phones */
 }
 
 .modal-year {
-    font-size: 0.85rem;
-    font-weight: 700;
+    font-size: 1.5rem;          /* Distinctive Year */
+    font-weight: 300;           /* Light font weight */
     color: var(--accent);
-    letter-spacing: 0.1em;
-    opacity: 0.9;
+    letter-spacing: -0.02em;
 }
 
-.modal-month {
-    font-size: 1.5rem;
-    font-weight: 500;
-    color: var(--text-muted);
-    margin-top: 2px;
-}
-
-.modal-day {
-    font-size: 3rem;
+.modal-date-row {
+    font-size: 2rem;            /* Big Date */
     font-weight: 700;
     color: var(--text-main);
-    line-height: 1;
-    margin-top: 5px;
+    letter-spacing: -0.03em;
 }
 
 .modal-weekday {
     font-size: 1.2rem;
     font-weight: 400;
     color: var(--text-muted);
-    margin-left: 10px;
+    padding-left: 10px;
+    border-left: 2px solid var(--border-color); /* Cool vertical divider */
+    margin-left: 5px;
 }
 
-/* 5. Key Insight Box */
+/* 4. Content Area */
+#modalContent {
+    padding: 40px;              /* Generous breathing room */
+    overflow-y: auto;
+}
+
+/* 5. Update Text */
 .modal-main-text {
-    font-size: 1.15rem;
+    font-size: 1.25rem;         /* Slightly larger reading text */
     line-height: 1.6;
     color: var(--text-main);
-    margin-bottom: 30px;
+    margin-bottom: 35px;
+    max-width: 100%;            /* Ensure it uses full width */
 }
 
+/* 6. Learning Boxes (Full Width) */
 .modal-learning-box {
     border-left-width: 4px;
     border-left-style: solid;
-    padding: 20px 25px;
+    padding: 20px 30px;         /* More horizontal padding */
     border-radius: 0 8px 8px 0;
     margin-bottom: 20px;
+    width: 100%;                /* Forces box to fill the wide modal */
 }
 
-/* 6. Close Button */
 .close-modal-btn {
     position: absolute;
-    top: 15px;
-    right: 15px;
+    top: 25px;                  /* Aligned with header center */
+    right: 25px;
     background: rgba(128,128,128,0.1);
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     border: none;
     color: var(--text-muted);
@@ -1226,11 +1219,17 @@ body.dark-mode .icon-btn:hover {
     align-items: center;
     justify-content: center;
     transition: all 0.2s;
-    padding: 0;
-    line-height: 1;
     z-index: 10;
 }
 .close-modal-btn:hover { 
     background: var(--text-main); 
     color: var(--bg-color); 
+}
+
+/* Mobile Tweaks */
+@media screen and (max-width: 600px) {
+    .modal-date-group { gap: 5px; }
+    .modal-weekday { border: none; padding-left: 0; margin-left: 0; display: block; width: 100%; font-size: 1rem; margin-top: -5px; }
+    .modal-date-row { font-size: 1.6rem; }
+    #modalContent { padding: 25px; }
 }

@@ -501,6 +501,10 @@ function renderCalendarDayView(year, month) {
    UPDATED MODAL LOGIC (Hierarchical Date)
    ========================================= */
 
+/* =========================================
+   WIDESCREEN MODAL LOGIC
+   ========================================= */
+
 function openDayModal(year, month, day) {
     const data = FETCHED_CALENDAR_DATA[year]?.months?.[month]?.days?.[day];
     if (!data) return;
@@ -509,20 +513,20 @@ function openDayModal(year, month, day) {
     const contentBox = document.getElementById('modalContent');
     const dateTitle = document.getElementById('modalDate');
     
-    // 1. Calculate the Weekday (e.g., "Monday")
+    // Calculate Weekday
     const dateObj = new Date(year, month, day);
     const dayName = dateObj.toLocaleDateString('en-US', { weekday: 'long' });
 
-    // 2. Build the Hierarchical Header HTML
+    // NEW COMPACT HEADER HTML
     dateTitle.innerHTML = `
         <div class="modal-date-group">
             <span class="modal-year">${year}</span>
-            <span class="modal-month">${MONTH_NAMES[month]}</span>
-            <span class="modal-day">${day} <span class="modal-weekday">${dayName}</span></span>
+            <span class="modal-date-row">${MONTH_NAMES[month]} ${day}</span>
+            <span class="modal-weekday">${dayName}</span>
         </div>
     `;
     
-    // 3. Add Close Button if missing
+    // Add Close Button
     if (!document.querySelector('.close-modal-btn')) {
         const closeBtn = document.createElement('button');
         closeBtn.className = 'close-modal-btn';
