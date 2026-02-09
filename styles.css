@@ -1117,48 +1117,87 @@ body.dark-mode .icon-btn:hover {
 
 /* --- IMPROVED CALENDAR MODAL STYLES (Paste at bottom of styles.css) --- */
 
-/* 1. The Container - FORCE Left Alignment */
+/* --- HIERARCHICAL CALENDAR MODAL STYLES --- */
+
+/* 1. The Container */
 .modal-wrapper {
     background: var(--card-bg);
-    padding: 40px !important;
-    border-radius: 12px;
-    max-width: 600px;
+    padding: 0; /* Remove default padding, we will pad inner elements */
+    border-radius: 16px;
+    max-width: 550px;
     width: 90%;
-    text-align: left !important;  /* Critical for the new look */
+    text-align: left;
     position: relative;
     border: 1px solid var(--border-color);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    box-shadow: 0 25px 80px rgba(0,0,0,0.4);
+    overflow: hidden; /* Keeps the header corners clean */
 }
 
-/* 2. The Header (Date) */
+/* 2. The Header Container (Date) */
 #modalDate {
-    font-size: 1.8rem;
-    font-weight: 700;
-    margin: 0 0 10px 0;
-    padding-bottom: 20px;
+    background: var(--bg-color); /* Slightly different bg for header? optional */
+    padding: 40px 40px 25px 40px; /* Top, Right, Bottom (Gap), Left */
     border-bottom: 1px solid var(--border-color);
-    color: var(--text-main);
-    text-align: left;
+    margin: 0;
 }
 
-/* 3. The Main Update Text */
+/* 3. The Date Hierarchy */
+.modal-date-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.modal-year {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.9;
+}
+
+.modal-month {
+    font-size: 1.4rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.modal-day {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-main);
+    line-height: 1.1;
+    margin-top: 5px;
+}
+
+.modal-weekday {
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: var(--text-muted);
+    margin-left: 8px;
+}
+
+/* 4. The Content Body */
+#modalContent {
+    padding: 30px 40px 40px 40px; /* Padding for the text area */
+}
+
+/* 5. Main Update Text */
 .modal-main-text {
     font-size: 1.15rem;
     line-height: 1.6;
     color: var(--text-main);
-    margin: 25px 0 35px 0;
-    text-align: left;
+    margin-bottom: 35px; /* Space between "Hello/Make" and the Yellow Box */
 }
 
-/* 4. Learning Cards */
+/* 6. Learning Cards */
 .modal-learning-box {
-    /* The transparent colors are set by JS, this handles the shape */
     border-left-width: 4px;
     border-left-style: solid;
-    padding: 20px;
+    padding: 20px 25px;
     border-radius: 0 8px 8px 0;
     margin-bottom: 20px;
-    text-align: left;
 }
 
 .modal-label {
@@ -1177,9 +1216,10 @@ body.dark-mode .icon-btn:hover {
     margin: 0;
     font-size: 1rem;
     color: var(--text-main);
+    line-height: 1.5;
 }
 
-/* 5. Mentor Tags */
+/* 7. Mentor Tags */
 .modal-mentors-box {
     margin-top: 15px;
     padding-top: 15px;
@@ -1202,9 +1242,15 @@ body.dark-mode .icon-btn:hover {
     border-radius: 20px;
     font-size: 0.85rem;
     text-decoration: none;
-    border: 1px solid transparent;
+    transition: all 0.2s ease;
 }
 
+.mentor-tag:hover {
+    background: var(--card-bg);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* 8. Close Button */
 .close-modal-btn {
     position: absolute;
     top: 20px;
@@ -1215,4 +1261,7 @@ body.dark-mode .icon-btn:hover {
     color: var(--text-muted);
     cursor: pointer;
     line-height: 0.5;
+    z-index: 10;
+    padding: 10px;
 }
+.close-modal-btn:hover { color: var(--text-main); }

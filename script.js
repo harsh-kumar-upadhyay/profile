@@ -496,6 +496,11 @@ function renderCalendarDayView(year, month) {
 /* =========================================
    MODAL LOGIC (With Colors)
    ========================================= */
+
+/* =========================================
+   UPDATED MODAL LOGIC (Hierarchical Date)
+   ========================================= */
+
 function openDayModal(year, month, day) {
     const data = FETCHED_CALENDAR_DATA[year]?.months?.[month]?.days?.[day];
     if (!data) return;
@@ -504,20 +509,30 @@ function openDayModal(year, month, day) {
     const contentBox = document.getElementById('modalContent');
     const dateTitle = document.getElementById('modalDate');
     
-    // Set Date Header
-    dateTitle.innerText = `${MONTH_NAMES[month]} ${day}, ${year}`;
+    // 1. Calculate the Weekday (e.g., "Monday")
+    const dateObj = new Date(year, month, day);
+    const dayName = dateObj.toLocaleDateString('en-US', { weekday: 'long' });
+
+    // 2. Build the Hierarchical Header HTML
+    dateTitle.innerHTML = `
+        <div class="modal-date-group">
+            <span class="modal-year">${year}</span>
+            <span class="modal-month">${MONTH_NAMES[month]}</span>
+            <span class="modal-day">${day} <span class="modal-weekday">${dayName}</span></span>
+        </div>
+    `;
     
-    // Add a close button dynamically if it doesn't exist
+    // 3. Add Close Button if missing
     if (!document.querySelector('.close-modal-btn')) {
         const closeBtn = document.createElement('button');
         closeBtn.className = 'close-modal-btn';
         closeBtn.innerHTML = '&times;';
-        closeBtn.onclick = (e) => window.closeDayModal(e); // Re-use close logic
+        closeBtn.onclick = (e) => window.closeDayModal(e);
         document.querySelector('.modal-wrapper').appendChild(closeBtn);
     }
     
     const COLORS = [
-        { border: '#ff9500', bg: 'rgba(255, 149, 0, 0.08)' }, // Lower opacity for elegance
+        { border: '#ff9500', bg: 'rgba(255, 149, 0, 0.08)' },
         { border: '#007aff', bg: 'rgba(0, 122, 255, 0.08)' },
         { border: '#32d74b', bg: 'rgba(50, 215, 75, 0.08)' },
         { border: '#bf5af2', bg: 'rgba(191, 90, 242, 0.08)' },
