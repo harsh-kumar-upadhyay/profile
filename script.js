@@ -514,38 +514,53 @@ function openDayModal(year, month, day) {
     
     const modal = document.getElementById('dayModal');
     const contentBox = document.getElementById('modalContent');
-    document.getElementById('modalDate').innerText = `${MONTH_NAMES[month]} ${day}, ${year}`;
+    const dateTitle = document.getElementById('modalDate');
+    
+    // Set Date Header
+    dateTitle.innerText = `${MONTH_NAMES[month]} ${day}, ${year}`;
+    
+    // Add a close button dynamically if it doesn't exist
+    if (!document.querySelector('.close-modal-btn')) {
+        const closeBtn = document.createElement('button');
+        closeBtn.className = 'close-modal-btn';
+        closeBtn.innerHTML = '&times;';
+        closeBtn.onclick = (e) => window.closeDayModal(e); // Re-use close logic
+        document.querySelector('.modal-wrapper').appendChild(closeBtn);
+    }
     
     const COLORS = [
-        { border: '#ff9500', bg: 'rgba(255, 149, 0, 0.1)' },
-        { border: '#007aff', bg: 'rgba(0, 122, 255, 0.1)' },
-        { border: '#34c759', bg: 'rgba(52, 199, 89, 0.1)' },
-        { border: '#af52de', bg: 'rgba(175, 82, 222, 0.1)' },
-        { border: '#ff2d55', bg: 'rgba(255, 45, 85, 0.1)' }
+        { border: '#ff9500', bg: 'rgba(255, 149, 0, 0.08)' }, // Lower opacity for elegance
+        { border: '#007aff', bg: 'rgba(0, 122, 255, 0.08)' },
+        { border: '#32d74b', bg: 'rgba(50, 215, 75, 0.08)' },
+        { border: '#bf5af2', bg: 'rgba(191, 90, 242, 0.08)' },
+        { border: '#ff375f', bg: 'rgba(255, 55, 95, 0.08)' }
     ];
 
-    let htmlContent = `<p class="modal-main-text">${data.text}</p>`;
+    let htmlContent = `<div class="modal-main-text">${data.text}</div>`;
 
     if (data.learnings && Array.isArray(data.learnings)) {
         data.learnings.forEach((item, index) => {
-            const colorTheme = COLORS[index % COLORS.length];
+            const theme = COLORS[index % COLORS.length];
             
             htmlContent += `
-                <div class="modal-learning-box" style="border-left-color: ${colorTheme.border}; background-color: ${colorTheme.bg};">
-                    <span class="modal-label" style="color: ${colorTheme.border}">💡 Learning ${index + 1}</span>
+                <div class="modal-learning-box" style="border-left-color: ${theme.border}; background-color: ${theme.bg};">
+                    <div class="modal-label" style="color: ${theme.border}">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7z"/></svg>
+                        KEY INSIGHT
+                    </div>
                     <p>${item.text}</p>
             `;
 
             if (item.mentors && item.mentors.length > 0) {
                 htmlContent += `
                     <div class="modal-mentors-box">
-                        <span class="modal-label">Credit / Learned from:</span>
+                        <span class="modal-label" style="margin-bottom:5px; color:var(--text-muted); opacity:0.7">Learned from</span>
                         <div class="mentor-tags">
                 `;
                 item.mentors.forEach(m => {
                     htmlContent += `
                         <a href="${m.link}" target="_blank" class="mentor-tag">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                            <img src="https://www.google.com/s2/favicons?domain=${m.link}" width="14" height="14" style="opacity:0.7; border-radius:2px;">
                             ${m.name}
                         </a>`;
                 });
