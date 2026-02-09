@@ -1,105 +1,4 @@
 /* =========================================
-   DATA SOURCE
-   ========================================= */
-
-const BLOG_DATA = [
-    {
-        id: "1",
-        title: "The Neon Horizon",
-        date: "Dec 24, 2025",
-        readTime: "4 min read",
-        preview: "A cinematic perspective on light and isolation within a sprawling digital landscape.",
-        content: `<p>The rain in Sector 7 didn't fall; it drifted. It was a fine mist that caught the glare of the holographic billboards, turning the air into a shimmering kaleidoscope of pink and electric blue.</p>
-                  <p>Elias adjusted his collar. The dampness was beginning to seep through his synthetic leather jacket. He wasn’t supposed to be this far below the cloud line, but the tip he’d received was too good to ignore.</p>
-                  <p>The city groaned above him, a heavy percussion of mag-lev trains and distant industrial sirens. Here, in the gutters of the skyline, time felt different—slower, heavier, and far more dangerous.</p>`
-    },
-    {
-        id: "2",
-        title: "Whispers of Oak",
-        date: "Jan 02, 2026",
-        readTime: "3 min read",
-        preview: "Decoding the acoustic secrets hidden within ancient timber and forgotten groves.",
-        content: `<p>The old oak stood like a sentinel against the grey sky...</p>`
-    },
-    {
-        id: "3",
-        title: "The Last Echo",
-        date: "Jan 10, 2026",
-        readTime: "5 min read",
-        preview: "A final transcription exploring the transition from sound to absolute silence.",
-        content: `<p>Silence wasn't just the absence of noise; it was a weight...</p>`
-    },
-    {
-        id: "4",
-        title: "The Last Echo (Part 2)",
-        date: "Jan 15, 2026",
-        readTime: "4 min read",
-        preview: "A final transcription exploring the transition from sound to absolute silence.",
-        content: `<p>Continuing the journey into the void...</p>`
-    }
-];
-
-const GALLERY_DATA = [
-    { 
-        // A single gallery item now has MULTIPLE images
-        ids: [
-            "1TaoXVddE91IcHJsmM95BBvr7TNOaNA9z", // Image 1 of this event
-            "1LrnvcnFidVcBoPIwYMqGBPSZ5_voE3TO",
-            "1i0L27j1qYUUSS9buxgpMp8SvByg-M5Si",
-            "1-AFUdiLNzhJWcIESAYaq9gATCEcQ-2s1",
-            "1Fi6Wqt3daQ-qeGTVpkTAzZoQskdH55Wh",
-            "14wJEqcoBTXh_T83NCe6v-YTLg6P39m3j",
-            "14wJEqcoBTXh_T83NCe6v-YTLg6P39m3j",
-            "1katdTOV9PBGFSeT_6hR6O0ShJDMMyDmJ"
-        ], 
-        description: "A day with IITH Director."
-    },
-    { 
-        ids: [
-            "1W17eEk0uZA36RgJ6Gc-AAddNgmn6uGAS",
-            "1wq0JSOlEma6cVCFHSXXHJv1ESPjsoFyM",
-            "1oUYJeVoYhtMn_M69fuK11pTIKRwTMOey"
-        ], 
-        description: "CTO with TRDDC (TCS Research) team."
-    },
-    { 
-        ids: [
-            "1_VoevVg_Go4VyV_xGxQA0muZ3CSUoDFm",
-            "1wfs5Y9l5RVVw2W4QMnz7WXFBpAeqCdzE",
-            "1rUZlvC4WA6wPdQNyGOzNq1EAcfATdPbq",
-            "1793G3ZqXiguboLlqNA4YxSnooLEUFO2t"
-        ], 
-        description: "Jadavpur University Convocation."
-    },
-    { 
-        ids: [
-            "1W-y9uqaWDZdkDEdd5mP_KpahifTxsyPW",
-            "1Ut7Gz1zJwa-_mPCaoQ890NweruG78_aU",
-            "16M5ZwvDdnCy79lGvxsLH5JmST9q_zlFR",
-            "1c57Qg4gKyLEu6F42Nnd1gmq3kCQUfPZw"
-        ], 
-        description: "Awards and Degrees at IIT M." 
-    },
-];
-
-const PEOPLE_DATA = [
-    {
-        name: "(Prof.) Saketha Nath Jagarlapuddi",
-        role: "PhD Guide",
-        img: "https://people.iith.ac.in/saketha/index_files/saketh2015.jpg",
-        link: "https://people.iith.ac.in/saketha/",
-        desc: "Taught me to think from the first principles. Guiding research in Machine Learning. A mentor beyond academics."
-    },
-    {
-        name: "(Shri.) Sunil and (Smt.) Sudha Upadhyay",
-        role: "Parents",
-        img: "../assets/parents.png",
-        link: "",
-        desc: "The pillars of support and inspiration throughout the journey."
-    }
-];
-
-/* =========================================
    GLOBAL VARIABLES (Shared State)
    ========================================= */
 let openTimer, closeTimer;
@@ -114,11 +13,14 @@ document.addEventListener('DOMContentLoaded', () => {
     injectNavigation();
     
     // Router Logic: Detect page and run appropriate renderer
+    // We now check if the DATA exists before trying to render
     const path = window.location.pathname;
-    if (path.includes('blogs.html')) renderBlogList();
-    if (path.includes('post.html')) renderBlogPost();
-    if (path.includes('gallery.html')) renderGallery();
-    if (path.includes('people.html')) renderPeople();
+    
+    if (path.includes('blogs.html') && typeof BLOG_DATA !== 'undefined') renderBlogList();
+    if (path.includes('post.html') && typeof BLOG_DATA !== 'undefined') renderBlogPost();
+    if (path.includes('gallery.html') && typeof GALLERY_DATA !== 'undefined') renderGallery();
+    if (path.includes('people.html') && typeof PEOPLE_DATA !== 'undefined') renderPeople();
+    if (path.includes('calendar.html') && typeof CALENDAR_DATA !== 'undefined') renderCalendarYearView();
 });
 
 // Fix for Dark Mode on Back/Forward navigation
@@ -408,4 +310,126 @@ window.onclick = function(e) {
     const drops = document.getElementsByClassName("dropdown-content");
     for (let d of drops) if (d.classList.contains('show')) d.classList.remove('show');
   }
+}
+
+/* =========================================
+   5. CALENDAR LOGIC
+   ========================================= */
+
+// 1. RENDER YEARS
+function renderCalendarYearView() {
+    const container = document.getElementById('calendar-container');
+    const title = document.getElementById('calendar-title');
+    if (!container) return;
+
+    title.innerText = "Year Overview";
+    title.onclick = null; // Already at top level
+    title.style.color = "var(--text-main)";
+
+    container.className = "calendar-wrapper year-grid";
+    container.innerHTML = Object.keys(CALENDAR_DATA).sort((a,b) => b-a).map(year => `
+        <div class="time-card" onclick="renderCalendarMonthView(${year})">
+            <div>
+                <h2>${year}</h2>
+                <p>${CALENDAR_DATA[year].summary || "No summary available."}</p>
+            </div>
+            <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent);">View Months →</span>
+        </div>
+    `).join('');
+}
+
+// 2. RENDER MONTHS
+function renderCalendarMonthView(year) {
+    const container = document.getElementById('calendar-container');
+    const title = document.getElementById('calendar-title');
+    const yearData = CALENDAR_DATA[year];
+    
+    // Breadcrumb Navigation
+    title.innerHTML = `<span style="opacity:0.5">Years</span> / ${year}`;
+    title.onclick = () => renderCalendarYearView();
+
+    container.className = "calendar-wrapper month-grid";
+    
+    // Generate 12 months
+    let html = "";
+    MONTH_NAMES.forEach((name, index) => {
+        const hasData = yearData.months && yearData.months[index];
+        const summary = hasData ? yearData.months[index].summary : "";
+        const style = hasData ? "" : "opacity: 0.6;"; // Dim months with no updates
+
+        html += `
+            <div class="time-card" style="${style}" onclick="renderCalendarDayView(${year}, ${index})">
+                <div>
+                    <h3 style="margin:0; font-size: 1.5rem;">${name}</h3>
+                    <p>${summary}</p>
+                </div>
+            </div>
+        `;
+    });
+    container.innerHTML = html;
+}
+
+// 3. RENDER DAYS
+function renderCalendarDayView(year, month) {
+    const container = document.getElementById('calendar-container');
+    const title = document.getElementById('calendar-title');
+    
+    // Breadcrumb
+    title.innerHTML = `<span style="opacity:0.5">Years</span> / <span style="opacity:0.5" onclick="renderCalendarMonthView(${year})">${year}</span> / ${MONTH_NAMES[month]}`;
+    
+    container.className = "calendar-wrapper day-grid";
+    
+    // Logic to calculate days
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const firstDayIndex = new Date(year, month, 1).getDay(); // 0 = Sunday
+    
+    let html = "";
+    
+    // Headers
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    days.forEach(d => html += `<div class="weekday-header">${d}</div>`);
+    
+    // Empty cells for days before the 1st
+    for (let i = 0; i < firstDayIndex; i++) {
+        html += `<div></div>`;
+    }
+    
+    // Day cells
+    const monthData = CALENDAR_DATA[year]?.months?.[month]?.days || {};
+    
+    for (let day = 1; day <= daysInMonth; day++) {
+        const update = monthData[day];
+        const hasUpdateClass = update ? "day-has-update" : "";
+        const preview = update ? `<div class="day-preview">${update}</div>` : "";
+        
+        // Pass distinct arguments carefully
+        html += `
+            <div class="day-cell ${hasUpdateClass}" onclick="openDayModal('${year}', '${month}', '${day}')">
+                <div class="day-number">${day}</div>
+                ${preview}
+            </div>
+        `;
+    }
+    
+    container.innerHTML = html;
+}
+
+// 4. MODAL UTILS
+function openDayModal(year, month, day) {
+    const update = CALENDAR_DATA[year]?.months?.[month]?.days?.[day];
+    if (!update) return; // Don't open if no update
+    
+    const modal = document.getElementById('dayModal');
+    document.getElementById('modalDate').innerText = `${MONTH_NAMES[month]} ${day}, ${year}`;
+    document.getElementById('modalContent').innerText = update;
+    
+    modal.style.display = 'flex';
+    setTimeout(() => modal.classList.add('active'), 10);
+}
+
+function closeDayModal(e) {
+    const modal = document.getElementById('dayModal');
+    if (e.target !== modal) return;
+    modal.classList.remove('active');
+    setTimeout(() => modal.style.display = 'none', 300);
 }

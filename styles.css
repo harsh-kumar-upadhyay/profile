@@ -850,3 +850,119 @@ body.dark-mode .icon-btn:hover {
     color: var(--text-main);
     margin: 0;
 }
+
+/* --- CALENDAR STYLES --- */
+
+/* The Grid Container */
+.calendar-wrapper {
+    display: grid;
+    gap: 20px;
+    /* Default animation for zoom effect */
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+/* 1. YEAR VIEW: Big cards */
+.year-grid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+/* 2. MONTH VIEW: 3x4 Grid */
+.month-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+
+/* 3. DAY VIEW: 7 columns (standard calendar) */
+.day-grid {
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+}
+
+/* Cards for Years and Months */
+.time-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 30px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.time-card:hover {
+    border-color: var(--text-main);
+    transform: translateY(-4px);
+}
+
+.time-card h2 {
+    font-size: 2rem;
+    margin: 0;
+    color: var(--accent);
+}
+
+.time-card p {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin-top: 10px;
+}
+
+/* Day Cells */
+.day-cell {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    min-height: 100px;
+    padding: 10px;
+    cursor: pointer;
+    position: relative;
+    transition: background 0.2s;
+}
+
+.day-cell:hover {
+    background: var(--border-color);
+}
+
+.day-number {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.day-has-update {
+    border-color: var(--accent);
+}
+
+.day-preview {
+    font-size: 0.75rem;
+    color: var(--text-main);
+    margin-top: 5px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Weekday Headers (Sun, Mon, Tue...) */
+.weekday-header {
+    text-align: center;
+    font-weight: 600;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    padding-bottom: 10px;
+}
+
+/* Mobile Responsiveness for Calendar */
+@media screen and (max-width: 600px) {
+    .day-grid {
+        grid-template-columns: repeat(1, 1fr); /* List view on mobile */
+    }
+    .day-cell {
+        min-height: auto;
+        display: flex;
+        gap: 15px;
+        align-items: center;
+    }
+}
