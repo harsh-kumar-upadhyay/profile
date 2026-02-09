@@ -994,3 +994,100 @@ body.dark-mode .icon-btn:hover {
         font-size: 0.9rem;
     }
 }
+
+/* --- CALENDAR MODAL STYLES --- */
+
+.modal-main-text {
+    font-size: 1.1rem;
+    color: var(--text-main);
+    margin-bottom: 25px;
+    line-height: 1.6;
+}
+
+/* Learning Box */
+.modal-learning-box {
+    background-color: rgba(255, 149, 0, 0.1); /* Subtle orange tint */
+    border-left: 4px solid #ff9500;
+    padding: 15px;
+    border-radius: 4px;
+    margin-bottom: 25px;
+}
+
+.modal-label {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    letter-spacing: 0.05em;
+}
+
+.modal-learning-box p {
+    margin: 0;
+    font-style: italic;
+    color: var(--text-main);
+    font-size: 0.95rem;
+}
+
+/* Mentors Box */
+.modal-mentors-box {
+    margin-top: 20px;
+    border-top: 1px solid var(--border-color);
+    padding-top: 15px;
+}
+
+.mentor-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.mentor-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--border-color);
+    color: var(--text-main);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.mentor-tag:hover {
+    background: var(--accent);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+/* Dark Mode Adjustments for Modal */
+body.dark-mode .modal-learning-box {
+    background-color: rgba(255, 149, 0, 0.15);
+}
+
+/* Add spacing between multiple learning boxes */
+.modal-learning-box + .modal-learning-box {
+    margin-top: 20px;
+}
+
+/* Ensure the mentor box sits nicely inside the learning box */
+.modal-learning-box .modal-mentors-box {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px dashed rgba(0,0,0,0.1); /* Lighter separator inside the box */
+    border-bottom: none; /* Override previous style if needed */
+}
+
+/* Dark mode adjustment for the dashed line */
+body.dark-mode .modal-learning-box .modal-mentors-box {
+    border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Add space between the Date Header and the Learning content */
+#modalDate {
+    margin-bottom: 30px !important; 
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color); /* Optional: adds a subtle divider line */
+}

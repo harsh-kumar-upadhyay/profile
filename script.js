@@ -369,40 +369,35 @@ function renderCalendarMonthView(year) {
     container.innerHTML = html;
 }
 
-// 3. RENDER DAYS
+
+// 3. RENDER DAYS (Updated)
 function renderCalendarDayView(year, month) {
     const container = document.getElementById('calendar-container');
     const title = document.getElementById('calendar-title');
     
-    // Breadcrumb
-    title.innerHTML = `<span style="opacity:0.5">Years</span> / <span style="opacity:0.5" onclick="renderCalendarMonthView(${year})">${year}</span> / ${MONTH_NAMES[month]}`;
+    title.innerHTML = `<span style="opacity:0.5; cursor:pointer" onclick="renderCalendarYearView()">Years</span> / <span style="opacity:0.5; cursor:pointer" onclick="renderCalendarMonthView(${year})">${year}</span> / ${MONTH_NAMES[month]}`;
     
     container.className = "calendar-wrapper day-grid";
     
-    // Logic to calculate days
     const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const firstDayIndex = new Date(year, month, 1).getDay(); // 0 = Sunday
+    const firstDayIndex = new Date(year, month, 1).getDay();
     
     let html = "";
-    
-    // Headers
     const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     days.forEach(d => html += `<div class="weekday-header">${d}</div>`);
     
-    // Empty cells for days before the 1st
-    for (let i = 0; i < firstDayIndex; i++) {
-        html += `<div></div>`;
-    }
+    for (let i = 0; i < firstDayIndex; i++) html += `<div></div>`;
     
-    // Day cells
     const monthData = CALENDAR_DATA[year]?.months?.[month]?.days || {};
     
     for (let day = 1; day <= daysInMonth; day++) {
-        const update = monthData[day];
-        const hasUpdateClass = update ? "day-has-update" : "";
-        const preview = update ? `<div class="day-preview">${update}</div>` : "";
+        const data = monthData[day];
+        // Handle both simple String and new Object format
+        const updateText = (typeof data === 'object' && data !== null) ? data.text : data;
         
-        // Pass distinct arguments carefully
+        const hasUpdateClass = updateText ? "day-has-update" : "";
+        const preview = updateText ? `<div class="day-preview">${updateText}</div>` : "";
+        
         html += `
             <div class="day-cell ${hasUpdateClass}" onclick="openDayModal('${year}', '${month}', '${day}')">
                 <div class="day-number">${day}</div>
@@ -414,22 +409,68 @@ function renderCalendarDayView(year, month) {
     container.innerHTML = html;
 }
 
-// 4. MODAL UTILS
+// 4. MODAL UTILS (Updated)
+
+/* =========================================
+   UPDATED OPEN MODAL FUNCTION
+   ========================================= */
+
 function openDayModal(year, month, day) {
-    const update = CALENDAR_DATA[year]?.months?.[month]?.days?.[day];
-    if (!update) return; // Don't open if no update
+    const data = CALENDAR_DATA[year]?.months?.[month]?.days?.[day];
+    if (!data) return;
     
     const modal = document.getElementById('dayModal');
+    const contentBox = document.getElementById('modalContent');
     document.getElementById('modalDate').innerText = `${MONTH_NAMES[month]} ${day}, ${year}`;
-    document.getElementById('modalContent').innerText = update;
     
+    // Normalize data
+    const entry = (typeof data === 'string') ? { text: data, learnings: [] } : data;
+    
+    // 1. DEFINE COLOR PALETTE (Orange, Blue, Green, Purple, Red)
+    const COLORS = [
+        { border: '#ff9500', bg: 'rgba(255, 149, 0, 0.1)' },
+        { border: '#007aff', bg: 'rgba(0, 122, 255, 0.1)' },
+        { border: '#34c759', bg: 'rgba(52, 199, 89, 0.1)' },
+        { border: '#af52de', bg: 'rgba(175, 82, 222, 0.1)' },
+        { border: '#ff2d55', bg: 'rgba(255, 45, 85, 0.1)' }
+    ];
+
+    // 2. Render Main Text
+    let htmlContent = `<p class="modal-main-text">${entry.text}</p>`;
+
+    // 3. Render Learnings with Cycling Colors
+    if (entry.learnings && Array.isArray(entry.learnings)) {
+        entry.learnings.forEach((item, index) => {
+            // Pick color based on index (0, 1, 2...)
+            const colorTheme = COLORS[index % COLORS.length];
+            
+            // Apply styles dynamically
+            htmlContent += `
+                <div class="modal-learning-box" style="border-left-color: ${colorTheme.border}; background-color: ${colorTheme.bg};">
+                    <span class="modal-label" style="color: ${colorTheme.border}">💡 Learning ${index + 1}</span>
+                    <p>${item.text}</p>
+            `;
+
+            if (item.mentors && item.mentors.length > 0) {
+                htmlContent += `
+                    <div class="modal-mentors-box">
+                        <span class="modal-label">Credit / Learned from:</span>
+                        <div class="mentor-tags">
+                `;
+                item.mentors.forEach(m => {
+                    htmlContent += `
+                        <a href="${m.link}" target="_blank" class="mentor-tag">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                            ${m.name}
+                        </a>`;
+                });
+                htmlContent += `</div></div>`; 
+            }
+            htmlContent += `</div>`; 
+        });
+    }
+
+    contentBox.innerHTML = htmlContent;
     modal.style.display = 'flex';
     setTimeout(() => modal.classList.add('active'), 10);
-}
-
-function closeDayModal(e) {
-    const modal = document.getElementById('dayModal');
-    if (e.target !== modal) return;
-    modal.classList.remove('active');
-    setTimeout(() => modal.style.display = 'none', 300);
 }
