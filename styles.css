@@ -1114,3 +1114,105 @@ body.dark-mode .icon-btn:hover {
     line-height: 1;
 }
 .close-modal-btn:hover { color: var(--text-main); }
+
+/* --- IMPROVED CALENDAR MODAL STYLES (Paste at bottom of styles.css) --- */
+
+/* 1. The Container - FORCE Left Alignment */
+.modal-wrapper {
+    background: var(--card-bg);
+    padding: 40px !important;
+    border-radius: 12px;
+    max-width: 600px;
+    width: 90%;
+    text-align: left !important;  /* Critical for the new look */
+    position: relative;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+/* 2. The Header (Date) */
+#modalDate {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-main);
+    text-align: left;
+}
+
+/* 3. The Main Update Text */
+.modal-main-text {
+    font-size: 1.15rem;
+    line-height: 1.6;
+    color: var(--text-main);
+    margin: 25px 0 35px 0;
+    text-align: left;
+}
+
+/* 4. Learning Cards */
+.modal-learning-box {
+    /* The transparent colors are set by JS, this handles the shape */
+    border-left-width: 4px;
+    border-left-style: solid;
+    padding: 20px;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.modal-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 12px;
+    letter-spacing: 0.05em;
+    opacity: 0.9;
+}
+
+.modal-learning-box p {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--text-main);
+}
+
+/* 5. Mentor Tags */
+.modal-mentors-box {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px dashed rgba(128, 128, 128, 0.2);
+}
+
+.mentor-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.mentor-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(128, 128, 128, 0.1);
+    color: var(--text-main);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    text-decoration: none;
+    border: 1px solid transparent;
+}
+
+.close-modal-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    line-height: 0.5;
+}
