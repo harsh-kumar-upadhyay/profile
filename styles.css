@@ -957,13 +957,40 @@ body.dark-mode .icon-btn:hover {
 
 /* Mobile Responsiveness for Calendar */
 @media screen and (max-width: 600px) {
+    /* 1. Change Grid to a Vertical List */
     .day-grid {
-        grid-template-columns: repeat(1, 1fr); /* List view on mobile */
-    }
-    .day-cell {
-        min-height: auto;
         display: flex;
-        gap: 15px;
-        align-items: center;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    /* 2. Hide Weekday Headers (Sun, Mon...) and Empty Spacers */
+    /* This selects any div inside day-grid that is NOT a day-cell */
+    .day-grid > div:not(.day-cell) {
+        display: none;
+    }
+
+    /* 3. Style the Day Cells as List Items */
+    .day-cell {
+        min-height: auto;        /* Remove the tall boxy height */
+        display: flex;           /* Align number and text side-by-side */
+        flex-direction: row;
+        align-items: center;     /* Vertically center */
+        gap: 20px;               /* Space between Date and Preview text */
+        text-align: left;
+        padding: 15px;           /* Comfortable touch target */
+    }
+    
+    /* Make the Date Number prominent */
+    .day-number {
+        font-size: 1.1rem;
+        min-width: 30px;         /* Keeps alignment even for 1-digit vs 2-digit dates */
+        color: var(--accent);
+    }
+    
+    /* Fix the preview text alignment */
+    .day-preview {
+        margin-top: 0;
+        font-size: 0.9rem;
     }
 }
