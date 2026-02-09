@@ -318,18 +318,49 @@ window.onclick = function(e) {
 
 // Your specific CSV Link
 const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRQgLv44MFjm1SvcZr_MNenPgKTPkz3uEXpLOG2qwM-1zlC0BKJjgIZe-4GJ0jomviHCOa4EHCnWmDU/pub?output=csv';
+const CACHE_KEY = 'calendar_data_cache';
 
-async function fetchCalendarData() {
+async function initCalendar() {
+    const container = document.getElementById('calendar-container');
+    
+    // 1. Check for cached data first
+    const cachedCSV = localStorage.getItem(CACHE_KEY);
+    
+    if (cachedCSV) {
+        // If we have cache, render it IMMEDIATELY (Zero wait time)
+        FETCHED_CALENDAR_DATA = parseCSVToCalendarData(cachedCSV);
+        renderCalendarYearView();
+    } else {
+        // Only show loading message if this is the very first visit ever
+        if(container) container.innerHTML = '<div style="text-align:center; padding:50px; color:var(--text-muted)">Loading updates...</div>';
+    }
+    
+    // 2. Fetch fresh data in the background
+    await fetchAndCacheData(cachedCSV);
+}
+
+async function fetchAndCacheData(oldData) {
     try {
-        // We add a timestamp (&t=...) to prevent the browser from caching old data
+        // Fetch fresh data
         const response = await fetch(SHEET_URL + '&t=' + Date.now());
-        const data = await response.text();
-        return parseCSVToCalendarData(data);
+        const newCSV = await response.text();
+        
+        // 3. Compare: Only re-render if data has actually changed
+        if (newCSV !== oldData) {
+            console.log("New updates found, refreshing calendar...");
+            localStorage.setItem(CACHE_KEY, newCSV);
+            FETCHED_CALENDAR_DATA = parseCSVToCalendarData(newCSV);
+            renderCalendarYearView();
+        } else {
+            console.log("Data is up to date.");
+        }
     } catch (error) {
-        console.error("Error fetching calendar data:", error);
-        return {};
+        console.error("Background fetch failed:", error);
+        // If offline, the user still sees the cached version!
     }
 }
+
+// ... Keep your parseCSVToCalendarData function exactly as it is ...
 
 function parseCSVToCalendarData(csvText) {
     const rows = csvText.split(/\r?\n/); 
