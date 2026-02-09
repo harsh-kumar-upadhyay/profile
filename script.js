@@ -313,39 +313,41 @@ window.onclick = function(e) {
 }
 
 /* =========================================
-   GOOGLE SHEET INTEGRATION
+   GOOGLE SHEET INTEGRATION & CALENDAR
    ========================================= */
 
-// Your specific CSV Link
 const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRQgLv44MFjm1SvcZr_MNenPgKTPkz3uEXpLOG2qwM-1zlC0BKJjgIZe-4GJ0jomviHCOa4EHCnWmDU/pub?output=csv';
 const CACHE_KEY = 'calendar_data_cache';
+let FETCHED_CALENDAR_DATA = {}; 
+const MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
+// 1. INITIALIZE (Called on page load)
 async function initCalendar() {
     const container = document.getElementById('calendar-container');
     
-    // 1. Check for cached data first
+    // Check for cached data first to load INSTANTLY
     const cachedCSV = localStorage.getItem(CACHE_KEY);
     
     if (cachedCSV) {
-        // If we have cache, render it IMMEDIATELY (Zero wait time)
         FETCHED_CALENDAR_DATA = parseCSVToCalendarData(cachedCSV);
         renderCalendarYearView();
     } else {
-        // Only show loading message if this is the very first visit ever
+        // Only show "Loading..." if we have NO cache at all
         if(container) container.innerHTML = '<div style="text-align:center; padding:50px; color:var(--text-muted)">Loading updates...</div>';
     }
     
-    // 2. Fetch fresh data in the background
+    // Fetch fresh data in the background
     await fetchAndCacheData(cachedCSV);
 }
 
+// 2. FETCH & CACHE (Background Process)
 async function fetchAndCacheData(oldData) {
     try {
-        // Fetch fresh data
+        // Fetch fresh data (using timestamp to avoid browser caching the request)
         const response = await fetch(SHEET_URL + '&t=' + Date.now());
         const newCSV = await response.text();
         
-        // 3. Compare: Only re-render if data has actually changed
+        // Compare: Only re-render if data has actually changed
         if (newCSV !== oldData) {
             console.log("New updates found, refreshing calendar...");
             localStorage.setItem(CACHE_KEY, newCSV);
@@ -356,45 +358,33 @@ async function fetchAndCacheData(oldData) {
         }
     } catch (error) {
         console.error("Background fetch failed:", error);
-        // If offline, the user still sees the cached version!
     }
 }
 
-// ... Keep your parseCSVToCalendarData function exactly as it is ...
-
+// 3. PARSER (Converts CSV text to Object)
 function parseCSVToCalendarData(csvText) {
     const rows = csvText.split(/\r?\n/); 
     const calendarData = {};
     const monthMap = { "January":0, "February":1, "March":2, "April":3, "May":4, "June":5, "July":6, "August":7, "September":8, "October":9, "November":10, "December":11 };
 
-    // Start from i=1 to skip the Header Row (Row 0)
     for (let i = 1; i < rows.length; i++) {
         const rowText = rows[i];
-        if (!rowText.trim()) continue; // Skip empty rows
+        if (!rowText.trim()) continue; 
 
-        // --- ROBUST PARSER START ---
-        // This handles commas inside quotes (e.g., "Hello, world")
         const cols = [];
         let inQuote = false;
         let currentVal = '';
         
         for (let j = 0; j < rowText.length; j++) {
             const char = rowText[j];
-            if (char === '"') {
-                inQuote = !inQuote;
-            } else if (char === ',' && !inQuote) {
-                cols.push(currentVal.trim());
-                currentVal = '';
-            } else {
-                currentVal += char;
-            }
+            if (char === '"') { inQuote = !inQuote; }
+            else if (char === ',' && !inQuote) { cols.push(currentVal.trim()); currentVal = ''; }
+            else { currentVal += char; }
         }
-        cols.push(currentVal.trim()); // Push last column
-        // --- ROBUST PARSER END ---
+        cols.push(currentVal.trim());
 
         if (cols.length < 4) continue; 
 
-        // Clean up quotes (e.g., remove surrounding "" if present)
         const year = cols[0];
         const monthStr = cols[1];
         const day = cols[2];
@@ -406,7 +396,7 @@ function parseCSVToCalendarData(csvText) {
         const month = monthMap[monthStr];
         if (month === undefined) continue;
 
-        // --- Build Data Structure ---
+        // Build Structure
         if (!calendarData[year]) calendarData[year] = { months: {} };
         if (!calendarData[year].months[month]) calendarData[year].months[month] = { days: {} };
         
@@ -416,9 +406,8 @@ function parseCSVToCalendarData(csvText) {
             calendarData[year].months[month].days[day] = dayEntry;
         }
 
-        // Add Learning (avoid duplicates)
+        // Add Learning
         let learning = dayEntry.learnings.find(l => l.text === learningText);
-        // Only add if there is actual learning text (ignore "Nothing" or empty)
         if (!learning && learningText && learningText.toLowerCase() !== "nothing") {
             learning = { text: learningText, mentors: [] };
             dayEntry.learnings.push(learning);
@@ -429,24 +418,10 @@ function parseCSVToCalendarData(csvText) {
             learning.mentors.push({ name: mentorName, link: mentorLink || '#' });
         }
     }
-
     return calendarData;
 }
 
-/* =========================================
-   CALENDAR RENDERERS
-   ========================================= */
-
-let FETCHED_CALENDAR_DATA = {}; 
-const MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-
-async function initCalendar() {
-    const container = document.getElementById('calendar-container');
-    if(container) container.innerHTML = '<div style="text-align:center; padding:50px; color:var(--text-muted)">Loading updates from Sheet...</div>';
-    
-    FETCHED_CALENDAR_DATA = await fetchCalendarData();
-    renderCalendarYearView();
-}
+// 4. RENDERERS (Display the Data)
 
 function renderCalendarYearView() {
     const container = document.getElementById('calendar-container');
@@ -454,7 +429,6 @@ function renderCalendarYearView() {
     if (!container) return;
 
     const years = Object.keys(FETCHED_CALENDAR_DATA).sort((a,b) => b-a);
-
     title.innerText = "Year Overview";
     title.onclick = null;
     title.style.cursor = "default";
@@ -467,10 +441,7 @@ function renderCalendarYearView() {
     container.className = "calendar-wrapper year-grid";
     container.innerHTML = years.map(year => `
         <div class="time-card" onclick="renderCalendarMonthView(${year})">
-            <div>
-                <h2>${year}</h2>
-                <p>Click to view progress</p>
-            </div>
+            <div><h2>${year}</h2><p>Click to view progress</p></div>
             <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent);">View Months →</span>
         </div>
     `).join('');
@@ -482,22 +453,16 @@ function renderCalendarMonthView(year) {
     const yearData = FETCHED_CALENDAR_DATA[year];
     
     title.innerHTML = `<span style="opacity:0.5; cursor:pointer" onclick="renderCalendarYearView()">Years</span> / ${year}`;
-    
     container.className = "calendar-wrapper month-grid";
     
     let html = "";
     MONTH_NAMES.forEach((name, index) => {
         const hasData = yearData.months && yearData.months[index];
         const style = hasData ? "" : "opacity: 0.4; pointer-events: none;"; 
-
         html += `
             <div class="time-card" style="${style}" onclick="renderCalendarDayView(${year}, ${index})">
-                <div>
-                    <h3 style="margin:0; font-size: 1.5rem;">${name}</h3>
-                    ${hasData ? '<span style="color:var(--accent); font-size:0.8rem">Has Updates</span>' : ''}
-                </div>
-            </div>
-        `;
+                <div><h3 style="margin:0; font-size: 1.5rem;">${name}</h3>${hasData ? '<span style="color:var(--accent); font-size:0.8rem">Has Updates</span>' : ''}</div>
+            </div>`;
     });
     container.innerHTML = html;
 }
@@ -507,16 +472,14 @@ function renderCalendarDayView(year, month) {
     const title = document.getElementById('calendar-title');
     
     title.innerHTML = `<span style="opacity:0.5; cursor:pointer" onclick="renderCalendarYearView()">Years</span> / <span style="opacity:0.5; cursor:pointer" onclick="renderCalendarMonthView(${year})">${year}</span> / ${MONTH_NAMES[month]}`;
-    
     container.className = "calendar-wrapper day-grid";
     
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     const firstDayIndex = new Date(year, month, 1).getDay();
-    
     let html = "";
+    
     const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     days.forEach(d => html += `<div class="weekday-header">${d}</div>`);
-    
     for (let i = 0; i < firstDayIndex; i++) html += `<div></div>`;
     
     const monthData = FETCHED_CALENDAR_DATA[year]?.months?.[month]?.days || {};
@@ -525,13 +488,7 @@ function renderCalendarDayView(year, month) {
         const data = monthData[day];
         const hasUpdateClass = data ? "day-has-update" : "";
         const preview = data ? `<div class="day-preview">${data.text}</div>` : "";
-        
-        html += `
-            <div class="day-cell ${hasUpdateClass}" onclick="openDayModal('${year}', '${month}', '${day}')">
-                <div class="day-number">${day}</div>
-                ${preview}
-            </div>
-        `;
+        html += `<div class="day-cell ${hasUpdateClass}" onclick="openDayModal('${year}', '${month}', '${day}')"><div class="day-number">${day}</div>${preview}</div>`;
     }
     container.innerHTML = html;
 }
