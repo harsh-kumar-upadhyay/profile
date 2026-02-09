@@ -607,9 +607,15 @@ function openDayModal(year, month, day) {
 }
 
 // Close Modal Logic (Ensure this is available globally or attached to window)
+// Updated Close Logic to allow Background OR Button clicks
 window.closeDayModal = function(e) {
     const modal = document.getElementById('dayModal');
-    if (e.target !== modal) return;
+    
+    // logic: If we clicked inside the content box (and NOT on the X button), ignore the click
+    if (e && e.target !== modal && !e.target.closest('.close-modal-btn')) {
+        return;
+    }
+
     modal.classList.remove('active');
     setTimeout(() => modal.style.display = 'none', 300);
 }
