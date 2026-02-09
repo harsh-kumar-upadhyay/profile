@@ -25,51 +25,6 @@
             <p id="modalContent" style="color: var(--text-muted);"></p>
         </div>
     </div>
-    
-    <script>
-        const MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-        
-        const CALENDAR_DATA = {
-            2026: {
-                summary: "Starting my second semester as TA for AI (ID1050). Deepening research focus.",
-                months: {
-                    1: { // February
-                        summary: "Working on submissions.",
-                        days: { 
-                            // NEW FORMAT: 'learnings' is an ARRAY
-                            5: {
-                                text: "Deep dive into Bayesian decision theory.",
-                                learnings: [
-                                    {
-                                        text: "Realized that minimizing the posterior expected loss is the core of Bayesian decision theory.",
-                                        mentors: [
-                                            { name: "Prof. Saketha Nath", link: "https://people.iith.ac.in/saketha/" }
-                                        ]
-                                    },
-                                    {
-                                        text: "Understood how different loss functions lead to different estimators (e.g., L2 loss implies the Mean).",
-                                        mentors: [
-                                            { name: "Kevin Murphy (Book)", link: "https://github.com/probml/pml-book" }
-                                        ]
-                                    }
-                                ]
-                            },
-                            8: {
-                                text: "Fixed CSS alignment issues on the portfolio site.",
-                                // You can still have entries with no mentors
-                                learnings: [
-                                    {
-                                        text: "Flexbox 'justify-content' is needed for horizontal alignment when flex-direction is row.",
-                                        mentors: [] 
-                                    }
-                                ]
-                            }
-                        }
-                    }
-                }
-            }
-        };
-    </script>
 
     <script src="../script.js"></script>
 
