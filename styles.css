@@ -1115,59 +1115,58 @@ body.dark-mode .icon-btn:hover {
 }
 .close-modal-btn:hover { color: var(--text-main); }
 
-/* --- IMPROVED CALENDAR MODAL STYLES (Paste at bottom of styles.css) --- */
+/* --- FIXED CALENDAR MODAL STYLES --- */
 
-/* --- HIERARCHICAL CALENDAR MODAL STYLES --- */
-
-/* 1. The Container */
-.modal-wrapper {
+/* 1. Modal Container - FORCE Block Display (Fixes side-by-side issue) */
+#dayModal .modal-wrapper {
+    display: block !important; /* Overrides the Gallery's inline-flex */
     background: var(--card-bg);
-    padding: 0; /* Remove default padding, we will pad inner elements */
+    padding: 0;
     border-radius: 16px;
-    max-width: 550px;
+    max-width: 500px;
     width: 90%;
     text-align: left;
     position: relative;
     border: 1px solid var(--border-color);
-    box-shadow: 0 25px 80px rgba(0,0,0,0.4);
-    overflow: hidden; /* Keeps the header corners clean */
+    box-shadow: 0 25px 80px rgba(0,0,0,0.5);
+    overflow: hidden;
 }
 
-/* 2. The Header Container (Date) */
+/* 2. Date Header - Transparent to match Dark Mode */
 #modalDate {
-    background: var(--bg-color); /* Slightly different bg for header? optional */
-    padding: 40px 40px 25px 40px; /* Top, Right, Bottom (Gap), Left */
+    background: var(--card-bg); /* Matches the modal background */
+    padding: 35px 40px 25px 40px; /* Top, Right, Bottom, Left */
     border-bottom: 1px solid var(--border-color);
     margin: 0;
 }
 
-/* 3. The Date Hierarchy */
+/* 3. The Date Hierarchy (Vertical Stack) */
 .modal-date-group {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 4px;
 }
 
 .modal-year {
-    font-size: 0.9rem;
-    font-weight: 600;
+    font-size: 0.85rem;
+    font-weight: 700;
     color: var(--accent);
     letter-spacing: 0.1em;
-    text-transform: uppercase;
     opacity: 0.9;
 }
 
 .modal-month {
-    font-size: 1.4rem;
-    color: var(--text-muted);
+    font-size: 1.5rem;
     font-weight: 500;
+    color: var(--text-muted);
+    margin-top: 2px;
 }
 
 .modal-day {
-    font-size: 2.5rem;
+    font-size: 3rem;
     font-weight: 700;
     color: var(--text-main);
-    line-height: 1.1;
+    line-height: 1;
     margin-top: 5px;
 }
 
@@ -1175,23 +1174,22 @@ body.dark-mode .icon-btn:hover {
     font-size: 1.2rem;
     font-weight: 400;
     color: var(--text-muted);
-    margin-left: 8px;
+    margin-left: 10px;
 }
 
-/* 4. The Content Body */
+/* 4. Content Area */
 #modalContent {
-    padding: 30px 40px 40px 40px; /* Padding for the text area */
+    padding: 35px 40px 40px 40px; /* Big spacing around content */
 }
 
-/* 5. Main Update Text */
 .modal-main-text {
     font-size: 1.15rem;
     line-height: 1.6;
     color: var(--text-main);
-    margin-bottom: 35px; /* Space between "Hello/Make" and the Yellow Box */
+    margin-bottom: 30px; /* Gap before the Key Insight box */
 }
 
-/* 6. Learning Cards */
+/* 5. Key Insight Box */
 .modal-learning-box {
     border-left-width: 4px;
     border-left-style: solid;
@@ -1200,68 +1198,27 @@ body.dark-mode .icon-btn:hover {
     margin-bottom: 20px;
 }
 
-.modal-label {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    font-weight: 700;
-    margin-bottom: 12px;
-    letter-spacing: 0.05em;
-    opacity: 0.9;
-}
-
-.modal-learning-box p {
-    margin: 0;
-    font-size: 1rem;
-    color: var(--text-main);
-    line-height: 1.5;
-}
-
-/* 7. Mentor Tags */
-.modal-mentors-box {
-    margin-top: 15px;
-    padding-top: 15px;
-    border-top: 1px dashed rgba(128, 128, 128, 0.2);
-}
-
-.mentor-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
-.mentor-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: rgba(128, 128, 128, 0.1);
-    color: var(--text-main);
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    text-decoration: none;
-    transition: all 0.2s ease;
-}
-
-.mentor-tag:hover {
-    background: var(--card-bg);
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-/* 8. Close Button */
+/* Close Button (Updated position) */
 .close-modal-btn {
     position: absolute;
-    top: 20px;
-    right: 20px;
-    background: none;
+    top: 15px;
+    right: 15px;
+    background: rgba(128,128,128,0.1); /* Subtle circle background */
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
     border: none;
-    font-size: 2rem;
     color: var(--text-muted);
+    font-size: 20px;
     cursor: pointer;
-    line-height: 0.5;
-    z-index: 10;
-    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    padding: 0;
+    line-height: 1;
 }
-.close-modal-btn:hover { color: var(--text-main); }
+.close-modal-btn:hover { 
+    background: var(--text-main); 
+    color: var(--bg-color); 
+}
