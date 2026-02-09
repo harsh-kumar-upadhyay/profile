@@ -494,15 +494,7 @@ function renderCalendarDayView(year, month) {
 }
 
 /* =========================================
-   MODAL LOGIC (With Colors)
-   ========================================= */
-
-/* =========================================
-   UPDATED MODAL LOGIC (Hierarchical Date)
-   ========================================= */
-
-/* =========================================
-   WIDESCREEN MODAL LOGIC
+   WIDESCREEN MODAL LOGIC (With Link Auto-Fix)
    ========================================= */
 
 function openDayModal(year, month, day) {
@@ -513,11 +505,11 @@ function openDayModal(year, month, day) {
     const contentBox = document.getElementById('modalContent');
     const dateTitle = document.getElementById('modalDate');
     
-    // Calculate Weekday
+    // Weekday Logic
     const dateObj = new Date(year, month, day);
     const dayName = dateObj.toLocaleDateString('en-US', { weekday: 'long' });
 
-    // NEW COMPACT HEADER HTML
+    // HEADER HTML
     dateTitle.innerHTML = `
         <div class="modal-date-group">
             <span class="modal-year">${year}</span>
@@ -526,7 +518,7 @@ function openDayModal(year, month, day) {
         </div>
     `;
     
-    // Add Close Button
+    // Close Button Logic
     if (!document.querySelector('.close-modal-btn')) {
         const closeBtn = document.createElement('button');
         closeBtn.className = 'close-modal-btn';
@@ -565,9 +557,16 @@ function openDayModal(year, month, day) {
                         <div class="mentor-tags">
                 `;
                 item.mentors.forEach(m => {
+                    // --- THE FIX IS HERE ---
+                    // Check if link starts with http:// or https://. If not, add https://
+                    let cleanLink = m.link.trim();
+                    if (cleanLink && !cleanLink.match(/^https?:\/\//)) {
+                        cleanLink = 'https://' + cleanLink;
+                    }
+
                     htmlContent += `
-                        <a href="${m.link}" target="_blank" class="mentor-tag">
-                            <img src="https://www.google.com/s2/favicons?domain=${m.link}" width="14" height="14" style="opacity:0.7; border-radius:2px;">
+                        <a href="${cleanLink}" target="_blank" class="mentor-tag">
+                            <img src="https://www.google.com/s2/favicons?domain=${cleanLink}" width="14" height="14" style="opacity:0.7; border-radius:2px;">
                             ${m.name}
                         </a>`;
                 });
