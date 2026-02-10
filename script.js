@@ -105,7 +105,7 @@ function renderGallery() {
         });
 
         modalWrapper.addEventListener('mouseleave', () => {
-            closeTimer = setTimeout(closeModal, 300);
+            closeTimer = setTimeout(closeModal, 1000);
         });
     }
 
