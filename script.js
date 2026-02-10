@@ -43,7 +43,8 @@ function applySavedTheme() {
     const body = document.getElementById("body");
     if (!body) return;
     
-    if (savedTheme === 'dark' || savedTheme === null) {
+    // Now it ONLY turns dark if explicitly saved as 'dark'
+    if (savedTheme === 'dark') {
         body.classList.add("dark-mode");
         updateIcons(true);
     } else {
