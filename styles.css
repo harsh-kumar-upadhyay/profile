@@ -1251,3 +1251,31 @@ body.dark-mode .icon-btn:hover {
     object-fit: contain;
     box-shadow: 0 20px 50px rgba(0,0,0,0.5); /* Add shadow back to the image itself */
 }
+
+/* =========================================
+   RESPONSIVE NAV MENU
+   ========================================= */
+#nav-overflow-menu {
+    margin-left: 5px;
+}
+
+#nav-overflow-content {
+    min-width: 160px;
+    right: 0; 
+    left: auto; /* Aligns dropdown to the right edge */
+    text-align: left;
+}
+
+#nav-overflow-content .button {
+    display: block;
+    width: 100%;
+    margin: 0;
+    border-radius: 0;
+    background: transparent;
+    color: var(--text-main);
+    text-align: left;
+}
+
+#nav-overflow-content .button:hover {
+    background-color: var(--border-color);
+}
