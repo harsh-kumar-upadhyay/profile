@@ -607,6 +607,10 @@ window.closeDayModal = function(e) {
    RESPONSIVE NAVIGATION LOGIC (Aggressive)
    ========================================= */
 
+/* =========================================
+   RESPONSIVE NAVIGATION LOGIC (Fixed)
+   ========================================= */
+
 function initResponsiveNav() {
     const header = document.querySelector('.home-header');
     const menuContainer = document.getElementById('nav-overflow-menu');
@@ -616,49 +620,46 @@ function initResponsiveNav() {
 
     function checkOverflow() {
         // 1. RESET: Move everything back to the main header
-        // We insert them before the menuContainer to maintain order
         const hiddenItems = Array.from(menuContent.children);
         // Reverse to keep original order when putting back
         hiddenItems.reverse().forEach(item => {
+            // We insert them before the menuContainer to maintain order
             header.insertBefore(item, menuContainer);
         });
         
-        // Hide menu initially to measure "pure" content
+        // Hide menu initially
         menuContainer.style.display = 'none';
         
-        // 2. MEASURE: Establish the baseline "Top" position
-        // We use the last item (Dark Mode toggle) as our anchor. 
-        // If everything is on one line, all items should share roughly the same offsetTop.
+        // 2. MEASURE
         const darkModeBtn = document.getElementById('mode');
         if(!darkModeBtn) return;
 
-        // Helper to get visible nav links (excluding menu & dark mode)
-        const getNavLinks = () => Array.from(header.querySelectorAll('a.button'));
+        // --- FIX IS HERE: Select ONLY direct children using .children property ---
+        const getDirectNavLinks = () => {
+            return Array.from(header.children).filter(child => 
+                child.tagName === 'A' && child.classList.contains('button')
+            );
+        };
 
-        // 3. CHECK & LOOP
-        // If the Dark Mode button is lower than the first link, we have a wrap.
-        // OR if the header height is significantly larger than a single button height.
-        
-        let links = getNavLinks();
+        let links = getDirectNavLinks();
         if (links.length === 0) return;
 
+        // Establish the "Top Row" Y-position from the first link
         const firstItemTop = links[0].offsetTop;
 
-        // Loop: While Dark Mode button is on a different line than the first item...
+        // 3. LOOP
+        // While Dark Mode button is on a new line (lower Y position)...
         while (darkModeBtn.offsetTop > firstItemTop + 10) { 
-            // (+10 is a buffer for small misalignments)
-            
-            // A. Show the menu button (it takes up space, so we need it visible to calculate)
+            // Show the menu button
             menuContainer.style.display = 'inline-block';
 
-            // B. Get current links again
-            links = getNavLinks();
+            // Re-check available links
+            links = getDirectNavLinks();
             
-            // C. Safety break
+            // Stop if no links left to move
             if (links.length === 0) break;
 
-            // D. Move the LAST link (closest to menu) into the dropdown
-            // We use prepend so the right-most items go to the top of the list
+            // Move the LAST link into the dropdown (prepend to top of menu)
             const itemToHide = links[links.length - 1];
             menuContent.insertBefore(itemToHide, menuContent.firstChild);
         }
@@ -672,7 +673,6 @@ function initResponsiveNav() {
     
     // Initial checks
     checkOverflow();
-    // Double check after a slight delay to ensure fonts/layout loaded
     setTimeout(checkOverflow, 300);
 }
 
