@@ -604,7 +604,7 @@ window.closeDayModal = function(e) {
 }
 
 /* =========================================
-   RESPONSIVE NAVIGATION LOGIC
+   RESPONSIVE NAVIGATION LOGIC (Aggressive)
    ========================================= */
 
 function initResponsiveNav() {
@@ -612,56 +612,84 @@ function initResponsiveNav() {
     const menuContainer = document.getElementById('nav-overflow-menu');
     const menuContent = document.getElementById('nav-overflow-content');
     
-    // Safety check
     if (!header || !menuContainer || !menuContent) return;
 
     function checkOverflow() {
-        // 1. Reset: Move all items back to the main header first
-        // We insert them right before the menu container
+        // 1. RESET: Move everything back to the main header
+        // We insert them before the menuContainer to maintain order
         const hiddenItems = Array.from(menuContent.children);
-        hiddenItems.forEach(item => {
-            item.classList.add('button'); // Ensure class persists
+        // Reverse to keep original order when putting back
+        hiddenItems.reverse().forEach(item => {
             header.insertBefore(item, menuContainer);
         });
         
-        // Hide menu initially
+        // Hide menu initially to measure "pure" content
         menuContainer.style.display = 'none';
         
-        // 2. Get all navigation buttons (exclude the menu itself and dark mode toggle)
-        // We select direct 'a.button' children of the header
-        const navButtons = Array.from(header.querySelectorAll(':scope > a.button'));
-        
-        if (navButtons.length === 0) return;
+        // 2. MEASURE: Establish the baseline "Top" position
+        // We use the last item (Dark Mode toggle) as our anchor. 
+        // If everything is on one line, all items should share roughly the same offsetTop.
+        const darkModeBtn = document.getElementById('mode');
+        if(!darkModeBtn) return;
 
-        // 3. Determine the "first line" Y-position
-        const firstButtonTop = navButtons[0].offsetTop;
-        
-        // 4. Filter buttons that have dropped to a new line
-        const overflowItems = navButtons.filter(btn => btn.offsetTop > firstButtonTop);
+        // Helper to get visible nav links (excluding menu & dark mode)
+        const getNavLinks = () => Array.from(header.querySelectorAll('a.button'));
 
-        // 5. Move overflow items into the dropdown
-        if (overflowItems.length > 0) {
+        // 3. CHECK & LOOP
+        // If the Dark Mode button is lower than the first link, we have a wrap.
+        // OR if the header height is significantly larger than a single button height.
+        
+        let links = getNavLinks();
+        if (links.length === 0) return;
+
+        const firstItemTop = links[0].offsetTop;
+
+        // Loop: While Dark Mode button is on a different line than the first item...
+        while (darkModeBtn.offsetTop > firstItemTop + 10) { 
+            // (+10 is a buffer for small misalignments)
+            
+            // A. Show the menu button (it takes up space, so we need it visible to calculate)
             menuContainer.style.display = 'inline-block';
-            overflowItems.forEach(btn => menuContent.appendChild(btn));
+
+            // B. Get current links again
+            links = getNavLinks();
+            
+            // C. Safety break
+            if (links.length === 0) break;
+
+            // D. Move the LAST link (closest to menu) into the dropdown
+            // We use prepend so the right-most items go to the top of the list
+            const itemToHide = links[links.length - 1];
+            menuContent.insertBefore(itemToHide, menuContent.firstChild);
         }
     }
 
     // Run on load and resize
     window.addEventListener('resize', () => {
-        // Simple debounce
         clearTimeout(window.resizeTimer);
         window.resizeTimer = setTimeout(checkOverflow, 100);
     });
     
     // Initial checks
     checkOverflow();
-    setTimeout(checkOverflow, 500); // Check again after layout settles
+    // Double check after a slight delay to ensure fonts/layout loaded
+    setTimeout(checkOverflow, 300);
 }
 
-// Function to toggle the menu (attached to the button)
 function toggleOverflowMenu() {
     document.getElementById("nav-overflow-content").classList.toggle("show");
 }
 
-// Initialize the logic
+// Close menu when clicking outside
+window.onclick = function(event) {
+    if (!event.target.matches('.dropbtn')) {
+        const dropdowns = document.getElementsByClassName("dropdown-content");
+        for (let i = 0; i < dropdowns.length; i++) {
+            if (dropdowns[i].classList.contains('show')) {
+                dropdowns[i].classList.remove('show');
+            }
+        }
+    }
+}
+
 document.addEventListener('DOMContentLoaded', initResponsiveNav);

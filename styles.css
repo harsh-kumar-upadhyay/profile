@@ -1253,27 +1253,46 @@ body.dark-mode .icon-btn:hover {
 }
 
 /* =========================================
-   RESPONSIVE NAV MENU
+   RESPONSIVE MENU STYLES
    ========================================= */
+/* Ensure header items align properly */
+.home-header {
+    display: flex;
+    flex-wrap: wrap; /* Allows detection of wrapping */
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px; /* Reduced gap slightly for mobile */
+}
+
+/* The Menu Container */
 #nav-overflow-menu {
-    margin-left: 5px;
+    margin: 0;
+    position: relative;
 }
 
+/* The Dropdown Box */
 #nav-overflow-content {
-    min-width: 160px;
+    min-width: 150px;
     right: 0; 
-    left: auto; /* Aligns dropdown to the right edge */
-    text-align: left;
+    left: auto;
+    top: 100%;
+    margin-top: 5px;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
+/* Links inside the dropdown */
 #nav-overflow-content .button {
     display: block;
     width: 100%;
-    margin: 0;
-    border-radius: 0;
+    text-align: left;
     background: transparent;
     color: var(--text-main);
-    text-align: left;
+    border: none;
+    border-radius: 0;
+    padding: 12px 16px;
+    margin: 0;
 }
 
 #nav-overflow-content .button:hover {
