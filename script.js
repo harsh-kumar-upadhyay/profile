@@ -340,7 +340,7 @@ async function initCalendar() {
             container.innerHTML = `
                 <div class="buffering-container">
                     <div class="spinner"></div>
-                    <div class="loading-text">Loading/Updating</div>
+                    <div class="loading-text">Wait for 15 seconds...(Loading)</div>
                 </div>
             `;
         }
