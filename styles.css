@@ -1299,37 +1299,49 @@ body.dark-mode .icon-btn:hover {
     background-color: var(--border-color);
 }
 
-/* Skeleton Loading Animation */
-.skeleton-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    padding: 30px;
-    height: 150px;
-    position: relative;
-    overflow: hidden;
+/* Buffering / Loading Animation */
+.buffering-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    grid-column: 1 / -1; /* Ensures it spans full width if inside a grid */
+    text-align: center;
+    color: var(--text-muted);
 }
 
-.skeleton-text {
-    height: 20px;
-    margin-bottom: 10px;
-    border-radius: 4px;
-    background: #e0e0e0;
-    animation: shimmer 1.5s infinite linear;
-    background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
-    background-size: 1200px 100%;
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(128, 128, 128, 0.2);
+    border-top: 4px solid var(--accent); /* Uses your blue accent color */
+    border-radius: 50%;
+    margin-bottom: 20px;
+    animation: spin 1s linear infinite;
 }
 
-.skeleton-title { width: 60%; height: 30px; margin-bottom: 20px; }
-.skeleton-line { width: 80%; }
-.skeleton-line-short { width: 40%; }
-
-body.dark-mode .skeleton-text {
-    background: #333;
-    background: linear-gradient(to right, #2a2a2a 8%, #3a3a3a 18%, #2a2a2a 33%);
+.loading-text {
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    animation: pulse 1.5s ease-in-out infinite;
+    text-transform: uppercase;
 }
 
-@keyframes shimmer {
-    0% { background-position: -1200px 0; }
-    100% { background-position: 1200px 0; }
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+    0% { opacity: 0.5; }
+    50% { opacity: 1; }
+    100% { opacity: 0.5; }
+}
+
+/* Dark mode adjustment for the spinner track */
+body.dark-mode .spinner {
+    border-color: rgba(255, 255, 255, 0.1);
+    border-top-color: var(--accent);
 }

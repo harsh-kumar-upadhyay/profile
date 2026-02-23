@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (path.includes('post.html') && typeof BLOG_DATA !== 'undefined') renderBlogPost();
     if (path.includes('gallery.html') && typeof GALLERY_DATA !== 'undefined') renderGallery();
     if (path.includes('people.html') && typeof PEOPLE_DATA !== 'undefined') renderPeople();
-    if (path.includes('calendar.html')) initCalendar();
+    if (path.includes('updates.html')) initCalendar();
 });
 
 // Fix for Dark Mode on Back/Forward navigation
@@ -333,16 +333,16 @@ async function initCalendar() {
         FETCHED_CALENDAR_DATA = parseCSVToCalendarData(cachedCSV);
         renderCalendarYearView();
     } else {
-        // RENDER SKELETON LOADER instead of text
+        // RENDER BUFFERING ANIMATION
         if(container) {
-            container.className = "calendar-wrapper year-grid";
-            container.innerHTML = Array(6).fill(0).map(() => `
-                <div class="skeleton-card">
-                    <div class="skeleton-text skeleton-title"></div>
-                    <div class="skeleton-text skeleton-line"></div>
-                    <div class="skeleton-text skeleton-line-short"></div>
+            // Remove specific grid layouts so the spinner can center
+            container.className = "calendar-wrapper"; 
+            container.innerHTML = `
+                <div class="buffering-container">
+                    <div class="spinner"></div>
+                    <div class="loading-text">Loading/Updating</div>
                 </div>
-            `).join('');
+            `;
         }
     }
     
