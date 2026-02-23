@@ -1,10 +1,3 @@
-window.onload = function() {
-    if (!localStorage.getItem('force_reloaded')) {
-        localStorage.setItem('force_reloaded', 'true');
-        location.reload(true); // 'true' forces a reload from the server, ignoring cache
-    }
-}
-
 /* =========================================
    GLOBAL VARIABLES (Shared State)
    ========================================= */
