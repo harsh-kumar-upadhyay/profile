@@ -1298,3 +1298,38 @@ body.dark-mode .icon-btn:hover {
 #nav-overflow-content .button:hover {
     background-color: var(--border-color);
 }
+
+/* Skeleton Loading Animation */
+.skeleton-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 30px;
+    height: 150px;
+    position: relative;
+    overflow: hidden;
+}
+
+.skeleton-text {
+    height: 20px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    background: #e0e0e0;
+    animation: shimmer 1.5s infinite linear;
+    background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
+    background-size: 1200px 100%;
+}
+
+.skeleton-title { width: 60%; height: 30px; margin-bottom: 20px; }
+.skeleton-line { width: 80%; }
+.skeleton-line-short { width: 40%; }
+
+body.dark-mode .skeleton-text {
+    background: #333;
+    background: linear-gradient(to right, #2a2a2a 8%, #3a3a3a 18%, #2a2a2a 33%);
+}
+
+@keyframes shimmer {
+    0% { background-position: -1200px 0; }
+    100% { background-position: 1200px 0; }
+}

@@ -324,7 +324,7 @@ window.onclick = function(e) {
    GOOGLE SHEET INTEGRATION & CALENDAR
    ========================================= */
 
-const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRQgLv44MFjm1SvcZr_MNenPgKTPkz3uEXpLOG2qwM-1zlC0BKJjgIZe-4GJ0jomviHCOa4EHCnWmDU/pub?output=csv';
+const SHEET_URL = 'https://docs.google.com/spreadsheets/d/12j44Lp8e53Zkz62_bapJmo82g9imT7BulegRduIBsgw/edit?gid=0#gid=0';
 const CACHE_KEY = 'calendar_data_cache';
 let FETCHED_CALENDAR_DATA = {}; 
 const MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -340,8 +340,17 @@ async function initCalendar() {
         FETCHED_CALENDAR_DATA = parseCSVToCalendarData(cachedCSV);
         renderCalendarYearView();
     } else {
-        // Only show "Loading..." if we have NO cache at all
-        if(container) container.innerHTML = '<div style="text-align:center; padding:50px; color:var(--text-muted)">Loading updates...</div>';
+        // RENDER SKELETON LOADER instead of text
+        if(container) {
+            container.className = "calendar-wrapper year-grid";
+            container.innerHTML = Array(6).fill(0).map(() => `
+                <div class="skeleton-card">
+                    <div class="skeleton-text skeleton-title"></div>
+                    <div class="skeleton-text skeleton-line"></div>
+                    <div class="skeleton-text skeleton-line-short"></div>
+                </div>
+            `).join('');
+        }
     }
     
     // Fetch fresh data in the background
