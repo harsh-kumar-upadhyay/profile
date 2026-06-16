@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I have a question...</title>
+    <style>
+        /* Import a nice, romantic font */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Sacramento&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden; /* Prevents scrollbars when 'Yes' gets huge */
+        }
+
+        h1 {
+            font-family: 'Sacramento', cursive;
+            font-size: 4rem;
+            color: #d63031;
+            margin-bottom: 30px;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            z-index: 10;
+            transition: transform 0.2s ease; /* Makes the upward movement smooth */
+        }
+
+        .button-container {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            z-index: 10;
+        }
+
+        button {
+            padding: 15px 40px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s ease, left 0.2s ease, top 0.2s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        #yes-btn {
+            background-color: #ff4757;
+            color: white;
+            /* Keeps the Yes button centered as it grows */
+            transform-origin: center; 
+        }
+
+        #yes-btn:hover {
+            background-color: #ff6b81;
+        }
+
+        #no-btn {
+            background-color: #ffffff;
+            color: #ff4757;
+            position: relative; /* Will change to absolute via JS */
+        }
+
+        /* Success screen styling */
+        #success-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #ff4757;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.8s ease;
+        }
+
+        #success-screen h1 {
+            color: white;
+            font-size: 5rem;
+            text-shadow: none;
+        }
+
+        .gifs {
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            max-width: 80%;
+        }
+    </style>
+</head>
+<body>
+
+    <h1 id="question">Will you marry me? 💍</h1>
+    
+    <div class="button-container">
+        <button id="yes-btn" onclick="sayYes()">Yes!</button>
+        <button id="no-btn">No</button>
+    </div>
+
+    <div id="success-screen">
+        <h1>I knew you'd say YES! ❤️💍</h1>
+        <img src="https://media.giphy.com/media/l4pTfx2qLszoacZRS/giphy.gif" alt="Happy Celebration" class="gifs">
+    </div>
+
+    <script>
+        const noBtn = document.getElementById('no-btn');
+        const yesBtn = document.getElementById('yes-btn');
+        const questionText = document.getElementById('question');
+        
+        let yesScale = 1;
+        let noScale = 1;
+        let questionY = 0; // Tracks how high the question has moved
+
+        // Function that triggers when she tries to hover or click 'No'
+        function runAway() {
+            // Change position to absolute so it can fly around the screen freely
+            noBtn.style.position = 'absolute';
+            
+            // Calculate random coordinates within the window
+            const maxX = window.innerWidth - noBtn.offsetWidth;
+            const maxY = window.innerHeight - noBtn.offsetHeight;
+            
+            const randomX = Math.max(0, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(0, Math.floor(Math.random() * maxY));
+            
+            // Move the 'No' button
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+
+            // Shrink 'No' slowly and Grow 'Yes'
+            noScale -= 0.03; 
+            yesScale += 0.6;
+
+            // Move the question text up by 25 pixels each time
+            questionY -= 25;
+
+            // Apply the changes to the elements
+            noBtn.style.transform = `scale(${Math.max(noScale, 0)})`; 
+            yesBtn.style.transform = `scale(${yesScale})`;
+            questionText.style.transform = `translateY(${questionY}px)`;
+        }
+
+        // Add event listeners for both mouse and touch screens
+        noBtn.addEventListener('mouseover', runAway);
+        noBtn.addEventListener('touchstart', function(e) {
+            e.preventDefault(); 
+            runAway();
+        });
+
+        // Function for when she clicks 'Yes'
+        function sayYes() {
+            const successScreen = document.getElementById('success-screen');
+            successScreen.style.opacity = '1';
+            successScreen.style.pointerEvents = 'all';
+        }
+    </script>
+</body>
+</html>
