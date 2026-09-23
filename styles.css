@@ -1345,3 +1345,38 @@ body.dark-mode .spinner {
     border-color: rgba(255, 255, 255, 0.1);
     border-top-color: var(--accent);
 }
+
+/* 1. Stacks words on top of each other & locks width to the larger word */
+.word-swap {
+    display: inline-grid;
+    grid-template-areas: "stack";
+    cursor: pointer;
+    font-weight: bold;
+    color: #2563eb;
+}
+
+/* 2. Place both original and replacement in the same grid spot */
+.original,
+.replacement {
+    grid-area: stack;
+    transition: opacity 0.15s ease-in-out;
+}
+
+/* Initial state */
+.original {
+    opacity: 1;
+}
+
+.replacement {
+    opacity: 0;
+    color: #dc2626;
+}
+
+/* Hover state: toggle opacity instead of display */
+.word-swap:hover .original {
+    opacity: 0;
+}
+
+.word-swap:hover .replacement {
+    opacity: 1;
+}
