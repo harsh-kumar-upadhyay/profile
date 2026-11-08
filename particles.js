@@ -2,7 +2,7 @@
     "use strict";
 
     const CONFIG = {
-        particleDensity: 12000, 
+        particleDensity: 15000, 
         minParticles: 25,
         maxParticles: 100,
         connectionDistance: 150,
