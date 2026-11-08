@@ -3,10 +3,10 @@
 
     const CONFIG = {
         particleDensity: 12000, 
-        minParticles: 51,
-        maxParticles: 120,
-        connectionDistance: 140,
-        cursorRadius: 140,        // The size of the empty void around the cursor
+        minParticles: 25,
+        maxParticles: 100,
+        connectionDistance: 150,
+        cursorRadius: 100,        // The size of the empty void around the cursor
         repulsionStrength: 0.85,  // Pushes particles firmly to the boundary edge
         frameInterval: 500 / 1000
     };
