@@ -2,12 +2,12 @@
     "use strict";
 
     const CONFIG = {
-        particleDensity: 15000,
-        minParticles: 25,
-        maxParticles: 100,
-        connectionDistance: 150,
-        cursorRadius: 150, // Slightly larger interaction radius
-        cursorRepulsion: 2, // Push force away from cursor
+        particleDensity: 12000, 
+        minParticles: 51,
+        maxParticles: 120,
+        connectionDistance: 140,
+        cursorRadius: 140,        // The size of the empty void around the cursor
+        repulsionStrength: 0.85,  // Pushes particles firmly to the boundary edge
         frameInterval: 500 / 1000
     };
 
@@ -55,23 +55,23 @@
             this.x = Math.random() * width;
             this.y = Math.random() * height;
 
-            // Generate a random angle and a slow, constant speed
+            // Generate a random angle and a slow, constant drifting speed
             const angle = Math.random() * Math.PI * 2;
-            const speed = Math.random() * 0.4 + 0.15; 
+            const speed = Math.random() * 0.3 + 0.15; 
             
             this.vx = Math.cos(angle) * speed;
             this.vy = Math.sin(angle) * speed;
 
-            this.radius = Math.random() * 1.5 + 1;
-            this.alpha = Math.random() * 0.35 + 0.25;
+            this.radius = Math.random() * 1.5 + 1.2;
+            this.alpha = Math.random() * 0.4 + 0.2;
         }
 
         update() {
-            // Constant movement
+            // Apply constant movement
             this.x += this.vx;
             this.y += this.vy;
 
-            // Repel particles from the cursor without permanently altering their velocity
+            // Cursor Repulsion (Hard Boundary Effect)
             if (mouse.active) {
                 const dx = this.x - mouse.x;
                 const dy = this.y - mouse.y;
@@ -80,15 +80,20 @@
 
                 if (distanceSquared < radiusSquared && distanceSquared > 0.01) {
                     const distance = Math.sqrt(distanceSquared);
-                    const force = (1 - distance / CONFIG.cursorRadius) * CONFIG.cursorRepulsion;
+                    
+                    // Calculate how deep the particle is inside the forbidden zone
+                    const overlap = CONFIG.cursorRadius - distance;
+                    
+                    const nx = dx / distance;
+                    const ny = dy / distance;
 
-                    // Displace position temporarily
-                    this.x += (dx / distance) * force;
-                    this.y += (dy / distance) * force;
+                    // Shove the particle strictly outward to the boundary perimeter
+                    this.x += nx * overlap * CONFIG.repulsionStrength;
+                    this.y += ny * overlap * CONFIG.repulsionStrength;
                 }
             }
 
-            // Wrap around screen edges seamlessly
+            // Wrap around screen edges smoothly
             const margin = 10;
             if (this.x < -margin) this.x = width + margin;
             if (this.x > width + margin) this.x = -margin;
@@ -134,17 +139,11 @@
         if (particles.length > count) {
             particles.length = count;
         }
-
-        // Ensure particles stay in bounds on resize
-        particles.forEach(particle => {
-            particle.x = Math.min(particle.x, width);
-            particle.y = Math.min(particle.y, height);
-        });
     }
 
     function getParticleColor() {
         const isDark = document.body.classList.contains("dark-mode");
-        return isDark ? "220, 230, 255" : "65, 85, 115";
+        return isDark ? "220, 230, 255" : "100, 115, 135"; 
     }
 
     function drawConnections(color) {
@@ -166,13 +165,14 @@
                 }
 
                 const distance = Math.sqrt(distanceSquared);
-                const opacity = (1 - distance / maxDistance) * 0.22;
+                // Connections become more opaque as particles get closer together
+                const opacity = (1 - distance / maxDistance) * 0.25;
 
                 ctx.beginPath();
                 ctx.moveTo(a.x, a.y);
                 ctx.lineTo(b.x, b.y);
                 ctx.strokeStyle = `rgba(${color}, ${opacity})`;
-                ctx.lineWidth = 0.7;
+                ctx.lineWidth = 0.8;
                 ctx.stroke();
             }
         }
