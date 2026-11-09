@@ -2,10 +2,10 @@
     "use strict";
 
     const CONFIG = {
-        particleDensity: 15000, 
+        particleDensity: 10000, 
         minParticles: 25,
         maxParticles: 100,
-        connectionDistance: 150,
+        connectionDistance: 200,
         cursorRadius: 100,        // The size of the empty void around the cursor
         repulsionStrength: 0.85,  // Pushes particles firmly to the boundary edge
         frameInterval: 500 / 1000
@@ -143,7 +143,7 @@
 
     function getParticleColor() {
         const isDark = document.body.classList.contains("dark-mode");
-        return isDark ? "120, 120, 120" : "100, 115, 135"; 
+        return isDark ? "57, 255, 20" : "220, 20, 60"; 
     }
 
     function drawConnections(color) {
