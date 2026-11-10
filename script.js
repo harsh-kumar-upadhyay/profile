@@ -44,11 +44,13 @@ function applySavedTheme() {
     const body = document.getElementById("body");
     if (!body) return;
 
-    // Dark mode is the default unless the user explicitly selects light mode.
-    const isDarkMode = savedTheme !== 'light';
-
-    body.classList.toggle("dark-mode", isDarkMode);
-    updateIcons(isDarkMode);
+    if (savedTheme === 'dark') {
+        body.classList.add("dark-mode");
+        updateIcons(true);
+    } else {
+        body.classList.remove("dark-mode");
+        updateIcons(false);
+    }
 }
 
 function updateIcons(isDarkMode) {
