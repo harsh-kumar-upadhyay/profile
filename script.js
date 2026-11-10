@@ -43,15 +43,12 @@ function applySavedTheme() {
     const savedTheme = localStorage.getItem('theme');
     const body = document.getElementById("body");
     if (!body) return;
-    
-    // Now it ONLY turns dark if explicitly saved as 'dark'
-    if (savedTheme === 'dark') {
-        body.classList.add("dark-mode");
-        updateIcons(true);
-    } else {
-        body.classList.remove("dark-mode");
-        updateIcons(false);
-    }
+
+    // Dark mode is the default unless the user explicitly selects light mode.
+    const isDarkMode = savedTheme !== 'light';
+
+    body.classList.toggle("dark-mode", isDarkMode);
+    updateIcons(isDarkMode);
 }
 
 function updateIcons(isDarkMode) {
