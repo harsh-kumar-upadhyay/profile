@@ -143,7 +143,7 @@
 
     function getParticleColor() {
         const isDark = document.body.classList.contains("dark-mode");
-        return isDark ? "57, 255, 20" : "220, 20, 60"; 
+        return isDark ? "120, 120, 120" : "100, 115, 135"; 
     }
 
     function drawConnections(color) {
