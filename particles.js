@@ -2,10 +2,10 @@
     "use strict";
 
     const CONFIG = {
-        gridCellSize: 28,         // Contour marching-squares resolution (fast & smooth)
-        contourLevels: 9,         // Number of topographic level sets
+        gridCellSize: 32,         // Crisp contour resolution with 30% fewer cells
+        contourLevels: 8,         // Topographic level sets
         optimizerCount: 22,       // Active gradient descent trajectories
-        trailLength: 28,          // Sleek trajectory ribbon length
+        trailLength: 28,          // Trajectory ribbon length
         learningRate: 2.8,        // Step size \eta
         momentum: 0.86,           // Heavy-ball momentum \beta
         cursorRadius: 210,        // Pointer landscape perturbation radius
@@ -15,15 +15,15 @@
 
     const THEMES = {
         dark: {
-            rgb: "170, 186, 210", // Crisp silver-slate
-            contourAlpha: 0.14,   // Fine topographic level sets
-            majorAlpha: 0.22,     // Every 3rd major contour line
-            trailAlpha: 0.42,     // Gradient descent trajectory
-            headAlpha: 0.85,      // Optimizer iterate dot x_k
+            rgb: "170, 186, 210",
+            contourAlpha: 0.14,
+            majorAlpha: 0.22,
+            trailAlpha: 0.42,
+            headAlpha: 0.85,
             lineWidth: 0.95
         },
         light: {
-            rgb: "88, 105, 128",  // Academic slate
+            rgb: "88, 105, 128",
             contourAlpha: 0.12,
             majorAlpha: 0.19,
             trailAlpha: 0.34,
@@ -51,21 +51,34 @@
     let height = 0;
     let cols = 0;
     let rows = 0;
-    let field = [];
+    let field = new Float32Array(0);
     let optimizers = [];
     let animationId = null;
     let lastFrame = 0;
+    let frameCount = 0;
     let time = 0;
     let dpr = 1;
 
+    // Cache theme via MutationObserver instead of querying DOM 60 times/sec
+    let activeTheme = document.body.classList.contains("dark-mode") ? THEMES.dark : THEMES.light;
+    const themeObserver = new MutationObserver(() => {
+        activeTheme = document.body.classList.contains("dark-mode") ? THEMES.dark : THEMES.light;
+    });
+    themeObserver.observe(document.body, { attributes: true, attributeFilter: ["class"] });
+
+    // Offscreen canvas for caching topographic contours every 2nd frame
+    const contourCanvas = document.createElement("canvas");
+    const contourCtx = contourCanvas.getContext("2d", { alpha: true });
+    let contourDirty = true;
+
     const mouse = { x: -1000, y: -1000, active: false };
 
-    // Smooth non-convex loss landscape f(x, y, t) with shifting basins & saddle points
     function evaluateLoss(x, y, t) {
-        const nx = (x / Math.max(width, 1)) * 3.6;
-        const ny = (y / Math.max(height, 1)) * 2.6;
+        const w = width || 1;
+        const h = height || 1;
+        const nx = (x / w) * 3.6;
+        const ny = (y / h) * 2.6;
 
-        // Primary global basin on the right-center + secondary local minima
         const d1x = nx - (2.45 + Math.sin(t * 0.6) * 0.22);
         const d1y = ny - (1.55 + Math.cos(t * 0.5) * 0.18);
         const basin1 = -1.25 * Math.exp(-(d1x * d1x + d1y * d1y) * 1.4);
@@ -74,12 +87,9 @@
         const d2y = ny - (1.95 + Math.sin(t * 0.55) * 0.15);
         const basin2 = -0.85 * Math.exp(-(d2x * d2x + d2y * d2y) * 1.8);
 
-        // Smooth wave coupling for saddle regions
         const saddle = 0.28 * Math.sin(nx * 2.1 + t * 0.4) * Math.cos(ny * 2.2 - t * 0.35);
-
         let val = basin1 + basin2 + saddle;
 
-        // Pointer creates a live local attractor basin in the loss surface
         if (mouse.active) {
             const dx = x - mouse.x;
             const dy = y - mouse.y;
@@ -93,16 +103,23 @@
         return val;
     }
 
-    // Finite-difference gradient \nabla f(x, y)
-    function evaluateGradient(x, y, t) {
+    function evaluateGradient(x, y, t, out) {
         const eps = 4.0;
-        const dfdx = (evaluateLoss(x + eps, y, t) - evaluateLoss(x - eps, y, t)) / (2 * eps);
-        const dfdy = (evaluateLoss(x, y + eps, t) - evaluateLoss(x, y - eps, t)) / (2 * eps);
-        return { gx: dfdx, gy: dfdy };
+        const inv = 1 / (2 * eps);
+        out.gx = (evaluateLoss(x + eps, y, t) - evaluateLoss(x - eps, y, t)) * inv;
+        out.gy = (evaluateLoss(x, y + eps, t) - evaluateLoss(x, y - eps, t)) * inv;
     }
+
+    // Reusable gradient scratch object to eliminate per-step allocations
+    const gradScratch = { gx: 0, gy: 0 };
 
     class OptimizerParticle {
         constructor(prewarm = false, customPos = null) {
+            // Pre-allocated typed ring buffers (zero garbage collection)
+            this.trailX = new Float32Array(CONFIG.trailLength);
+            this.trailY = new Float32Array(CONFIG.trailLength);
+            this.headIdx = 0;
+            this.count = 0;
             this.reset(prewarm, customPos);
         }
 
@@ -113,17 +130,19 @@
                 this.x = customPos.x + Math.cos(angle) * spread;
                 this.y = customPos.y + Math.sin(angle) * spread;
             } else {
-                // Bias spawns toward right and lower regions to keep left bio clean
                 this.x = width * (0.28 + Math.random() * 0.68);
                 this.y = height * (0.12 + Math.random() * 0.82);
             }
 
             this.vx = 0;
             this.vy = 0;
-            this.maxLife = 170 + Math.random() * 140;
-            this.life = prewarm ? Math.floor(this.maxLife * Math.random() * 0.6) : 0;
-            this.history = [];
+            this.stagnantFrames = 0;
+            this.maxLife = 160 + Math.floor(Math.random() * 120);
+            this.life = prewarm ? Math.floor(this.maxLife * Math.random() * 0.5) : 0;
             this.isTemporary = Boolean(customPos);
+
+            this.headIdx = 0;
+            this.count = 0;
 
             if (prewarm) {
                 for (let i = 0; i < CONFIG.trailLength; i++) {
@@ -132,96 +151,121 @@
             }
         }
 
+        pushTrail(x, y) {
+            this.trailX[this.headIdx] = x;
+            this.trailY[this.headIdx] = y;
+            this.headIdx = (this.headIdx + 1) % CONFIG.trailLength;
+            if (this.count < CONFIG.trailLength) {
+                this.count++;
+            }
+        }
+
         step() {
-            const { gx, gy } = evaluateGradient(this.x, this.y, time);
+            evaluateGradient(this.x, this.y, time, gradScratch);
+            const gx = gradScratch.gx;
+            const gy = gradScratch.gy;
             const gradNorm = Math.hypot(gx, gy);
 
-            // Normalize gradient lightly so trajectories glide smoothly even on flat plateaus
             const scale = gradNorm > 1e-5 ? CONFIG.learningRate / Math.max(gradNorm, 0.0025) : 0;
 
             this.vx = CONFIG.momentum * this.vx - gx * scale * 0.35;
             this.vy = CONFIG.momentum * this.vy - gy * scale * 0.35;
 
-            // Cap max velocity for silky curve rendering
             const speed = Math.hypot(this.vx, this.vy);
             if (speed > 4.2) {
-                this.vx = (this.vx / speed) * 4.2;
-                this.vy = (this.vy / speed) * 4.2;
+                const invSpeed = 4.2 / speed;
+                this.vx *= invSpeed;
+                this.vy *= invSpeed;
+            }
+
+            // Detect convergence into a local minimum so particles don't sit idle
+            if (speed < 0.25) {
+                this.stagnantFrames++;
+            } else {
+                this.stagnantFrames = 0;
             }
 
             this.x += this.vx;
             this.y += this.vy;
-
-            this.history.push({ x: this.x, y: this.y });
-            if (this.history.length > CONFIG.trailLength) {
-                this.history.shift();
-            }
+            this.pushTrail(this.x, this.y);
         }
 
         update() {
             this.life++;
-            if (this.life > this.maxLife) {
+
+            // Guard against NaN/Infinity or converged stagnation
+            const outOfBounds =
+                !Number.isFinite(this.x) ||
+                !Number.isFinite(this.y) ||
+                this.x < -30 || this.x > width + 30 ||
+                this.y < -30 || this.y > height + 30;
+
+            if (this.life > this.maxLife || this.stagnantFrames > 22 || outOfBounds) {
                 if (this.isTemporary) return false;
                 this.reset(false);
                 return true;
             }
 
             this.step();
-
-            if (this.x < -30 || this.x > width + 30 || this.y < -30 || this.y > height + 30) {
-                if (this.isTemporary) return false;
-                this.reset(false);
-            }
             return true;
         }
 
         draw(theme) {
-            if (this.history.length < 2) return;
+            if (this.count < 2) return;
 
             const ratio = this.life / this.maxLife;
             let envelope = 1;
             if (ratio < 0.12) envelope = ratio / 0.12;
             else if (ratio > 0.8) envelope = (1 - ratio) / 0.2;
 
-            for (let i = 1; i < this.history.length; i++) {
-                const p0 = this.history[i - 1];
-                const p1 = this.history[i];
-                const segAlpha = (i / this.history.length) * theme.trailAlpha * envelope;
+            const startIdx = (this.headIdx - this.count + CONFIG.trailLength) % CONFIG.trailLength;
+            ctx.lineWidth = theme.lineWidth * 1.25;
+
+            let prevIdx = startIdx;
+            for (let i = 1; i < this.count; i++) {
+                const currIdx = (startIdx + i) % CONFIG.trailLength;
+                const segAlpha = (i / this.count) * theme.trailAlpha * envelope;
 
                 ctx.beginPath();
-                ctx.moveTo(p0.x, p0.y);
-                ctx.lineTo(p1.x, p1.y);
+                ctx.moveTo(this.trailX[prevIdx], this.trailY[prevIdx]);
+                ctx.lineTo(this.trailX[currIdx], this.trailY[currIdx]);
                 ctx.strokeStyle = `rgba(${theme.rgb}, ${segAlpha})`;
-                ctx.lineWidth = theme.lineWidth * 1.25;
                 ctx.stroke();
+
+                prevIdx = currIdx;
             }
 
-            const head = this.history[this.history.length - 1];
+            const lastIdx = (this.headIdx - 1 + CONFIG.trailLength) % CONFIG.trailLength;
             ctx.beginPath();
-            ctx.arc(head.x, head.y, 1.9, 0, Math.PI * 2);
+            ctx.arc(this.trailX[lastIdx], this.trailY[lastIdx], 1.9, 0, Math.PI * 2);
             ctx.fillStyle = `rgba(${theme.rgb}, ${theme.headAlpha * envelope})`;
             ctx.fill();
         }
     }
 
-    // Marching Squares contour renderer for topographic level sets
-    function drawContours(theme) {
+    function renderContoursToCache(theme) {
+        if (!contourCtx) return;
+
+        contourCtx.clearRect(0, 0, width, height);
+
         const cell = CONFIG.gridCellSize;
         for (let r = 0; r < rows; r++) {
             const y = r * cell;
+            const rowOffset = r * cols;
             for (let c = 0; c < cols; c++) {
-                field[r * cols + c] = evaluateLoss(c * cell, y, time);
+                field[rowOffset + c] = evaluateLoss(c * cell, y, time);
             }
         }
 
         const minVal = -1.35;
         const maxVal = 0.35;
+        const span = maxVal - minVal;
 
         for (let l = 0; l < CONFIG.contourLevels; l++) {
-            const threshold = minVal + ((l + 0.5) / CONFIG.contourLevels) * (maxVal - minVal);
+            const threshold = minVal + ((l + 0.5) / CONFIG.contourLevels) * span;
             const isMajor = l % 3 === 1;
 
-            ctx.beginPath();
+            contourCtx.beginPath();
             for (let r = 0; r < rows - 1; r++) {
                 const y0 = r * cell;
                 const y1 = y0 + cell;
@@ -253,53 +297,53 @@
                     switch (state) {
                         case 1:
                         case 14:
-                            ctx.moveTo(x0, leftY);
-                            ctx.lineTo(topX, y0);
+                            contourCtx.moveTo(x0, leftY);
+                            contourCtx.lineTo(topX, y0);
                             break;
                         case 2:
                         case 13:
-                            ctx.moveTo(topX, y0);
-                            ctx.lineTo(x1, rightY);
+                            contourCtx.moveTo(topX, y0);
+                            contourCtx.lineTo(x1, rightY);
                             break;
                         case 3:
                         case 12:
-                            ctx.moveTo(x0, leftY);
-                            ctx.lineTo(x1, rightY);
+                            contourCtx.moveTo(x0, leftY);
+                            contourCtx.lineTo(x1, rightY);
                             break;
                         case 4:
                         case 11:
-                            ctx.moveTo(x1, rightY);
-                            ctx.lineTo(bottomX, y1);
+                            contourCtx.moveTo(x1, rightY);
+                            contourCtx.lineTo(bottomX, y1);
                             break;
                         case 5:
-                            ctx.moveTo(x0, leftY);
-                            ctx.lineTo(topX, y0);
-                            ctx.moveTo(x1, rightY);
-                            ctx.lineTo(bottomX, y1);
+                            contourCtx.moveTo(x0, leftY);
+                            contourCtx.lineTo(topX, y0);
+                            contourCtx.moveTo(x1, rightY);
+                            contourCtx.lineTo(bottomX, y1);
                             break;
                         case 6:
                         case 9:
-                            ctx.moveTo(topX, y0);
-                            ctx.lineTo(bottomX, y1);
+                            contourCtx.moveTo(topX, y0);
+                            contourCtx.lineTo(bottomX, y1);
                             break;
                         case 7:
                         case 8:
-                            ctx.moveTo(x0, leftY);
-                            ctx.lineTo(bottomX, y1);
+                            contourCtx.moveTo(x0, leftY);
+                            contourCtx.lineTo(bottomX, y1);
                             break;
                         case 10:
-                            ctx.moveTo(topX, y0);
-                            ctx.lineTo(x1, rightY);
-                            ctx.moveTo(x0, leftY);
-                            ctx.lineTo(bottomX, y1);
+                            contourCtx.moveTo(topX, y0);
+                            contourCtx.lineTo(x1, rightY);
+                            contourCtx.moveTo(x0, leftY);
+                            contourCtx.lineTo(bottomX, y1);
                             break;
                     }
                 }
             }
 
-            ctx.strokeStyle = `rgba(${theme.rgb}, ${isMajor ? theme.majorAlpha : theme.contourAlpha})`;
-            ctx.lineWidth = isMajor ? theme.lineWidth * 1.1 : theme.lineWidth * 0.75;
-            ctx.stroke();
+            contourCtx.strokeStyle = `rgba(${theme.rgb}, ${isMajor ? theme.majorAlpha : theme.contourAlpha})`;
+            contourCtx.lineWidth = isMajor ? theme.lineWidth * 1.1 : theme.lineWidth * 0.75;
+            contourCtx.stroke();
         }
     }
 
@@ -308,13 +352,23 @@
         height = window.innerHeight;
 
         dpr = Math.min(window.devicePixelRatio || 1, 2);
-        canvas.width = Math.round(width * dpr);
-        canvas.height = Math.round(height * dpr);
+        const targetW = Math.round(width * dpr);
+        const targetH = Math.round(height * dpr);
+
+        canvas.width = targetW;
+        canvas.height = targetH;
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+        contourCanvas.width = targetW;
+        contourCanvas.height = targetH;
+        if (contourCtx) {
+            contourCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        }
 
         cols = Math.ceil(width / CONFIG.gridCellSize) + 2;
         rows = Math.ceil(height / CONFIG.gridCellSize) + 2;
         field = new Float32Array(cols * rows);
+        contourDirty = true;
 
         if (optimizers.length === 0) {
             for (let i = 0; i < CONFIG.optimizerCount; i++) {
@@ -323,33 +377,34 @@
         }
     }
 
-    function getActiveTheme() {
-        return document.body.classList.contains("dark-mode")
-            ? THEMES.dark
-            : THEMES.light;
-    }
-
     function animate(timestamp) {
         animationId = requestAnimationFrame(animate);
 
-        if (timestamp - lastFrame < CONFIG.frameInterval) {
+        // Clamp large delta spikes when returning from background sleep
+        const elapsed = timestamp - lastFrame;
+        if (elapsed < CONFIG.frameInterval) {
             return;
         }
 
         lastFrame = timestamp;
-        time += 0.012;
+        frameCount++;
+        time = (time + 0.012) % (Math.PI * 200); // Prevent unbounded float growth over hours
+
         ctx.clearRect(0, 0, width, height);
 
-        const theme = getActiveTheme();
-
-        drawContours(theme);
+        // Re-render topographic contour cache every 2nd frame (or immediately on pointer move/resize)
+        if (contourDirty || frameCount % 2 === 0) {
+            renderContoursToCache(activeTheme);
+            contourDirty = false;
+        }
+        ctx.drawImage(contourCanvas, 0, 0, width, height);
 
         for (let i = optimizers.length - 1; i >= 0; i--) {
             const alive = optimizers[i].update();
             if (!alive) {
                 optimizers.splice(i, 1);
             } else {
-                optimizers[i].draw(theme);
+                optimizers[i].draw(activeTheme);
             }
         }
     }
@@ -358,18 +413,19 @@
         mouse.x = x;
         mouse.y = y;
         mouse.active = true;
+        contourDirty = true;
     }
 
     function deactivatePointer() {
         mouse.active = false;
         mouse.x = -1000;
         mouse.y = -1000;
+        contourDirty = true;
     }
 
     window.addEventListener("mousemove", e => updatePointer(e.clientX, e.clientY), { passive: true });
     window.addEventListener("mouseleave", deactivatePointer);
 
-    // Clicking empty background drops a fresh batch of gradient descent trajectories
     window.addEventListener("click", e => {
         if (e.target.closest("a, button")) return;
         for (let i = 0; i < 4; i++) {
@@ -398,15 +454,17 @@
 
     document.addEventListener("visibilitychange", () => {
         if (document.hidden) {
-            cancelAnimationFrame(animationId);
-            animationId = null;
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+                animationId = null;
+            }
         } else if (!animationId) {
-            lastFrame = 0;
+            lastFrame = performance.now();
+            contourDirty = true;
             animationId = requestAnimationFrame(animate);
         }
     });
 
     resize();
-    // Instant frame-0 render on page open
     animate(performance.now());
 })();
