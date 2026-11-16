@@ -2,13 +2,15 @@
     "use strict";
 
     const CONFIG = {
-        gridCellSize: 32,         // Crisp contour resolution with 30% fewer cells
-        contourLevels: 8,         // Topographic level sets
-        optimizerCount: 22,       // Active gradient descent trajectories
-        trailLength: 28,          // Trajectory ribbon length
+        gridCellSize: 40,         // Wide, clean contour cell spacing
+        contourLevels: 5,         // Minimalist topographic level sets
+        areaPerOptimizer: 72000,  // Responsive density: ~7 on mobile, ~12–15 on desktop
+        minOptimizers: 3,
+        maxOptimizers: 7,
+        trailLength: 18,          // Sleek, uncluttered trajectory tail
         learningRate: 2.8,        // Step size \eta
         momentum: 0.86,           // Heavy-ball momentum \beta
-        cursorRadius: 210,        // Pointer landscape perturbation radius
+        cursorRadius: 200,        // Pointer landscape perturbation radius
         cursorStrength: 0.75,     // Local potential-well depth around pointer
         frameInterval: 1000 / 60
     };
@@ -16,17 +18,17 @@
     const THEMES = {
         dark: {
             rgb: "170, 186, 210",
-            contourAlpha: 0.14,
-            majorAlpha: 0.22,
-            trailAlpha: 0.42,
+            contourAlpha: 0.13,
+            majorAlpha: 0.21,
+            trailAlpha: 0.40,
             headAlpha: 0.85,
             lineWidth: 0.95
         },
         light: {
             rgb: "88, 105, 128",
-            contourAlpha: 0.12,
-            majorAlpha: 0.19,
-            trailAlpha: 0.34,
+            contourAlpha: 0.11,
+            majorAlpha: 0.18,
+            trailAlpha: 0.32,
             headAlpha: 0.75,
             lineWidth: 0.85
         }
@@ -59,35 +61,39 @@
     let time = 0;
     let dpr = 1;
 
-    // Cache theme via MutationObserver instead of querying DOM 60 times/sec
     let activeTheme = document.body.classList.contains("dark-mode") ? THEMES.dark : THEMES.light;
     const themeObserver = new MutationObserver(() => {
         activeTheme = document.body.classList.contains("dark-mode") ? THEMES.dark : THEMES.light;
+        contourDirty = true;
     });
     themeObserver.observe(document.body, { attributes: true, attributeFilter: ["class"] });
 
-    // Offscreen canvas for caching topographic contours every 2nd frame
     const contourCanvas = document.createElement("canvas");
     const contourCtx = contourCanvas.getContext("2d", { alpha: true });
     let contourDirty = true;
 
     const mouse = { x: -1000, y: -1000, active: false };
 
+    function getTargetOptimizerCount() {
+        const scaled = Math.floor((width * height) / CONFIG.areaPerOptimizer);
+        return Math.min(CONFIG.maxOptimizers, Math.max(CONFIG.minOptimizers, scaled));
+    }
+
     function evaluateLoss(x, y, t) {
         const w = width || 1;
         const h = height || 1;
-        const nx = (x / w) * 3.6;
-        const ny = (y / h) * 2.6;
+        const nx = (x / w) * 3.4;
+        const ny = (y / h) * 2.5;
 
-        const d1x = nx - (2.45 + Math.sin(t * 0.6) * 0.22);
-        const d1y = ny - (1.55 + Math.cos(t * 0.5) * 0.18);
-        const basin1 = -1.25 * Math.exp(-(d1x * d1x + d1y * d1y) * 1.4);
+        const d1x = nx - (2.35 + Math.sin(t * 0.6) * 0.22);
+        const d1y = ny - (1.50 + Math.cos(t * 0.5) * 0.18);
+        const basin1 = -1.25 * Math.exp(-(d1x * d1x + d1y * d1y) * 1.35);
 
         const d2x = nx - (1.15 + Math.cos(t * 0.45) * 0.2);
-        const d2y = ny - (1.95 + Math.sin(t * 0.55) * 0.15);
-        const basin2 = -0.85 * Math.exp(-(d2x * d2x + d2y * d2y) * 1.8);
+        const d2y = ny - (1.90 + Math.sin(t * 0.55) * 0.15);
+        const basin2 = -0.85 * Math.exp(-(d2x * d2x + d2y * d2y) * 1.7);
 
-        const saddle = 0.28 * Math.sin(nx * 2.1 + t * 0.4) * Math.cos(ny * 2.2 - t * 0.35);
+        const saddle = 0.24 * Math.sin(nx * 2.0 + t * 0.4) * Math.cos(ny * 2.1 - t * 0.35);
         let val = basin1 + basin2 + saddle;
 
         if (mouse.active) {
@@ -110,12 +116,10 @@
         out.gy = (evaluateLoss(x, y + eps, t) - evaluateLoss(x, y - eps, t)) * inv;
     }
 
-    // Reusable gradient scratch object to eliminate per-step allocations
     const gradScratch = { gx: 0, gy: 0 };
 
     class OptimizerParticle {
         constructor(prewarm = false, customPos = null) {
-            // Pre-allocated typed ring buffers (zero garbage collection)
             this.trailX = new Float32Array(CONFIG.trailLength);
             this.trailY = new Float32Array(CONFIG.trailLength);
             this.headIdx = 0;
@@ -126,7 +130,7 @@
         reset(prewarm = false, customPos = null) {
             if (customPos) {
                 const angle = Math.random() * Math.PI * 2;
-                const spread = 8 + Math.random() * 24;
+                const spread = 8 + Math.random() * 20;
                 this.x = customPos.x + Math.cos(angle) * spread;
                 this.y = customPos.y + Math.sin(angle) * spread;
             } else {
@@ -137,7 +141,7 @@
             this.vx = 0;
             this.vy = 0;
             this.stagnantFrames = 0;
-            this.maxLife = 160 + Math.floor(Math.random() * 120);
+            this.maxLife = 150 + Math.floor(Math.random() * 110);
             this.life = prewarm ? Math.floor(this.maxLife * Math.random() * 0.5) : 0;
             this.isTemporary = Boolean(customPos);
 
@@ -172,13 +176,12 @@
             this.vy = CONFIG.momentum * this.vy - gy * scale * 0.35;
 
             const speed = Math.hypot(this.vx, this.vy);
-            if (speed > 4.2) {
-                const invSpeed = 4.2 / speed;
+            if (speed > 4.0) {
+                const invSpeed = 4.0 / speed;
                 this.vx *= invSpeed;
                 this.vy *= invSpeed;
             }
 
-            // Detect convergence into a local minimum so particles don't sit idle
             if (speed < 0.25) {
                 this.stagnantFrames++;
             } else {
@@ -193,14 +196,13 @@
         update() {
             this.life++;
 
-            // Guard against NaN/Infinity or converged stagnation
             const outOfBounds =
                 !Number.isFinite(this.x) ||
                 !Number.isFinite(this.y) ||
                 this.x < -30 || this.x > width + 30 ||
                 this.y < -30 || this.y > height + 30;
 
-            if (this.life > this.maxLife || this.stagnantFrames > 22 || outOfBounds) {
+            if (this.life > this.maxLife || this.stagnantFrames > 20 || outOfBounds) {
                 if (this.isTemporary) return false;
                 this.reset(false);
                 return true;
@@ -219,7 +221,7 @@
             else if (ratio > 0.8) envelope = (1 - ratio) / 0.2;
 
             const startIdx = (this.headIdx - this.count + CONFIG.trailLength) % CONFIG.trailLength;
-            ctx.lineWidth = theme.lineWidth * 1.25;
+            ctx.lineWidth = theme.lineWidth * 1.2;
 
             let prevIdx = startIdx;
             for (let i = 1; i < this.count; i++) {
@@ -237,7 +239,7 @@
 
             const lastIdx = (this.headIdx - 1 + CONFIG.trailLength) % CONFIG.trailLength;
             ctx.beginPath();
-            ctx.arc(this.trailX[lastIdx], this.trailY[lastIdx], 1.9, 0, Math.PI * 2);
+            ctx.arc(this.trailX[lastIdx], this.trailY[lastIdx], 1.85, 0, Math.PI * 2);
             ctx.fillStyle = `rgba(${theme.rgb}, ${theme.headAlpha * envelope})`;
             ctx.fill();
         }
@@ -257,13 +259,13 @@
             }
         }
 
-        const minVal = -1.35;
-        const maxVal = 0.35;
+        const minVal = -1.25;
+        const maxVal = 0.25;
         const span = maxVal - minVal;
 
         for (let l = 0; l < CONFIG.contourLevels; l++) {
             const threshold = minVal + ((l + 0.5) / CONFIG.contourLevels) * span;
-            const isMajor = l % 3 === 1;
+            const isMajor = l === 2;
 
             contourCtx.beginPath();
             for (let r = 0; r < rows - 1; r++) {
@@ -370,29 +372,29 @@
         field = new Float32Array(cols * rows);
         contourDirty = true;
 
-        if (optimizers.length === 0) {
-            for (let i = 0; i < CONFIG.optimizerCount; i++) {
-                optimizers.push(new OptimizerParticle(true));
-            }
+        // Dynamically adapt particle count to current screen size
+        const targetCount = getTargetOptimizerCount();
+        while (optimizers.length < targetCount) {
+            optimizers.push(new OptimizerParticle(true));
+        }
+        if (optimizers.length > targetCount) {
+            optimizers.length = targetCount;
         }
     }
 
     function animate(timestamp) {
         animationId = requestAnimationFrame(animate);
 
-        // Clamp large delta spikes when returning from background sleep
-        const elapsed = timestamp - lastFrame;
-        if (elapsed < CONFIG.frameInterval) {
+        if (timestamp - lastFrame < CONFIG.frameInterval) {
             return;
         }
 
         lastFrame = timestamp;
         frameCount++;
-        time = (time + 0.012) % (Math.PI * 200); // Prevent unbounded float growth over hours
+        time = (time + 0.012) % (Math.PI * 200);
 
         ctx.clearRect(0, 0, width, height);
 
-        // Re-render topographic contour cache every 2nd frame (or immediately on pointer move/resize)
         if (contourDirty || frameCount % 2 === 0) {
             renderContoursToCache(activeTheme);
             contourDirty = false;
@@ -428,8 +430,9 @@
 
     window.addEventListener("click", e => {
         if (e.target.closest("a, button")) return;
-        for (let i = 0; i < 4; i++) {
-            if (optimizers.length < CONFIG.optimizerCount + 12) {
+        const maxAllowed = getTargetOptimizerCount() + 6;
+        for (let i = 0; i < 3; i++) {
+            if (optimizers.length < maxAllowed) {
                 optimizers.push(new OptimizerParticle(false, { x: e.clientX, y: e.clientY }));
             }
         }
@@ -437,8 +440,7 @@
 
     window.addEventListener("touchstart", e => {
         if (e.touches.length > 0) {
-            const t = e.touches[0];
-            updatePointer(t.clientX, t.clientY);
+            updatePointer(e.touches[0].clientX, e.touches[0].clientY);
         }
     }, { passive: true });
 
