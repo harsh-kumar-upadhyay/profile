@@ -2,16 +2,16 @@
     "use strict";
 
     const CONFIG = {
-        gridCellSize: 40,         // Wide, clean contour cell spacing
+        gridCellSize: 26,         // Smooth contour curvature without extra CPU cost
         contourLevels: 5,         // Minimalist topographic level sets
         areaPerOptimizer: 72000,  // Responsive density: ~7 on mobile, ~12–15 on desktop
         minOptimizers: 3,
         maxOptimizers: 7,
-        trailLength: 18,          // Sleek, uncluttered trajectory tail
-        learningRate: 2.8,        // Step size \eta
-        momentum: 0.86,           // Heavy-ball momentum \beta
+        trailLength: 22,          // Slightly longer trail to showcase the overshoot arc
+        learningRate: 145.0,      // Force gain proportional to true gradient steepness
+        momentum: 0.935,          // High heavy-ball inertia for realistic basin overshoot
         cursorRadius: 200,        // Pointer landscape perturbation radius
-        cursorStrength: 0.75,     // Local potential-well depth around pointer
+        cursorStrength: 0.80,     // Local potential-well depth around pointer
         frameInterval: 1000 / 60
     };
 
@@ -130,7 +130,7 @@
         reset(prewarm = false, customPos = null) {
             if (customPos) {
                 const angle = Math.random() * Math.PI * 2;
-                const spread = 8 + Math.random() * 20;
+                const spread = 12 + Math.random() * 24;
                 this.x = customPos.x + Math.cos(angle) * spread;
                 this.y = customPos.y + Math.sin(angle) * spread;
             } else {
@@ -138,11 +138,15 @@
                 this.y = height * (0.12 + Math.random() * 0.82);
             }
 
-            this.vx = 0;
-            this.vy = 0;
+            // Give slight initial tangential velocity so descent arcs swirl & overshoot cleanly
+            const initAngle = Math.random() * Math.PI * 2;
+            const initKick = 0.6 + Math.random() * 0.8;
+            this.vx = Math.cos(initAngle) * initKick;
+            this.vy = Math.sin(initAngle) * initKick;
+
             this.stagnantFrames = 0;
-            this.maxLife = 150 + Math.floor(Math.random() * 110);
-            this.life = prewarm ? Math.floor(this.maxLife * Math.random() * 0.5) : 0;
+            this.maxLife = 180 + Math.floor(Math.random() * 120);
+            this.life = prewarm ? Math.floor(this.maxLife * Math.random() * 0.45) : 0;
             this.isTemporary = Boolean(customPos);
 
             this.headIdx = 0;
@@ -170,19 +174,21 @@
             const gy = gradScratch.gy;
             const gradNorm = Math.hypot(gx, gy);
 
-            const scale = gradNorm > 1e-5 ? CONFIG.learningRate / Math.max(gradNorm, 0.0025) : 0;
+            // Minimum baseline pull ensures particles on flat plateaus still accelerate into basins
+            const minPull = gradNorm > 1e-6 && gradNorm < 0.0012 ? 0.0012 / gradNorm : 1.0;
 
-            this.vx = CONFIG.momentum * this.vx - gx * scale * 0.35;
-            this.vy = CONFIG.momentum * this.vy - gy * scale * 0.35;
+            this.vx = CONFIG.momentum * this.vx - gx * minPull * CONFIG.learningRate;
+            this.vy = CONFIG.momentum * this.vy - gy * minPull * CONFIG.learningRate;
 
             const speed = Math.hypot(this.vx, this.vy);
-            if (speed > 4.0) {
-                const invSpeed = 4.0 / speed;
+            if (speed > 5.2) {
+                const invSpeed = 5.2 / speed;
                 this.vx *= invSpeed;
                 this.vy *= invSpeed;
             }
 
-            if (speed < 0.25) {
+            // Only mark stagnant after full overshoot oscillations settle near the minimum
+            if (speed < 0.14 && gradNorm < 0.0015) {
                 this.stagnantFrames++;
             } else {
                 this.stagnantFrames = 0;
@@ -199,10 +205,10 @@
             const outOfBounds =
                 !Number.isFinite(this.x) ||
                 !Number.isFinite(this.y) ||
-                this.x < -30 || this.x > width + 30 ||
-                this.y < -30 || this.y > height + 30;
+                this.x < -40 || this.x > width + 40 ||
+                this.y < -40 || this.y > height + 40;
 
-            if (this.life > this.maxLife || this.stagnantFrames > 20 || outOfBounds) {
+            if (this.life > this.maxLife || this.stagnantFrames > 36 || outOfBounds) {
                 if (this.isTemporary) return false;
                 this.reset(false);
                 return true;
@@ -213,7 +219,7 @@
         }
 
         draw(theme) {
-            if (this.count < 2) return;
+            if (this.count < 3) return;
 
             const ratio = this.life / this.maxLife;
             let envelope = 1;
@@ -222,24 +228,47 @@
 
             const startIdx = (this.headIdx - this.count + CONFIG.trailLength) % CONFIG.trailLength;
             ctx.lineWidth = theme.lineWidth * 1.2;
+            ctx.lineCap = "round";
+            ctx.lineJoin = "round";
 
-            let prevIdx = startIdx;
-            for (let i = 1; i < this.count; i++) {
+            let i0 = startIdx;
+            let i1 = (startIdx + 1) % CONFIG.trailLength;
+            let prevMidX = (this.trailX[i0] + this.trailX[i1]) * 0.5;
+            let prevMidY = (this.trailY[i0] + this.trailY[i1]) * 0.5;
+
+            for (let i = 1; i < this.count - 1; i++) {
                 const currIdx = (startIdx + i) % CONFIG.trailLength;
+                const nextIdx = (startIdx + i + 1) % CONFIG.trailLength;
+
+                const cx = this.trailX[currIdx];
+                const cy = this.trailY[currIdx];
+                const midX = (cx + this.trailX[nextIdx]) * 0.5;
+                const midY = (cy + this.trailY[nextIdx]) * 0.5;
+
                 const segAlpha = (i / this.count) * theme.trailAlpha * envelope;
 
                 ctx.beginPath();
-                ctx.moveTo(this.trailX[prevIdx], this.trailY[prevIdx]);
-                ctx.lineTo(this.trailX[currIdx], this.trailY[currIdx]);
+                ctx.moveTo(prevMidX, prevMidY);
+                ctx.quadraticCurveTo(cx, cy, midX, midY);
                 ctx.strokeStyle = `rgba(${theme.rgb}, ${segAlpha})`;
                 ctx.stroke();
 
-                prevIdx = currIdx;
+                prevMidX = midX;
+                prevMidY = midY;
             }
 
             const lastIdx = (this.headIdx - 1 + CONFIG.trailLength) % CONFIG.trailLength;
+            const headX = this.trailX[lastIdx];
+            const headY = this.trailY[lastIdx];
+
             ctx.beginPath();
-            ctx.arc(this.trailX[lastIdx], this.trailY[lastIdx], 1.85, 0, Math.PI * 2);
+            ctx.moveTo(prevMidX, prevMidY);
+            ctx.lineTo(headX, headY);
+            ctx.strokeStyle = `rgba(${theme.rgb}, ${theme.trailAlpha * envelope})`;
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(headX, headY, 1.85, 0, Math.PI * 2);
             ctx.fillStyle = `rgba(${theme.rgb}, ${theme.headAlpha * envelope})`;
             ctx.fill();
         }
@@ -249,6 +278,8 @@
         if (!contourCtx) return;
 
         contourCtx.clearRect(0, 0, width, height);
+        contourCtx.lineCap = "round";
+        contourCtx.lineJoin = "round";
 
         const cell = CONFIG.gridCellSize;
         for (let r = 0; r < rows; r++) {
@@ -372,7 +403,6 @@
         field = new Float32Array(cols * rows);
         contourDirty = true;
 
-        // Dynamically adapt particle count to current screen size
         const targetCount = getTargetOptimizerCount();
         while (optimizers.length < targetCount) {
             optimizers.push(new OptimizerParticle(true));
