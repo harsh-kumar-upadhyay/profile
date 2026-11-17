@@ -236,14 +236,15 @@ body.dark-mode .icon-btn:hover {
 .show { display: block; }
 
 .iitb-badge {
-    margin-right: auto; /* Pushes everything else to the right, keeping this on the far left */
+    margin: 0 auto 0 0; /* Keep this on the top-left and push everything else right */
+    align-self: flex-start;
     display: inline-flex;
     align-items: center;
     gap: 10px;
     text-decoration: none;
     color: inherit;
     font-weight: 600;
-    font-size: 5rem;
+    font-size: 1rem;
 }
 
 .iitb-badge img {
