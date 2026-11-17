@@ -235,6 +235,23 @@ body.dark-mode .icon-btn:hover {
 
 .show { display: block; }
 
+.iitb-badge {
+    margin-right: auto; /* Pushes everything else to the right, keeping this on the far left */
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: inherit;
+    font-weight: 600;
+    font-size: 5rem;
+}
+
+.iitb-badge img {
+    height: 64px;
+    width: auto;
+    object-fit: contain;
+}
+
 /* =========================================
    4. ABOUT PAGE (Timeline)
    ========================================= */
