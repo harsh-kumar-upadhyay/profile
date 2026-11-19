@@ -408,7 +408,9 @@ body.dark-mode .shloka-iast {
     background: transparent;
     color: #2563eb;
     font-size: 15px;
+    font-style: italic;
     font-weight: 600;
+    font-family: Georgia, "Times New Roman", serif;
     cursor: pointer;
     padding: 2px 4px;
     transition: color 0.2s ease, transform 0.1s ease;
@@ -462,6 +464,30 @@ body.dark-mode .shloka-iast {
     pointer-events: auto;
     transform: translateX(-50%) translateY(0);
     z-index: 100;
+}
+
+.shloka-question-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: #2563eb;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 2px 4px;
+    transition: color 0.2s ease, transform 0.1s ease;
+}
+
+.shloka-question-btn:hover,
+.shloka-question-btn:focus-visible {
+    color: #1d4ed8;
+    transform: scale(1.08);
+    outline: none;
+}
+
+.shloka-question-btn:active {
+    transform: scale(0.95);
 }
 
 /* Copyright Footer */
@@ -1631,5 +1657,85 @@ body.dark-mode .shloka-iast {
         transform: translateX(-50%);
         width: 90vw;
         max-width: 340px;
+    }
+}
+
+/* =========================================
+   SHLOKA ROUTE PAGE
+   ========================================= */
+.shloka-page {
+    max-width: 720px;
+    margin: 60px auto;
+    padding: 0 24px;
+}
+
+.shloka-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 36px;
+}
+
+.shloka-ref {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    font-weight: 700;
+    margin: 0 0 16px 0;
+}
+
+.shloka-sanskrit {
+    font-size: 1.55rem;
+    font-weight: 600;
+    line-height: 1.6;
+    color: var(--text-main);
+    margin: 0 0 10px 0;
+}
+
+.shloka-translit {
+    font-size: 1.05rem;
+    font-style: italic;
+    color: var(--text-muted);
+    margin: 0 0 28px 0;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.meaning-heading {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin: 0 0 12px 0;
+}
+
+.typed-meaning {
+    font-family: var(--font-serif);
+    font-size: 1.2rem;
+    line-height: 1.75;
+    color: var(--text-main);
+    min-height: 110px;
+    margin: 0;
+}
+
+.typing-cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1.15em;
+    background-color: var(--accent);
+    vertical-align: text-bottom;
+    margin-left: 2px;
+    animation: blinkCursor 0.75s step-end infinite;
+}
+
+.typing-cursor.done {
+    opacity: 0;
+    animation: none;
+}
+
+@keyframes blinkCursor {
+    50% {
+        opacity: 0;
     }
 }

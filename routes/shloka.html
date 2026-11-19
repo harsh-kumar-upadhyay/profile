@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bhagavad Gita 4.34 — Shloka</title>
+    <link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+    <div class="top-nav">
+        <a href="../index.html" class="back-btn">← Back</a>
+        <div class="nav-buttons">
+            <button id="replay-btn" class="button" type="button">Replay</button>
+        </div>
+    </div>
+
+    <main class="shloka-page">
+        <div class="shloka-card">
+            <p class="shloka-ref">Bhagavad Gita 4.34</p>
+            <h1 class="shloka-sanskrit">तद्विद्धि प्रणिपातेन परिप्रश्नेन सेवया । उपदेक्ष्यन्ति ते ज्ञानं ज्ञानिनस्तत्त्वदर्शिनः ॥</h1>
+            <p class="shloka-translit">tad viddhi praṇipātena paripraśnena sevayā | upadekṣyanti te jñānaṁ jñāninas tattva-darśinaḥ ||</p>
+
+            <h2 class="meaning-heading">Meaning</h2>
+            <p class="typed-meaning" style="white-space: pre-line;">
+                <span id="meaning-text"></span><span id="cursor" class="typing-cursor"></span>
+            </p>
+        </div>
+    </main>
+
+    <script>
+        // Sync dark mode if saved on the main site
+        if (localStorage.getItem("theme") === "dark") {
+            document.body.classList.add("dark-mode");
+        }
+        const meaningText = `Tad Viddhi Jñānam: Krishna begins with an inspiring assurance—tad ("that") viddhi ("know/realize"), pointing to the liberating wisdom (jñānam) of our true nature. Lasting growth thrives when clear theory meets lived practice: theory gives you the map, while practical experience walks the path.
+
+                            Praṇipātena, Paripraśnena, Sevayā: To turn concepts into personal realization, Krishna shares three constructive habits:
+                            - Praṇipāta (Humble Openness): Approaching learning with genuine respect and a beginner's mind, keeping you receptive to fresh insight.
+                            - Paripraśna (Thoughtful Inquiry): Honoring theory through earnest, clarifying questions—welcoming deep understanding over blind acceptance.
+                            - Sevā (Practical Application): Translating ideals into action and service, so wisdom becomes part of how you live and uplift others.
+
+                            Upadekṣyanti Te Jñāninas Tattva-Darśinaḥ: The finest guides unite both dimensions—they are jñāninaḥ (grounded in clear theoretical mastery) and tattva-darśinaḥ (direct seers who have practiced and realized the truth). When a seeker pairs an inquiring mind with sincere action, upadekṣyanti te ("they will gladly awaken that wisdom within you")—a hopeful promise that clarity and growth are always within reach.`;
+                                    
+        const textEl = document.getElementById("meaning-text");
+        const cursorEl = document.getElementById("cursor");
+        const replayBtn = document.getElementById("replay-btn");
+
+        let index = 0;
+        let timerId = null;
+        const speedMs = 18; // Fast typing speed (lower = faster, e.g., 12–22ms)
+
+        function typeMeaning() {
+            clearTimeout(timerId);
+            index = 0;
+            textEl.textContent = "";
+            cursorEl.classList.remove("done");
+
+            function step() {
+                if (index < meaningText.length) {
+                    textEl.textContent += meaningText.charAt(index);
+                    index++;
+                    timerId = setTimeout(step, speedMs);
+                } else {
+                    cursorEl.classList.add("done");
+                }
+            }
+
+            step();
+        }
+
+        replayBtn.addEventListener("click", typeMeaning);
+        window.addEventListener("DOMContentLoaded", typeMeaning);
+    </script>
+</body>
+</html>
