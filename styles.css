@@ -1614,3 +1614,13 @@ body.dark-mode .shloka-iast {
         transform: translateY(0);
     }
 }
+
+@media (max-width: 640px) {
+  .quote-tooltip {
+    position: fixed; /* Or absolute relative to a full-width wrapper */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90vw;
+    max-width: 340px;
+  }
+}
