@@ -1520,3 +1520,20 @@ body.dark-mode .spinner {
     transform: translateY(0);
 }
 }
+
+.copyright-corner {
+          bottom: 10px;
+          right: 12px;
+          font-size: 16px;
+          position: absolute;
+          color: var(--text-muted);
+}
+
+.copyright-corner img.footer-ico {
+    width: 16px !important;
+    height: 16px !important;
+    max-width: 16px !important;
+    max-height: 16px !important;
+    object-fit: contain;
+    border-radius: 3px;
+  }
