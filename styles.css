@@ -1532,7 +1532,6 @@ body.dark-mode .spinner {
           bottom: 10px;
           right: 12px;
           font-size: 16px;
-          position: absolute;
           color: var(--text-muted);
 }
 
