@@ -1399,12 +1399,19 @@ body.dark-mode .spinner {
     opacity: 1;
 }
 
+
 /* Shloka and Bubble Text */
+
+.profile-text h2 {
+    margin-bottom: 1px;
+}
+
 .shloka-row {
     display: inline-flex;
     align-items: center;
     gap: 10px;
     position: relative;
+    color: var(--text-muted);
 }
 
 #shloka-play-btn {
