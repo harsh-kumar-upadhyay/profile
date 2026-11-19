@@ -43,8 +43,20 @@
         </div>
 
         <div class="profile-section">
-            <div class="profile-text">
+            <div class="profile-text" style="line-height: 1;">
                 <h2>Harsh Upadhyay</h2>
+                <div class="shloka-row">
+                  <h5>तद्विद्धि प्रणिपातेन परिप्रश्नेन सेवया।
+                      उपदेक्ष्यन्ति ते ज्ञानं ज्ञानिनस्तत्त्वदर्शिनः॥</h5>
+                  <button id="shloka-play-btn" type="button" aria-label="Play Shloka Audio" title="Listen to recitation">▶</button>
+                  <div class="meaning-wrapper">
+                    <button id="shloka-meaning-btn" type="button" aria-label="Show Shloka Meaning">ⓘ</button>
+                    <div id="shloka-meaning-bubble" class="meaning-bubble" role="tooltip">
+                      Learn the truth by approaching a wise teacher with humility, sincere inquiry, and service; those who see the truth will impart that knowledge to you.
+                    </div>
+                  </div>
+                  <audio id="shloka-audio" src="./assets/Shloka_Moto.mp3" preload="metadata"></audio>
+                </div>
                 <p><b>Upcoming Doctoral Student</b></p>
                 <p><b>Research Interests:</b> Learning Theory, Optimization, Reinforcement Learning</p>
                 <div class="social-icons">

@@ -702,3 +702,23 @@ window.onclick = function(event) {
 }
 
 document.addEventListener('DOMContentLoaded', initResponsiveNav);
+
+const shlokaPlayBtn = document.getElementById('shloka-play-btn');
+const shlokaAudio = document.getElementById('shloka-audio');
+
+shlokaPlayBtn.addEventListener('click', () => {
+    if (shlokaAudio.paused) {
+        shlokaAudio.play();
+        shlokaPlayBtn.textContent = '❚❚';
+        shlokaPlayBtn.style.paddingLeft = '0px';
+    } else {
+        shlokaAudio.pause();
+        shlokaPlayBtn.textContent = '▶';
+        shlokaPlayBtn.style.paddingLeft = '2px';
+    }
+});
+
+shlokaAudio.addEventListener('ended', () => {
+    shlokaPlayBtn.textContent = '▶';
+    shlokaPlayBtn.style.paddingLeft = '2px';
+});

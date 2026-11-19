@@ -1398,3 +1398,125 @@ body.dark-mode .spinner {
 .word-swap:hover .replacement {
     opacity: 1;
 }
+
+/* Shloka and Bubble Text */
+.shloka-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+}
+
+#shloka-play-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: none;
+    background: transparent;
+    color: #2563eb;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 2px 4px;
+    transition: color 0.2s ease, transform 0.1s ease;
+}
+
+#shloka-play-btn:hover {
+    color: #1d4ed8;
+    transform: scale(1.08);
+}
+
+#shloka-play-btn:active {
+    transform: scale(0.95);
+}
+
+.meaning-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+#shloka-meaning-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: none;
+    background: transparent;
+    color: #2563eb;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 2px 4px;
+    transition: color 0.2s ease, transform 0.1s ease;
+}
+
+#shloka-meaning-btn:hover,
+#shloka-meaning-btn:focus-visible {
+    color: #1d4ed8;
+    transform: scale(1.08);
+    outline: none;
+}
+
+.meaning-bubble {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+    width: 280px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background-color: #1e293b;
+    color: #f8fafc;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.45;
+    letter-spacing: normal;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+    z-index: 50;
+}
+
+/* Speech-bubble pointer arrow */
+.meaning-bubble::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 6px;
+    border-style: solid;
+    border-color: #1e293b transparent transparent transparent;
+}
+
+.meaning-wrapper:hover .meaning-bubble,
+.meaning-wrapper:focus-within .meaning-bubble,
+.meaning-bubble.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+@media (max-width: 600px) {
+.meaning-bubble {
+    left: auto;
+    right: 0;
+    transform: translateY(4px);
+    width: 240px;
+}
+
+.meaning-bubble::after {
+    left: auto;
+    right: 8px;
+    transform: none;
+}
+
+.meaning-wrapper:hover .meaning-bubble,
+.meaning-wrapper:focus-within .meaning-bubble,
+.meaning-bubble.show {
+    transform: translateY(0);
+}
+}
