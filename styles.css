@@ -178,11 +178,13 @@ body.dark-mode .shloka-iast {
     justify-content: space-between;
     margin-bottom: 30px;
     gap: 30px;
+    overflow: visible;
 }
 
 .profile-text {
     flex: 1;
     min-width: 0;
+    overflow: visible;
 }
 
 .profile-text h2 {
@@ -322,6 +324,7 @@ body.dark-mode .shloka-iast {
     color: var(--text-muted);
     margin: 0 0 8px 0;
     max-width: 100%;
+    overflow: visible;
 }
 
 .shloka-swap {
@@ -437,7 +440,7 @@ body.dark-mode .shloka-iast {
     visibility: hidden;
     pointer-events: none;
     transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
-    z-index: 50;
+    z-index: 100;
 }
 
 .meaning-bubble::after {
@@ -456,7 +459,9 @@ body.dark-mode .shloka-iast {
 .meaning-bubble.show {
     opacity: 1;
     visibility: visible;
+    pointer-events: auto;
     transform: translateX(-50%) translateY(0);
+    z-index: 100;
 }
 
 /* Copyright Footer */
@@ -1596,31 +1601,35 @@ body.dark-mode .shloka-iast {
     }
 
     .meaning-bubble {
-        left: auto;
-        right: 0;
-        transform: translateY(4px);
-        width: 240px;
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%) translateY(4px);
+        width: min(280px, 85vw);
     }
 
     .meaning-bubble::after {
-        left: auto;
-        right: 8px;
-        transform: none;
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%);
     }
 
     .meaning-wrapper:hover .meaning-bubble,
     .meaning-wrapper:focus-within .meaning-bubble,
     .meaning-bubble.show {
-        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transform: translateX(-50%) translateY(0);
+        z-index: 100;
     }
 }
 
 @media (max-width: 640px) {
-  .quote-tooltip {
-    position: fixed; /* Or absolute relative to a full-width wrapper */
-    left: 50%;
-    transform: translateX(-50%);
-    width: 90vw;
-    max-width: 340px;
-  }
+    .quote-tooltip {
+        position: fixed;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90vw;
+        max-width: 340px;
+    }
 }
