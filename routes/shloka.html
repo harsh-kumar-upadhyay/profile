@@ -17,9 +17,12 @@
     <main class="shloka-page">
         <div class="shloka-card">
             <p class="shloka-ref">Bhagavad Gita 4.34</p>
-            <h1 class="shloka-sanskrit">तद्विद्धि प्रणिपातेन परिप्रश्नेन सेवया । उपदेक्ष्यन्ति ते ज्ञानं ज्ञानिनस्तत्त्वदर्शिनः ॥</h1>
+            <div class="shloka-heading-row">
+                <h1 class="shloka-sanskrit">तद्विद्धि प्रणिपातेन परिप्रश्नेन सेवया । उपदेक्ष्यन्ति ते ज्ञानं ज्ञानिनस्तत्त्वदर्शिनः ॥</h1>
+                <button id="shloka-play-btn" type="button" aria-label="Play Shloka Audio" title="Listen to recitation">▶</button>
+            </div>
             <p class="shloka-translit">tad viddhi praṇipātena paripraśnena sevayā | upadekṣyanti te jñānaṁ jñāninas tattva-darśinaḥ ||</p>
-
+            <audio id="shloka-audio" src="../assets/Shloka_Moto.mp3" preload="metadata"></audio>
             <h2 class="meaning-heading">Meaning</h2>
             <p class="typed-meaning" style="white-space: pre-line;">
                 <span id="meaning-text"></span><span id="cursor" class="typing-cursor"></span>
@@ -48,7 +51,7 @@
 
         let index = 0;
         let timerId = null;
-        const speedMs = 25; // Adjusted slightly faster for the longer text
+        const speedMs = 20; // Adjusted slightly faster for the longer text
 
         function typeMeaning() {
             clearTimeout(timerId);
@@ -72,5 +75,6 @@
         replayBtn.addEventListener("click", typeMeaning);
         window.addEventListener("DOMContentLoaded", typeMeaning);
     </script>
+    <script src="../script.js"></script>
 </body>
 </html>

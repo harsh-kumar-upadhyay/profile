@@ -378,7 +378,8 @@ body.dark-mode .shloka-iast {
     border: none;
     background: transparent;
     color: #2563eb;
-    font-size: 14px;
+    font-size: 0.83em;
+    line-height: 1.6;
     cursor: pointer;
     padding: 2px 4px;
     transition: color 0.2s ease, transform 0.1s ease;
@@ -1664,8 +1665,8 @@ body.dark-mode .shloka-iast {
    SHLOKA ROUTE PAGE
    ========================================= */
 .shloka-page {
-    max-width: 720px;
-    margin: 60px auto;
+    max-width: 75%;
+    margin: 20px auto;
     padding: 0 24px;
 }
 
@@ -1685,12 +1686,26 @@ body.dark-mode .shloka-iast {
     margin: 0 0 16px 0;
 }
 
+.shloka-heading-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
 .shloka-sanskrit {
+    flex: 1;
+    min-width: 0;
     font-size: 1.55rem;
     font-weight: 600;
     line-height: 1.6;
     color: var(--text-main);
     margin: 0 0 10px 0;
+}
+
+.shloka-heading-row #shloka-play-btn {
+    font-size: 1.55rem;
+    line-height: 1.6;
+    margin-top: 6px;
 }
 
 .shloka-translit {
