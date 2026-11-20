@@ -493,9 +493,25 @@ body.dark-mode .shloka-iast {
 
 /* Copyright Footer */
 .copyright-corner {
-    bottom: 10px;
+    position: fixed;
+    left: auto;
     right: 12px;
-    font-size: 16px;
+    bottom: 10px;
+    width: fit-content;
+    box-sizing: border-box;
+    margin: 0;
+    white-space: nowrap;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    max-width: calc(100% - 24px);
+    padding: 6px 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background: color-mix(in srgb, var(--card-bg) 92%, transparent);
+    box-shadow: 0 2px 10px rgba(128, 128, 128, 0.12);
+    font-size: 12px;
     color: var(--text-muted);
 }
 
@@ -506,6 +522,23 @@ body.dark-mode .shloka-iast {
     max-height: 16px !important;
     object-fit: contain;
     border-radius: 3px;
+}
+
+@media screen and (max-width: 600px) {
+    .copyright-corner {
+        right: 8px;
+        bottom: 8px;
+        max-width: calc(100vw - 16px);
+        padding: 5px 8px;
+        font-size: 11px;
+    }
+
+    .copyright-corner img.footer-ico {
+        width: 14px !important;
+        height: 14px !important;
+        max-width: 14px !important;
+        max-height: 14px !important;
+    }
 }
 
 /* =========================================
