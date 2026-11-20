@@ -1698,9 +1698,10 @@ body.dark-mode .shloka-iast {
    SHLOKA ROUTE PAGE
    ========================================= */
 .shloka-page {
-    max-width: 95%;
+    width: 95%;
     margin: 20px auto;
     padding: 0 24px;
+    box-sizing: border-box;
 }
 
 .shloka-card {
