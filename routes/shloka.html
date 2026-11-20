@@ -32,22 +32,23 @@
         if (localStorage.getItem("theme") === "dark") {
             document.body.classList.add("dark-mode");
         }
-        const meaningText = `Tad Viddhi Jñānam: Krishna begins with an inspiring assurance—tad ("that") viddhi ("know/realize"), pointing to the liberating wisdom (jñānam) of our true nature. Lasting growth thrives when clear theory meets lived practice: theory gives you the map, while practical experience walks the path.
 
-                            Praṇipātena, Paripraśnena, Sevayā: To turn concepts into personal realization, Krishna shares three constructive habits:
-                            - Praṇipāta (Humble Openness): Approaching learning with genuine respect and a beginner's mind, keeping you receptive to fresh insight.
-                            - Paripraśna (Thoughtful Inquiry): Honoring theory through earnest, clarifying questions—welcoming deep understanding over blind acceptance.
-                            - Sevā (Practical Application): Translating ideals into action and service, so wisdom becomes part of how you live and uplift others.
+        const meaningText = `Krishna opens with tad ("that") viddhi ("know/understand"), building up to jñānam ("wisdom/knowledge") in the second half. The core logic is simple: because the ego has blind spots it cannot see on its own, ultimate truth cannot be cracked by solitary intellect—it must be received from an outside mirror.
 
-                            Upadekṣyanti Te Jñāninas Tattva-Darśinaḥ: The finest guides unite both dimensions—they are jñāninaḥ (grounded in clear theoretical mastery) and tattva-darśinaḥ (direct seers who have practiced and realized the truth). When a seeker pairs an inquiring mind with sincere action, upadekṣyanti te ("they will gladly awaken that wisdom within you")—a hopeful promise that clarity and growth are always within reach.`;
-                                    
+How to Receive It (Praṇipātena, Paripraśnena, Sevayā): To make yourself capable of receiving this wisdom, you approach through three conditions:
+- Praṇipātena (by humility): Lowering the ego so you stop defending what you already think you know.
+- Paripraśnena (by thorough questioning): Testing and clarifying doubts from every angle—real inquiry, never blind obedience.
+- Sevayā (by service): Acting without self-interest, which aligns your actions with your intent and builds real receptivity.
+
+The Teacher & Transmission (Upadekṣyanti Te Jñāninas Tattva-Darśinaḥ): Knowledge can only come from those who are both jñāninaḥ (established in wisdom) and tattva-darśinaḥ (direct seers of reality—not mere book scholars). When a receptive student meets such a guide, upadekṣyanti te ("they will point out/instruct unto you") that truth—not by pouring information into your head, but by guiding your vision until you see it for yourself.`;
+
         const textEl = document.getElementById("meaning-text");
         const cursorEl = document.getElementById("cursor");
         const replayBtn = document.getElementById("replay-btn");
 
         let index = 0;
         let timerId = null;
-        const speedMs = 18; // Fast typing speed (lower = faster, e.g., 12–22ms)
+        const speedMs = 14; // Adjusted slightly faster for the longer text
 
         function typeMeaning() {
             clearTimeout(timerId);
