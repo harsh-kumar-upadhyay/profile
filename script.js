@@ -1,11 +1,3 @@
-window.onload = function() {
-    if (!localStorage.getItem('force_reloaded')) {
-        localStorage.setItem('force_reloaded', 'true');
-        location.reload(true); // 'true' forces a reload from the server, ignoring cache
-    }
-}
-
-
 /* =========================================
    GLOBAL VARIABLES (Shared State)
    ========================================= */
@@ -706,19 +698,21 @@ document.addEventListener('DOMContentLoaded', initResponsiveNav);
 const shlokaPlayBtn = document.getElementById('shloka-play-btn');
 const shlokaAudio = document.getElementById('shloka-audio');
 
-shlokaPlayBtn.addEventListener('click', () => {
-    if (shlokaAudio.paused) {
-        shlokaAudio.play();
-        shlokaPlayBtn.textContent = '❚❚';
-        shlokaPlayBtn.style.paddingLeft = '0px';
-    } else {
-        shlokaAudio.pause();
+if (shlokaPlayBtn && shlokaAudio) {
+    shlokaPlayBtn.addEventListener('click', () => {
+        if (shlokaAudio.paused) {
+            shlokaAudio.play();
+            shlokaPlayBtn.textContent = '❚❚';
+            shlokaPlayBtn.style.paddingLeft = '0px';
+        } else {
+            shlokaAudio.pause();
+            shlokaPlayBtn.textContent = '▶';
+            shlokaPlayBtn.style.paddingLeft = '2px';
+        }
+    });
+
+    shlokaAudio.addEventListener('ended', () => {
         shlokaPlayBtn.textContent = '▶';
         shlokaPlayBtn.style.paddingLeft = '2px';
-    }
-});
-
-shlokaAudio.addEventListener('ended', () => {
-    shlokaPlayBtn.textContent = '▶';
-    shlokaPlayBtn.style.paddingLeft = '2px';
-});
+    });
+}
