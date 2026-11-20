@@ -33,14 +33,14 @@
             document.body.classList.add("dark-mode");
         }
 
-        const meaningText = `Krishna opens with tad ("that") viddhi ("know/understand"), building up to jñānam ("wisdom/knowledge") in the second half. The core logic is simple: because the ego has blind spots it cannot see on its own, ultimate truth cannot be cracked by solitary intellect—it must be received from an outside mirror.
+        const meaningText = `Krishna opens with tad ("that") viddhi ("know/understand"): The ignorance has blind spots it cannot see on its own, ultimate knowledge cannot be cracked by solitary intellect, it must be received from an outside mirror.
 
-How to Receive It (Praṇipātena, Paripraśnena, Sevayā): To make yourself capable of receiving this wisdom, you approach through three conditions:
-- Praṇipātena (by humility): Lowering the ego so you stop defending what you already think you know.
-- Paripraśnena (by thorough questioning): Testing and clarifying doubts from every angle—real inquiry, never blind obedience.
-- Sevayā (by service): Acting without self-interest, which aligns your actions with your intent and builds real receptivity.
+                            How to Receive It (Praṇipātena, Paripraśnena, Sevayā): To make yourself capable of receiving this wisdom, you approach through three conditions:
+                            - Praṇipātena (by humility): Lowering the ego so you stop defending what you already think you know is the ultimate knowledge.
+                            - Paripraśnena (by thorough questioning): Testing and clarifying doubts from every angle—real inquiry, never blind acceptance.
+                            - Sevayā (by service): Acting without self-interest, which aligns your actions with your intent and builds real receptivity.
 
-The Teacher & Transmission (Upadekṣyanti Te Jñāninas Tattva-Darśinaḥ): Knowledge can only come from those who are both jñāninaḥ (established in wisdom) and tattva-darśinaḥ (direct seers of reality—not mere book scholars). When a receptive student meets such a guide, upadekṣyanti te ("they will point out/instruct unto you") that truth—not by pouring information into your head, but by guiding your vision until you see it for yourself.`;
+                            The Teacher & Transmission (Upadekṣyanti Te Jñāninas Tattva-Darśinaḥ): Knowledge can only come from those who are both established in theory (jñāninaḥ) and lived the practical (tattva-darśinaḥ). When a receptive student meets such a guide, they will point out/instruct unto you ("upadekṣyanti te") that truth—not by pouring information into your head, but by guiding you until you see it for yourself.`;
 
         const textEl = document.getElementById("meaning-text");
         const cursorEl = document.getElementById("cursor");
@@ -48,7 +48,7 @@ The Teacher & Transmission (Upadekṣyanti Te Jñāninas Tattva-Darśinaḥ): Kn
 
         let index = 0;
         let timerId = null;
-        const speedMs = 14; // Adjusted slightly faster for the longer text
+        const speedMs = 25; // Adjusted slightly faster for the longer text
 
         function typeMeaning() {
             clearTimeout(timerId);
